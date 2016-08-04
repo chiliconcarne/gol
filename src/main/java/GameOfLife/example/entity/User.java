@@ -4,21 +4,16 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by raedschk on 04.08.2016.
+ * Created by sernowm on 04.08.2016.
  */
 @Entity
-@Table(name="USER")
+@Table(name="User")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private int id;
-
-    @Column(name = "USERNAME", nullable = false)
-    private String username;
-
-    @Column(name = "PASSWORD", nullable = false)
-    private String password;
+    private String name,passwort;
 
     public int getId() {
         return id;
@@ -28,19 +23,19 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswort() {
+        return passwort;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
     }
 }

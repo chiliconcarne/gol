@@ -1,9 +1,9 @@
-
 h1 {
     font-size: 1.3em;
     color: #844;
     font-style: bold;
 }
+
 table#board td {
     width: 1.5em;
     height: 1.5em;
@@ -11,9 +11,11 @@ table#board td {
     vertical-align: middle;
     border: solid 1px #ddd;
 }
+
 table#board td.new {
     background-color: red;
 }
+
 table#board td.die {
     background-color: black;
 }
@@ -25,6 +27,7 @@ table#board td.die {
 .history {
     color: #777;
 }
+
 table.history td {
     width: 1.5em;
     height: 1.5em;
@@ -32,7 +35,6 @@ table.history td {
     vertical-align: middle;
     border: solid 1px #eee;
 }
-
 
 table td {
   width:100px;

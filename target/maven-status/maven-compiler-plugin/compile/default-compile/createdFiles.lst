@@ -1,1 +1,6 @@
+GameOfLife\example\entity\User.class
+GameOfLife\example\repository\IConfigRepository.class
+GameOfLife\example\controller\Index.class
+GameOfLife\example\entity\Config.class
+GameOfLife\example\repository\IUserRepository.class
 GameOfLife\example\GameApplication.class

@@ -48,7 +48,6 @@ function GameOfLifeCntl($scope, $http, $interval) {
 
     $scope.height = 10;
     $scope.width = 20;
-    $scope.speed = 1;
     $scope.newGame();
 
     function init(height, width) {
