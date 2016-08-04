@@ -4,6 +4,11 @@ h1 {
     font-style: bold;
 }
 
+label {
+    width: 75px;
+    display: inline-block;
+}
+
 table#board td {
     width: 1.5em;
     height: 1.5em;
