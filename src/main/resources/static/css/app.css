@@ -1,0 +1,48 @@
+
+h1 {
+    font-size: 1.3em;
+    color: #844;
+    font-style: bold;
+}
+table#board td {
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    vertical-align: middle;
+    border: solid 1px #ddd;
+}
+table#board td.new {
+    background-color: red;
+}
+table#board td.die {
+    background-color: black;
+}
+
+.highlight {
+	background-color:#5f9ea0;
+}
+
+.history {
+    color: #777;
+}
+table.history td {
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    vertical-align: middle;
+    border: solid 1px #eee;
+}
+
+
+table td {
+  width:100px;
+  height:100px;
+  text-align:center;
+  vertical-align:middle;
+  background-color:#5f9ea0;
+  border:1px solid #fff;
+}
+
+table td.highlighted {
+  background-color:#999;
+}

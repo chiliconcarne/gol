@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: GameOfLife.example.GameApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.681 sec - in GameOfLife.example.GameApplicationTests
