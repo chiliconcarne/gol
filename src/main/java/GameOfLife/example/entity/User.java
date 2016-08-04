@@ -7,8 +7,13 @@ import java.io.Serializable;
  * Created by sernowm on 04.08.2016.
  */
 @Entity
-@Table(name="User")
+@Table(schema = "gol", name="User")
+@Access(AccessType.FIELD)
+@NamedQueries(
+    @NamedQuery(name="User.findAll",query="from User u")
+)
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
