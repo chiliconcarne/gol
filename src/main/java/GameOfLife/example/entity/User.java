@@ -1,4 +1,4 @@
-package GameOfLife.example.database;
+package GameOfLife.example.entity;
 
 import javax.persistence.*;
 
