@@ -10,10 +10,9 @@ import javax.persistence.*;
 @Table(name="CONFIG")
 public class Config {
     @Id
-    @Column(name="ID", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    private User user;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID", nullable = false)
+    private int id;
 
     @Column(name = "COLOR", nullable = false, columnDefinition="Integer default '0'")
     private int color;
@@ -27,12 +26,12 @@ public class Config {
     @Column(name = "BOARD_WIDTH", nullable = false, columnDefinition="Integer default '20'")
     private int boardWidth;
 
-    public User getUser() {
-        return user;
+    public int getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getColor() {
