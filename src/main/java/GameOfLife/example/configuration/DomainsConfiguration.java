@@ -11,4 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackageClasses = { GameOfLife.example.entity.User.class })
 @EnableJpaRepositories(basePackageClasses = { GameOfLife.example.entity.User.class })
 public class DomainsConfiguration {
+    public DomainsConfiguration(){
+        System.err.println("Test");
+    }
 }

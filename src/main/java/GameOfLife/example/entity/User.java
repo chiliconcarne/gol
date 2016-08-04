@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Created by sernowm on 04.08.2016.
  */
 @Entity
-@Table(schema = "gol", name="User")
+@Table(schema = "public", name="User")
 @Access(AccessType.FIELD)
 @NamedQueries(
     @NamedQuery(name="User.findAll",query="from User u")
