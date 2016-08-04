@@ -1,13 +1,14 @@
 package GameOfLife.example.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by raedschk on 04.08.2016.
  */
 @Entity
 @Table(name="USER")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
