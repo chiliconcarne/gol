@@ -57,3 +57,38 @@ table td.highlighted {
 .error {
     color: red;
 }
+
+a {
+    color: blue;
+    text-decoration: underline;
+}
+
+.btnToLink {
+    border: none;
+    background-color: initial;
+    padding: 0px;
+    margin: 0px;
+    font: initial;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.color {
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    border-width: 3px;
+    border-color: black;
+    border-style: solid;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.c1 { background-color: blue; }
+.c2 { background-color: red; }
+.c3 { background-color: green; }
+.c4 { background-color: yellow; }
+.c5 { background-color: orange; }
+.c6 { background-color: aqua; }
+.c7 { background-color: MediumOrchid; }

@@ -3,14 +3,46 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="'Profil von ' + ${user.name}" />
+    <script th:src="@{/js/jquery-3.1.0.min.js}"></script>
+    <script th:src="@{/js/profile.js}"></script>
+    <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
 </head>
 <body>
     <h2 th:text="'Profil von ' + ${user.name}" />
     <hr />
-    <div><h4>Farbe auswählen:</h4></div>
-    <div><h4>Zweitfarbe auswählen:</h4></div>
-    <div><h4>Feldgröße auswählen:</h4></div>
-    <div><a href="/conway">Zum Spiel</a></div>
+    <div class="options">
+        <div><h4>Farbe auswählen:</h4>
+            <div class="color c1" data-color="1"></div>
+            <div class="color c2" data-color="2"></div>
+            <div class="color c3" data-color="3"></div>
+            <div class="color c4" data-color="4"></div>
+            <div class="color c5" data-color="5"></div>
+            <div class="color c6" data-color="6"></div>
+            <div class="color c7" data-color="7 "></div>
+        </div>
+        <div><h4>Zweitfarbe auswählen:</h4>
+            <div class="color c1" data-color="1"></div>
+            <div class="color c2" data-color="2"></div>
+            <div class="color c3" data-color="3"></div>
+            <div class="color c4" data-color="4"></div>
+            <div class="color c5" data-color="5"></div>
+            <div class="color c6" data-color="6"></div>
+            <div class="color c7" data-color="7 "></div>
+        </div>
+        <form action="/settings" method="POST">
+            <div><h4>Feldgröße auswählen:</h4>
+                <label for="sizeWidth">Feldbreite: </label><input type="number" min="1" max="30" name="sizeWidth" id="sizeWidth" class="textField numberField" /><br />
+                <label for="sizeHeight">Feldhöhe: </label><input type="number" min="1" max="30" name="sizeHeight" id="sizeHeight" class="textField numberField" />
+            </div>
+            <input type="hidden" name="color1" id="color1" />
+            <input type="hidden" name="color2" id="color2" />
+            <input type="submit" name="save" value="Speichern" class="btnToLink" />
+        </form>
+    </div>
+    <div class="warten" style="display:none">
+        <img th:src="@{/img/warten.gif}" />
+    </div>
+    <div><a href="#" id="start">Freies Spiel suchen</a></div>
     <div><a href="/logout">Ausloggen</a></div>
 </body>
 </html>
