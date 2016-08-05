@@ -11,6 +11,7 @@ $(document).ready(function(){
         else
             $("#start").text(wait);
     });
+    /*
     $(".color").on('mouseover',function(){
         $(this).css('width','70px');
         $(this).css('height','70px');
@@ -21,4 +22,5 @@ $(document).ready(function(){
         $(this).css('height','50px');
         $(this).css('marginTop','30px');
     });
+    */
 })

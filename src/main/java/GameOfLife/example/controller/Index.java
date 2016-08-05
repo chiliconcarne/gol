@@ -1,12 +1,15 @@
 package GameOfLife.example.controller;
 
+import GameOfLife.example.entity.Profil;
 import GameOfLife.example.entity.User;
+import GameOfLife.example.repository.ProfilRepository;
 import GameOfLife.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 public class Index implements ErrorController {
 
     @Autowired
-    UserRepository repository;
+    UserRepository uRepo;
+
+    @Autowired
+    ProfilRepository pRepo;
 
     @RequestMapping("/")
     public String index(Model model){
@@ -33,7 +39,14 @@ public class Index implements ErrorController {
             Model model,
             HttpServletRequest request
     ) {
-        return loginCheck(request,model);
+        User u = loginCheck(request);
+        if(u != null)
+        {
+            model.addAttribute("user", u);
+            model.addAttribute("profil", pRepo.findOne(u.getId()));
+            return "profile";
+        }
+        return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -45,21 +58,44 @@ public class Index implements ErrorController {
         HttpServletRequest request
     ){
         if(register.equals("Register")) {
-            User u = repository.findByNameAndPasswort(username,password);
+            User u = uRepo.findByNameAndPasswort(username,password);
             if(u!=null) {
                 model.addAttribute("message","Username schon vorhanden.");
                 return "login";
             }
-            repository.save(new User(0, username, password));
+            uRepo.save(new User(0, username, password));
         }
-        User u = repository.findByNameAndPasswort(username,password);
+        User u = uRepo.findByNameAndPasswort(username,password);
         if(u!=null) {
             request.getSession().setAttribute("u",u.getId());
             model.addAttribute("user",u);
+            Profil p = pRepo.findOne(u.getId());
+            model.addAttribute("profil",p);
             return "profile";
         }
         model.addAttribute("message","Fehler, User nicht vorhanden oder Daten falsch eingegeben.");
         return "login";
+    }
+
+    @RequestMapping(value = "/profil", method = RequestMethod.POST)
+    public String settings(
+            @ModelAttribute("SpringWeb")Profil profil,
+            Model model,
+            HttpServletRequest request
+    ){
+        User u = loginCheck(request);
+        if(u != null)
+        {
+            profil.setUser(u);
+            pRepo.save(profil);
+            model.addAttribute("user",u);
+            model.addAttribute("profil",profil);
+            return "profile";
+        }
+        else
+        {
+            return "login";
+        }
     }
 
     @RequestMapping("/logout")
@@ -83,15 +119,14 @@ public class Index implements ErrorController {
         return "/error";
     }
 
-    public String loginCheck(HttpServletRequest request,Model model){
+    public User loginCheck(HttpServletRequest request){
         if(request.getSession().getLastAccessedTime()<System.currentTimeMillis()-(300000))
             request.getSession().removeAttribute("u");
         Object id = request.getSession().getAttribute("u");
         if(id!=null) {
-            User u = repository.findOne((Integer) id);
-            model.addAttribute("user", u);
-            return "profile";
+            User u = uRepo.findOne((Integer) id);
+            return u;
         }
-        return "login";
+        return null;
     }
 }

@@ -33,13 +33,14 @@
                 <div class="color c7" data-color="7 "></div>
             </div>
         </div>
-        <form action="/settings" method="POST">
+        <form action="/profil" method="POST">
             <div><h4>Feldgröße auswählen:</h4>
-                <label for="sizeWidth">Feldbreite: </label><input type="number" min="1" max="30" name="sizeWidth" id="sizeWidth" class="textField numberField" /><br />
-                <label for="sizeHeight">Feldhöhe: </label><input type="number" min="1" max="30" name="sizeHeight" id="sizeHeight" class="textField numberField" />
+                <label for="sizeWidth">Feldbreite: </label><input type="number" min="1" max="30" name="width" id="sizeWidth" class="textField numberField" th:value="${profil.width}"/><br />
+                <label for="sizeHeight">Feldhöhe: </label><input type="number" min="1" max="30" name="height" id="sizeHeight" class="textField numberField" th:value="${profil.height}"/>
             </div>
-            <input type="hidden" name="color1" id="color1" />
-            <input type="hidden" name="color2" id="color2" />
+            <input type="hidden" name="color1" id="color1" th:value="${profil.color1}"/>
+            <input type="hidden" name="color2" id="color2" th:value="${profil.color2}"/>
+            <input type="hidden" name="id" id="id" th:value="${profil.id}"/>
             <input type="submit" name="save" value="Speichern" class="btnToLink" />
         </form>
     </div>
