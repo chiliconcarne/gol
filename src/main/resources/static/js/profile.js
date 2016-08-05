@@ -11,4 +11,7 @@ $(document).ready(function(){
         else
             $("#start").text(wait);
     });
+    $(".color").on('hover',function(){
+        $(this).css('width','200px');
+    });
 })
