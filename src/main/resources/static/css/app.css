@@ -90,16 +90,24 @@ a {
 .first .color.active {
     border-color: LightSkyBlue;
     border-width: 10px;
+    margin-bottom: -7px;
 }
 
 .second .color.active {
     border-color: Tomato;
     border-width: 10px;
+    margin-bottom: -7px;
 }
 
-.color:hover {
-    border-width: 10px;
-    broder-color: blue;
+.second .color.inactive {
+    background-color: grey;
+    border-color: grey;
+    cursor: no-drop;
+    border-width: 3px;
+}
+
+.color {
+    cursor: pointer;
 }
 
 .c1 { background-color: blue; }
