@@ -87,7 +87,17 @@ a {
     vertical-align: bottom;
 }
 
-.color.active, .color:hover {
+.first .color.active {
+    border-color: LightSkyBlue;
+    border-width: 10px;
+}
+
+.second .color.active {
+    border-color: Tomato;
+    border-width: 10px;
+}
+
+.color:hover {
     border-width: 10px;
     broder-color: blue;
 }
