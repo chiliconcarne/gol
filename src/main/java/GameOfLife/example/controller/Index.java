@@ -30,7 +30,7 @@ public class Index implements ErrorController {
     ProfilRepository pRepo;
 
     @RequestMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         return "login";
     }
 
@@ -40,13 +40,7 @@ public class Index implements ErrorController {
             HttpServletRequest request
     ) {
         User u = loginCheck(request);
-        if(u != null)
-        {
-            model.addAttribute("user", u);
-            model.addAttribute("profil", pRepo.findOne(u.getId()));
-            return "profile";
-        }
-        return "login";
+        return "redirect:" + (u != null ? "profil" : "");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -56,61 +50,84 @@ public class Index implements ErrorController {
         @RequestParam(name = "register", required = false, defaultValue = "login") String register,
         Model model,
         HttpServletRequest request
-    ){
+    ) {
         if(register.equals("Register")) {
             User u = uRepo.findByNameAndPasswort(username,password);
-            if(u!=null) {
-                model.addAttribute("message","Username schon vorhanden.");
+            if(u != null) {
+                model.addAttribute("message", "Username schon vorhanden.");
                 return "login";
+            } else {
+                uRepo.save(new User(0, username, password));
+                u = uRepo.findByNameAndPasswort(username,password);
+                pRepo.save(new Profil(u.getId(), 1, 2, 20, 20));
             }
-            uRepo.save(new User(0, username, password));
         }
-        User u = uRepo.findByNameAndPasswort(username,password);
-        if(u!=null) {
-            request.getSession().setAttribute("u",u.getId());
-            model.addAttribute("user",u);
+
+        User u = uRepo.findByNameAndPasswort(username, password);
+        if(u != null) {
+            request.getSession().setAttribute("u", u.getId());
+            return "redirect:profil";
+        }
+        else {
+            model.addAttribute("message", "Fehler, User nicht vorhanden oder Daten falsch eingegeben.");
+            return "login";
+        }
+    }
+
+    @RequestMapping(value = "/profil", method = RequestMethod.GET)
+    public String settings2(
+            Model model,
+            HttpServletRequest request
+    ) {
+        User u = loginCheck(request);
+        if(u != null)
+        {
             Profil p = pRepo.findOne(u.getId());
-            model.addAttribute("profil",p);
+            model.addAttribute("user", u);
+            model.addAttribute("profil", p);
             return "profile";
         }
-        model.addAttribute("message","Fehler, User nicht vorhanden oder Daten falsch eingegeben.");
-        return "login";
+        else
+        {
+            model.addAttribute("message", "Du bist nicht eingeloggt.");
+            return "login";
+        }
     }
 
     @RequestMapping(value = "/profil", method = RequestMethod.POST)
     public String settings(
-            @ModelAttribute("SpringWeb")Profil profil,
+            @ModelAttribute("SpringWeb") Profil profil,
             Model model,
             HttpServletRequest request
-    ){
+    ) {
         User u = loginCheck(request);
         if(u != null)
         {
             profil.setUser(u);
             pRepo.save(profil);
-            model.addAttribute("user",u);
-            model.addAttribute("profil",profil);
-            return "profile";
+            return "redirect:profil";
         }
         else
         {
+            model.addAttribute("message", "Du bist nicht eingeloggt.");
             return "login";
         }
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request, Model model) {
         request.getSession().removeAttribute("u");
-        return "login";
+        model.addAttribute("message", "Erfolgreich ausgeloggt.");
+        return "redirect:login";
     }
 
     @RequestMapping("/conway")
-    public String conway(Model model){
+    public String conway(Model model) {
         return "conway";
     }
 
     @RequestMapping("/error")
-    public String error(Model model){
+    public String error(Model model) {
         return "404";
     }
 
@@ -119,14 +136,18 @@ public class Index implements ErrorController {
         return "/error";
     }
 
-    public User loginCheck(HttpServletRequest request){
-        if(request.getSession().getLastAccessedTime()<System.currentTimeMillis()-(300000))
+    public User loginCheck(HttpServletRequest request) {
+        if(request.getSession().getLastAccessedTime()<System.currentTimeMillis() - 300000) {
             request.getSession().removeAttribute("u");
+        }
+
         Object id = request.getSession().getAttribute("u");
-        if(id!=null) {
+        if(id != null) {
             User u = uRepo.findOne((Integer) id);
             return u;
         }
-        return null;
+        else {
+            return null;
+        }
     }
 }
