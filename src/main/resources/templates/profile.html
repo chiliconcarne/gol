@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="'Profil von ' + ${username}" />
+    <title th:text="'Profil von ' + ${user.name}" />
 </head>
 <body>
-    <h2 th:text="'Profil von ' + ${username}" />
+    <h2 th:text="'Profil von ' + ${user.name}" />
     <hr />
     <div><h4>Farbe auswählen:</h4></div>
     <div><h4>Zweitfarbe auswählen:</h4></div>
     <div><h4>Feldgröße auswählen:</h4></div>
     <div><a href="/conway">Zum Spiel</a></div>
+    <div><a href="/logout">Ausloggen</a></div>
 </body>
 </html>

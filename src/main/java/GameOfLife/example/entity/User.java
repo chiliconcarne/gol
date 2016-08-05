@@ -7,12 +7,15 @@ import java.io.Serializable;
  * Created by sernowm on 04.08.2016.
  */
 @Entity
-@Table(schema = "public", name="User")
-@Access(AccessType.FIELD)
-@NamedQueries(
-    @NamedQuery(name="User.findAll",query="from User u")
-)
 public class User implements Serializable {
+
+    public User(){}
+
+    public User(int id, String name, String passwort) {
+        this.id = id;
+        this.name = name;
+        this.passwort = passwort;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,13 +37,5 @@ public class User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPasswort() {
-        return passwort;
-    }
-
-    public void setPasswort(String passwort) {
-        this.passwort = passwort;
     }
 }
