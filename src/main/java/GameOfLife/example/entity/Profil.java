@@ -10,38 +10,26 @@ import javax.persistence.*;
 @Entity
 public class Profil {
     @Id
-    int id;
+    String username;
 
     int color1, color2, width, height;
 
     public Profil() {}
 
-    public Profil(User user, int color1, int color2, int width, int height) {
-        this.id = user.getId();
+    public Profil(String username, int color1, int color2, int width, int height) {
+        this.username = username;
         this.color1 = color1;
         this.color2 = color2;
         this.width = width;
         this.height = height;
     }
 
-    public Profil(int id, int color1, int color2, int width, int height) {
-        this.id = id;
-        this.color1 = color1;
-        this.color2 = color2;
-        this.width = width;
-        this.height = height;
+    public String getUsername() {
+        return username;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.id = user.getId();
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getColor1() {

@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="'Profil von ' + ${user.name}" />
+    <title th:text="'Profil von ' + ${profil.username}" />
     <script th:src="@{/js/jquery-3.1.0.min.js}"></script>
     <script th:src="@{/js/profile.js}"></script>
     <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
 </head>
 <body>
-    <h2 th:text="'Profil von ' + ${user.name}" />
+<h2 th:text="'Profil von ' + ${profil.username}" />
     <hr />
     <div class="options">
         <div><h4>Farbe auswählen:</h4>
@@ -40,7 +40,8 @@
             </div>
             <input type="hidden" name="color1" id="color1" th:value="${profil.color1}"/>
             <input type="hidden" name="color2" id="color2" th:value="${profil.color2}"/>
-            <input type="hidden" name="id" id="id" th:value="${profil.id}"/>
+            <input type="hidden" name="username" th:value="${profil.username}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <input type="submit" name="save" value="Speichern" class="btnToLink" />
         </form>
     </div>
@@ -48,6 +49,8 @@
         <img th:src="@{/img/warten.gif}" />
     </div>
     <div><a href="#" id="start">Freies Spiel suchen</a></div>
-    <div><a href="/logout">Ausloggen</a></div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Ausloggen"/>
+    </form>
 </body>
 </html>

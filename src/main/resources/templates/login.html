@@ -8,11 +8,20 @@
 <body>
     <h2>Login</h2>
     <hr />
-    <form action="/login" method="POST">
-        <label for="username">Username:</label><input id="username" name="username" ng-model="username" /><br />
-        <label for="passwort">Passwort:</label><input type="password" id="passwort" name="password" ng-model="password" /><br />
-        <div class="error" th:text="${message}"/>
-        <input type="submit" value="Login" /> <input type="submit" value="Register" name="register" />
+    <form th:action="@{/login}" method="POST">
+        <label for="username">Username:</label><input id="username" name="username"/><br/>
+        <label for="password">Passwort:</label><input type="password" id="password" name="password"/><br/>
+        <input type="submit" value="Einloggen"/>
     </form>
+    <div th:if="${param.error}">Nutzername oder Passwort falsch.</div>
+    <div th:if="${param.logout}">Du wurdest ausgeloggt.</div>
+
+    <form th:action="@{/register}" method="POST">
+        <label for="username2">Username:</label><input id="username2" name="username"/><br/>
+        <label for="password2">Passwort:</label><input type="password" id="password2" name="password"/><br/>
+        <input type="submit" value="Registrieren"/>
+    </form>
+    <div th:if="${param.registered}">Du hast dich erfolgreich registriert und kannst dich jetzt einloggen.</div>
+    <div th:if="${param.alreadyExists}">Der Nutzername existiert schon. Bitte versuche einen anderen Benutzernamen.</div>
 </body>
 </html>
