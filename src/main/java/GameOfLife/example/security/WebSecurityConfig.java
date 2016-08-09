@@ -50,12 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(ProfilRepository pRepo, AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inMemoryUserDetailsManager(pRepo)).passwordEncoder(passwordEncoder());
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(inMemoryUserDetailsManager()).passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager(ProfilRepository pRepo) {
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         final Properties users = new Properties();
         return new InMemoryUserDetailsManager(users);
     }

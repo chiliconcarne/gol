@@ -14,18 +14,4 @@ public class GameApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GameApplication.class, args);
 	}
-
-
-	/*
-	@Bean
-	public CommandLineRunner init(ProfilRepository pRepo, AuthenticationManagerBuilder auth){
-		return (args) -> {
-			auth.inMemoryAuthentication().withUser("Hans").password("Hans").roles("USER");
-			pRepo.save(new Profil("Hans", 1, 2, 20, 20));
-
-			auth.inMemoryAuthentication().withUser("Florian").password("Hans").roles("USER");
-			pRepo.save(new Profil("Florian", 3, 7, 30, 40));
-		};
-	}
-	*/
 }
