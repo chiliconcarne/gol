@@ -62,11 +62,11 @@ public class Index implements ErrorController {
     ) {
         if(userManager.createNewUser(username, password))
         {
-            return "redirect:login?registered=true";
+            return "redirect:login?registered";
         }
         else
         {
-            return "redirect:login?alreadyExists=true";
+            return "redirect:login?alreadyExists";
         }
     }
 

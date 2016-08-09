@@ -24,7 +24,6 @@ import java.util.Properties;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth)
             throws Exception {
         auth.inMemoryAuthentication().passwordEncoder(passwordEncoder());
@@ -39,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/register").permitAll()
+                .antMatchers("/", "/register", "/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
