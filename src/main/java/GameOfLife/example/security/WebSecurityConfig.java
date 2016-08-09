@@ -24,16 +24,12 @@ import java.util.Properties;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    public void configAuthentication(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.inMemoryAuthentication().passwordEncoder(passwordEncoder());
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder;
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -55,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(ProfilRepository pRepo, AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inMemoryUserDetailsManager(pRepo));
+        auth.userDetailsService(inMemoryUserDetailsManager(pRepo)).passwordEncoder(passwordEncoder());
     }
 
     @Bean

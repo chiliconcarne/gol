@@ -15,7 +15,7 @@
     </form>
     <div th:if="${param.error}">Nutzername oder Passwort falsch.</div>
     <div th:if="${param.logout}">Du wurdest ausgeloggt.</div>
-
+    <br/>
     <form th:action="@{/register}" method="POST">
         <label for="username2">Username:</label><input id="username2" name="username"/><br/>
         <label for="password2">Passwort:</label><input type="password" id="password2" name="password"/><br/>

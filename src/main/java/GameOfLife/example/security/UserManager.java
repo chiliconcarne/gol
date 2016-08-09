@@ -5,6 +5,7 @@ import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.util.ArrayList;
@@ -18,13 +19,16 @@ public class UserManager {
     InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     ProfilRepository pRepo;
 
     public boolean createNewUser(String username, String password)
     {
         if(!inMemoryUserDetailsManager.userExists(username))
         {
-            inMemoryUserDetailsManager.createUser(new User(username, password, new ArrayList<GrantedAuthority>()));
+            inMemoryUserDetailsManager.createUser(new User(username, passwordEncoder.encode(password), new ArrayList<GrantedAuthority>()));
             pRepo.save(new Profil(username, 1, 2, 20, 20));
             return true;
         }
