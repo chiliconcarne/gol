@@ -2,6 +2,7 @@ package GameOfLife.example.controller;
 
 import GameOfLife.example.entity.Profil;
 import GameOfLife.example.repository.ProfilRepository;
+import GameOfLife.example.security.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.annotation.Scope;
@@ -32,7 +33,7 @@ public class Index implements ErrorController {
     ProfilRepository pRepo;
 
     @Autowired
-    InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    UserManager userManager;
 
     @RequestMapping("/")
     public String index(Model model) {
@@ -59,10 +60,8 @@ public class Index implements ErrorController {
         Model model,
         HttpServletRequest request
     ) {
-        if(!inMemoryUserDetailsManager.userExists(username))
+        if(userManager.createNewUser(username, password))
         {
-            inMemoryUserDetailsManager.createUser(new User(username, password, new ArrayList<GrantedAuthority>()));
-            pRepo.save(new Profil(username, 1, 2, 20, 20));
             return "redirect:login?registered=true";
         }
         else
