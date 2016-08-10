@@ -1,38 +1,23 @@
 package GameOfLife.example.json;
 
+import GameOfLife.example.entity.Game;
+
 import java.util.Random;
 
 /**
  * Created by sernowm on 10.08.2016.
  */
 public class Board {
-    private int[][] board = new int[30][30];
-    private String spieler1;
-    public Board(){
-        Random rnd = new Random();
-        for(int y = 0; y < 30; y++){
-            for(int x = 0; x < 30; x++){
-                board[y][x]=rnd.nextInt(8);
-            }
-        }
-        spieler1 = "kai";
+    private Game g;
+    public Board(Game g) {
+        this.g=g;
     }
-    public Board(String spieler){
-        Random rnd = new Random();
-        for(int y = 0; y < 30; y++){
-            for(int x = 0; x < 30; x++){
-                board[y][x]=rnd.nextInt(8);
-            }
-        }
-        spieler1 = spieler;
+
+    public Game getG() {
+        return g;
     }
-    public int[][] getBoard() {
-        return board;
-    }
-    public void setBoard(int[][] board) {
-        this.board = board;
-    }
-    public String getSpieler1(){
-        return this.spieler1;
+
+    public void setG(Game g) {
+        this.g = g;
     }
 }
