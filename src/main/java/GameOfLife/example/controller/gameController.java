@@ -1,6 +1,7 @@
 package GameOfLife.example.controller;
 
 import GameOfLife.example.json.Board;
+import GameOfLife.example.json.Position;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ public class gameController {
 
     @MessageMapping("/set")
     @SendTo("/game/board")
-    public void set() throws Exception {
-
+    public Board set(Position pos) throws Exception {
+        return new Board();
     }
 }
