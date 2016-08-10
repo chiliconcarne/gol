@@ -16,7 +16,6 @@ public class gameController {
     public Board ready() throws Exception {
         return new Board();
     }
-
     @MessageMapping("/set")
     @SendTo("/game/board")
     public Board set(Position pos) throws Exception {
