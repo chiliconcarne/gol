@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class gameController {
-    @MessageMapping("/ready")
+    @MessageMapping("/game")
     @SendTo("/game/board")
     public Board ready() throws Exception {
         return new Board();
