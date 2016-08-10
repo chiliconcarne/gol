@@ -4,6 +4,8 @@
     <meta charset="UTF-8"/>
     <title>Lord of the Cell</title>
     <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
+    <script th:src="@{/js/sockjs-0.3.4.min.js}"></script>
+    <script th:src="@{/js/stomp.min.js}"></script>
     <script th:src="@{/app/angular.js}"></script>
     <script th:src="@{/app/game.angular.js}"></script>
     <script th:src="@{/app/game.websocket.js}"></script>
@@ -12,14 +14,11 @@
 <div class="text-center" ng-app="game" ng-controller="gameCntl">
     <h1>Lord of the Cell</h1>
 
-    <table class="text-center" id="board">
-        <tr ng-repeat="row in board">
-            <td ng-repeat="cell in row track by $index" ng-click="userClicked($parent.$index, $index)"
-                class="{{cell}}">
-                <span ng-show="cell"></span>
-            </td>
-        </tr>
-    </table>
+    <div class="board">
+        <div class="row" ng-repeat="row in board">
+            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userClicked($parent.$index, $index)"></div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

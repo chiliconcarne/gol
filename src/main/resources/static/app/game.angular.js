@@ -10,13 +10,13 @@
     {
         $scope.board = [[]];
 
-        var boardChanged = function(board)
+        var stateChanged = function(state)
         {
-            $scope.board = board;
+            $scope.board = state.board;
             $scope.$apply();
         };
 
-        var websocket = gameWebsocket(boardChanged);
+        var websocket = gameWebsocket(stateChanged);
 
         $scope.userClicked = function (x, y)
         {
