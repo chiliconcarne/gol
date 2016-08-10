@@ -101,6 +101,11 @@ public class Index implements ErrorController {
         return "conway";
     }
 
+    @RequestMapping("/game")
+    public String game(Model model) {
+        return "game";
+    }
+
     @RequestMapping("/error")
     public String error(Model model) {
         return "404";
