@@ -17,10 +17,8 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/game");
         config.setApplicationDestinationPrefixes("/app");
     }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/set").withSockJS();
-        registry.addEndpoint("/ready").withSockJS();
+        registry.addEndpoint("/game").withSockJS();
     }
 }
