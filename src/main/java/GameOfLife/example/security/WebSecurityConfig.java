@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/register", "/login").permitAll()
+                .antMatchers("/", "/register", "/login", "/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -45,13 +45,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true);
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inMemoryUserDetailsManager()).passwordEncoder(passwordEncoder());
+
     }
 
     @Bean
