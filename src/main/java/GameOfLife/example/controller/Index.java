@@ -45,6 +45,11 @@ public class Index implements ErrorController {
         return "login";
     }
 
+    @RequestMapping("/websock")
+    public String websock(){
+        return "websocket";
+    }
+
     @RequestMapping("/{side}")
     public String fallback(
             Model model,
