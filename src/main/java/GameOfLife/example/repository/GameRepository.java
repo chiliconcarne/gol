@@ -9,5 +9,4 @@ import java.util.List;
  * Created by sernowm on 10.08.2016.
  */
 public interface GameRepository extends CrudRepository<Game, Integer> {
-    public List<Game> findBySpieler1OrSpieler2(String name);
 }

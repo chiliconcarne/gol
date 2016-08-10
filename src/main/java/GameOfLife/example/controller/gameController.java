@@ -4,7 +4,6 @@ import GameOfLife.example.entity.Game;
 import GameOfLife.example.json.Board;
 import GameOfLife.example.json.Position;
 import GameOfLife.example.repository.GameRepository;
-import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -25,7 +24,7 @@ public class gameController {
     private SimpMessagingTemplate messagingTemplate;
     @MessageMapping("/start")
     @SendTo("/game/board")
-    public void start(Principal principal) throws Exception {
+    public String start(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
         if(g == null){
             gRepo.save(new Game(1,principal.getName(),null));
@@ -33,6 +32,7 @@ public class gameController {
             g.setSpieler2(principal.getName());
             gRepo.save(g);
         }
+        return "test";
     }
     @MessageMapping("/ready")
     @SendTo("/game/board")
