@@ -1,23 +1,28 @@
 'use strict';
 
-function gameWebsocket(boardchanged)
+function gameWebsocket(statechanged)
 {
-    var socket = new SockJS('/hello');
+    var websocket = {};
+
+    var socket = new SockJS('/game');
     var stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame)
     {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/game/board', function(boardJson)
+        stompClient.subscribe('/game/board', function(stateJson)
         {
-            var board = JSON.parse(board.body);
-            console.log(board);
-            boardchanged(board);
+            var state = JSON.parse(stateJson.body);
+            console.log(state);
+            statechanged(state);
         });
+        stompClient.send("/app/start", {});
     });
 
-    this.userClicked = function(x, y)
+    websocket.userClicked = function(x, y)
     {
         console.log('userClicked: x = ' + x + " y = " + y);
         stompClient.send("/app/set", {}, JSON.stringify({ 'x': x, 'y': y }));
     }
+
+    return websocket;
 }
