@@ -78,18 +78,18 @@ public class gameController {
     public Board set(Position pos, Principal principal) throws Exception {
         BoardLogik bl = ctx.getBean(BoardLogik.class);
         bl.init(gRepo.findOne(1));
-        bl.set(pos.getX(),pos.getY(),principal.getName());
+        bl.set(pos.getX(), pos.getY(), principal.getName());
         return new Board(bl.finish());
     }
     @Scheduled(fixedRate = 500)
     public void update(){
         Game g = gRepo.findOne(1);
-        if(g!=null){
-            if(g.getSpieler1()!=null&&g.getSpieler2()!=null) {
+        if(g != null){
+            if(g.getSpieler1() != null && g.getSpieler2() != null) {
                 BoardLogik bl = ctx.getBean(BoardLogik.class);
                 bl.init(gRepo.findOne(1));
                 bl.step();
-                this.messagingTemplate.convertAndSend("/out/game/state",new Board(bl.finish()));
+                this.messagingTemplate.convertAndSend("/out/game/state", new Board(bl.finish()));
             }
         }
     }
