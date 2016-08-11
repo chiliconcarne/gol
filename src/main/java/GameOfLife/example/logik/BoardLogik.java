@@ -49,7 +49,6 @@ public class BoardLogik {
                     this.g.getBoard()[y][x]=farben[rnd.nextInt(farben.length-1)];
                 }
             }
-
         }
     }
     public Game finish(){
