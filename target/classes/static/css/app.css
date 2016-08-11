@@ -16,7 +16,7 @@ label {
     margin-left: 1px;
 }
 
-.row {
+.board .row {
     margin-bottom: 1px;
     height: 20px;
 }
@@ -97,18 +97,19 @@ a {
 .boerseBtn {
     border-radius: 5px;
     border-width: 2px;
-    margin: 20px;
-    width: 300px;
+    width: 450px;
+    padding: 20px;
+    display: block;
 }
 
 .available {
-    background-color: blue;
+    background-color: #88f;
 }
 
 .unavailable {
-    background-color: grey;
+    background-color: #ddd;
 }
 
 .inprogress {
-    background-color: red;
+    background-color: #f88;
 }
