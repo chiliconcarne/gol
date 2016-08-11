@@ -79,6 +79,7 @@ public class boerseController {
         for(Offer offer : list)
         {
             JsonOffer jsonOffer = new JsonOffer(offer.getUsernname(), "GEGNER", OfferState.Available);
+            offers.add(jsonOffer);
         }
 
         return offers;

@@ -45,7 +45,7 @@ public class gameController {
             int[][] board = new int[p.getHeight()][p.getWidth()];
             for(int y = 0; y < p.getHeight(); y++){
                 for(int x = 0; x < p.getWidth(); x++){
-                    board[y][x]=0;
+                    board[y][x] = 0;
                 }
             }
             gRepo.save(new Game(1, principal.getName(), null, board));
