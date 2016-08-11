@@ -11,9 +11,9 @@ function boerseWebsocket(listChanged, messageChanged)
     {
         console.log('Connected');
 
-        stompClient.subscribe('/out/boerse/list', listArrived);
-        stompClient.subscribe('/out/boerse/message', messageArrived);
-        stompClient.subscribe('/out/boerse/game', gameArrived);
+        stompClient.subscribe('/user/out/boerse/list', listArrived);
+        stompClient.subscribe('/user/out/boerse/message', messageArrived);
+        stompClient.subscribe('/user/out/boerse/game', gameArrived);
         stompClient.send('/in/boerse/start');
 
         function listArrived(listJSON)
