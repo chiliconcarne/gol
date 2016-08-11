@@ -13,7 +13,7 @@ import javax.persistence.Id;
 public class Game {
     @Id
     int id;
-    String spieler1,spieler2;
+    String spieler1,spieler2,winner;
     GamePhase phase;
     int ready=0;
     @Column(length = 16581375)
@@ -74,5 +74,13 @@ public class Game {
 
     public void setReady(int ready) {
         this.ready = ready;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 }

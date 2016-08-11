@@ -2,9 +2,12 @@ package GameOfLife.example.logik;
 
 import GameOfLife.example.entity.Game;
 import GameOfLife.example.entity.Profil;
+import GameOfLife.example.json.Board;
+import GameOfLife.example.json.Message;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.Random;
 
@@ -16,6 +19,8 @@ public class BoardLogik {
     GameRepository gRepo;
     @Autowired
     ProfilRepository pRepo;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
     private Game g;
     private Profil p;
     private int secontColor;
@@ -49,6 +54,29 @@ public class BoardLogik {
                     this.g.getBoard()[y][x]=farben[rnd.nextInt(farben.length-1)];
                 }
             }
+            checkWin();
+        }
+    }
+    public void checkWin(){
+        int p1=0,p2=0;
+        for(int y = 0; y < p.getHeight(); y++){
+            for(int x = 0; x < p.getWidth(); x++){
+                int cell = this.g.getBoard()[y][x];
+                if(cell==this.secontColor)
+                    p2++;
+                else if (cell==this.p.getColor1())
+                    p1++;
+            }
+        }
+        if(p1>(p.getHeight()*p.getWidth())/2) {
+            this.g.setPhase(GamePhase.Ende);
+            this.g.setWinner(this.g.getSpieler1());
+            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getSpieler1()+" gewinnt das Spiel!"));
+        }
+        if(p2>(p.getHeight()*p.getWidth())/2) {
+            this.g.setPhase(GamePhase.Ende);
+            this.g.setWinner(this.g.getSpieler2());
+            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getSpieler2()+" gewinnt das Spiel!"));
         }
     }
     public Game finish(){

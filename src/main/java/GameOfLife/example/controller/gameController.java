@@ -65,6 +65,7 @@ public class gameController {
             g.setPhase(GamePhase.Spiel);
             return new Message(principal.getName()+" ist bereit.\nDas Spiel beginnt.");
         }
+        return new Message("Undefiniert");
     }
     @MessageMapping("/set")
     @SendTo("/game/board")
