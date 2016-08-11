@@ -33,6 +33,7 @@ public class gameController {
             gRepo.save(g);
         }
         return "test";
+
     }
     @MessageMapping("/ready")
     @SendTo("/game/board")
