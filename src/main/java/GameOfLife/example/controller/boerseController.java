@@ -4,6 +4,7 @@ import GameOfLife.example.entity.Game;
 import GameOfLife.example.entity.Offer;
 import GameOfLife.example.entity.Profil;
 import GameOfLife.example.json.JsonOffer;
+import GameOfLife.example.logik.GamePhase;
 import GameOfLife.example.logik.OfferState;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.OfferRepository;
@@ -79,8 +80,8 @@ public class boerseController {
             gRepo.save(new Game(1, username, principal.getName(), board));
             oRepo.delete(username);
 
-            this.messagingTemplate.convertAndSendToUser(username, "/out/boerse/game", null);
-            this.messagingTemplate.convertAndSendToUser(principal.getName(), "/out/boerse/game", null);
+            this.messagingTemplate.convertAndSendToUser(username, "/out/boerse/game", "");
+            this.messagingTemplate.convertAndSendToUser(principal.getName(), "/out/boerse/game", "");
         }
 
     }
@@ -97,8 +98,16 @@ public class boerseController {
 
         for(Offer offer : list)
         {
-            JsonOffer jsonOffer = new JsonOffer(offer.getUsernname(), "GEGNER", OfferState.Available);
-            offers.add(jsonOffer);
+            Game g = gRepo.findOneByPlayer1OrPlayer2(offer.getUsernname(), offer.getUsernname());
+            Profil p = pRepo.findOne(offer.getUsernname());
+            offers.add(new JsonOffer(offer.getUsernname(), "GEGNER", g == null ? OfferState.Available : OfferState.Unavailable, p.getWidth(), p.getHeight(), 50));
+        }
+
+        List<Game> games = (List<Game>) gRepo.findAll();
+        for(Game g : games)
+        {
+            Profil p = pRepo.findOne(g.getPlayer1());
+            offers.add(new JsonOffer(g.getPlayer1(), g.getPlayer2(), OfferState.InProgress, p.getWidth(), p.getHeight(), 50));
         }
 
         return offers;

@@ -50,8 +50,8 @@ public class gameController {
             String opponent = g.getOpponent(player);
 
             this.messagingTemplate.convertAndSendToUser(player, "/out/game/state", g);
-            this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message(player + " ist dem Spiel beigetreten."));
-            this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message("Du bist dem Spiel beigetreten."));
+            this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message((g.getState(opponent) == PlayerState.Connected ? "Alle Spieler sind verbunden. Das Zellen setzten kann beginnen." : "Warten auf " + opponent + ".")));
+            this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message((g.getState(opponent) == PlayerState.Connected ? "Alle Spieler sind verbunden. Das Zellen setzten kann beginnen." : player + " wartet auf dich.")));
         }
     }
 
@@ -68,10 +68,10 @@ public class gameController {
             {
                 g.setState(principal.getName(), PlayerState.Ready);
 
-                this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message("Du ist bereit." + (g.getState(opponent) == PlayerState.Ready ? "" : " Und wartet auf " + opponent + ".")));
-                this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message(player + " ist bereit."));
+                this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message((g.getState(opponent) == PlayerState.Ready ? "Alle Spieler sind bereit. Spiel startet." : "Warten auf " + opponent + ".")));
+                this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message((g.getState(opponent) == PlayerState.Ready ? "Alle Spieler sind bereit. Spiel startet." : player + " wartet auf dich.")));
 
-                if (g.getStatePlayer1()==PlayerState.Ready&&g.getStatePlayer1()==g.getStatePlayer2()){
+                if (g.getStatePlayer1() == PlayerState.Ready && g.getStatePlayer2() == PlayerState.Ready){
                     g.setPhase(GamePhase.Spiel);
                 }
 
@@ -97,8 +97,8 @@ public class gameController {
                 bl.init(g);
                 bl.step();
                 Board board = new Board(bl.finish());
-                this.messagingTemplate.convertAndSendToUser(g.getPlayer1(),"/out/game/state", board);
-                this.messagingTemplate.convertAndSendToUser(g.getPlayer2(),"/out/game/state", board);
+                this.messagingTemplate.convertAndSendToUser(g.getPlayer1(), "/out/game/state", board);
+                this.messagingTemplate.convertAndSendToUser(g.getPlayer2(), "/out/game/state", board);
             }
         }
     }
