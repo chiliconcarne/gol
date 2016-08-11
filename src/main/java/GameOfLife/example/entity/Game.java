@@ -1,5 +1,6 @@
 package GameOfLife.example.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -11,7 +12,7 @@ public class Game {
     @Id
     int id;
     String spieler1,spieler2;
-
+    @Column(length = 16581375)
     private int[][] board = new int[30][30];
 
     public Game(){}
