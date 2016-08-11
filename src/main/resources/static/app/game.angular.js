@@ -4,9 +4,7 @@
 {
     angular.module('game',[]).controller('gameCntl', gameCntl);
 
-    gameCntl.$inject = ['$scope', '$http', '$interval'];
-
-    function gameCntl($scope, $http, $interval)
+    function gameCntl($scope)
     {
         $scope.board = [[]];
 
