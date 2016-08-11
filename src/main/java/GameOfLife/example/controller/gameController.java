@@ -32,8 +32,8 @@ public class gameController {
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private ApplicationContext ctx;
-    @MessageMapping("/start")
-    @SendTo("/game/message")
+    @MessageMapping("/game/start")
+    @SendTo("/out/game/message")
     public Message start(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
         if(g == null){
@@ -52,8 +52,8 @@ public class gameController {
             return new Message(principal.getName()+" tritt dem Spiel bei.\nSpiel beginnt in einem kurzen Moment.");
         }
     }
-    @MessageMapping("/ready")
-    @SendTo("/game/message")
+    @MessageMapping("/game/ready")
+    @SendTo("/out/game/message")
     public Message ready(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
         if (g.getReady() == 0 && g.getPhase() == GamePhase.Start) {
@@ -69,8 +69,8 @@ public class gameController {
         }
         return new Message("Undefiniert");
     }
-    @MessageMapping("/set")
-    @SendTo("/game/state")
+    @MessageMapping("/game/set")
+    @SendTo("/out/game/state")
     public Board set(Position pos, Principal principal) throws Exception {
         BoardLogik bl = ctx.getBean(BoardLogik.class);
         bl.init(gRepo.findOne(1));
@@ -85,7 +85,7 @@ public class gameController {
                 BoardLogik bl = ctx.getBean(BoardLogik.class);
                 bl.init(gRepo.findOne(1));
                 bl.step();
-                this.messagingTemplate.convertAndSend("/game/state",new Board(bl.finish()));
+                this.messagingTemplate.convertAndSend("/out/game/state",new Board(bl.finish()));
             }
         }
     }

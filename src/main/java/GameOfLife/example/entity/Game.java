@@ -15,17 +15,17 @@ public class Game {
     int id;
     String spieler1,spieler2,winner;
     GamePhase phase;
-    int ready=0;
+    int ready = 0;
     @Column(length = 16581375)
     private int[][] board = new int[30][30];
 
     public Game(){}
 
-    public Game(int id, String spieler1, String spieler2,int[][] board) {
+    public Game(int id, String spieler1, String spieler2, int[][] board) {
         this.id = id;
         this.spieler1 = spieler1;
         this.spieler2 = spieler2;
-        this.board=board;
+        this.board = board;
         phase = GamePhase.Start;
     }
 
