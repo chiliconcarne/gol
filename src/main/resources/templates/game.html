@@ -17,7 +17,7 @@
     <h2>Status: {{message}}</h2>
     <div class="board">
         <div class="row" ng-repeat="row in board">
-            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userClicked($parent.$index, $index)"></div>
+            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userClicked($index, $parent.$index)"></div>
         </div>
     </div>
     <button ng-click="ready();">ready</button>
