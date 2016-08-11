@@ -17,9 +17,9 @@
     <h2>Status: {{message}}</h2>
     <div class="offer">
         <div class="row" ng-repeat="row in offer" >
-            <div ng-show="row.state=='Available'" ng-click="accept( row.username )" class="boerseBtn available">{{ row.username }}</div>
-            <div ng-show="row.state=='Unavailable'" class="boerseBtn unavailable">{{ row.username }}</div>
-            <div ng-show="row.state=='InProgress'" class="boerseBtn inprogress">{{ row.username + ' VS ' + row.opponent }}</div>
+            <div ng-show="row.state=='Available'" ng-click="accept( row.username )" class="boerseBtn available">{{ row.username }} Brettweite: {{ row.width }} Bretthöhe: {{ row.height }} Siegbedingung: {{ row.winCondition }}%</div>
+            <div ng-show="row.state=='Unavailable'" class="boerseBtn unavailable">{{ row.username }} Brettweite: {{ row.width }} Bretthöhe: {{ row.height }} Siegbedingung: {{ row.winCondition }}%</div>
+            <div ng-show="row.state=='InProgress'" class="boerseBtn inprogress">{{ row.username + ' VS ' + row.opponent }} Brettweite: {{ row.width }} Bretthöhe: {{ row.height }} Siegbedingung: {{ row.winCondition }}%</div>
         </div>
     </div>
     <button ng-click="add()">Hinzufügen</button><br />

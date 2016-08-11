@@ -11,8 +11,8 @@
         var stateChanged = function(state)
         {
             $scope.board = state.board;
-            $scope.spieler1 = state.spieler1;
-            $scope.spieler2 = state.spieler2;
+            $scope.spieler1 = state.player1;
+            $scope.spieler2 = state.player2;
             $scope.$apply();
         };
 
