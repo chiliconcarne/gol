@@ -26,17 +26,21 @@ import java.security.Principal;
 public class gameController {
     @Autowired
     private GameRepository gRepo;
+
     @Autowired
     private ProfilRepository pRepo;
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
     @Autowired
     private ApplicationContext ctx;
+
     @MessageMapping("/game/start")
     @SendTo("/out/game/message")
     public Message start(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
-        if(g == null){
+        if(g == null) {
             Profil p = pRepo.findOne(principal.getName());
             int[][] board = new int[p.getHeight()][p.getWidth()];
             for(int y = 0; y < p.getHeight(); y++){
@@ -44,12 +48,12 @@ public class gameController {
                     board[y][x]=0;
                 }
             }
-            gRepo.save(new Game(1,principal.getName(),null,board));
-            return new Message(principal.getName()+" tritt dem Spiel bei.\nWarte auf anderen Spieler...");
-        }else {
+            gRepo.save(new Game(1, principal.getName(), null, board));
+            return new Message(principal.getName() + " tritt dem Spiel bei.\nWarte auf anderen Spieler...");
+        } else {
             g.setSpieler2(principal.getName());
             gRepo.save(g);
-            return new Message(principal.getName()+" tritt dem Spiel bei.\nSpiel beginnt in einem kurzen Moment.");
+            return new Message(principal.getName() + " tritt dem Spiel bei.\nSpiel beginnt in einem kurzen Moment.");
         }
     }
     @MessageMapping("/game/ready")

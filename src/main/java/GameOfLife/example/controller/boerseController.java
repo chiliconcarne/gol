@@ -1,8 +1,6 @@
 package GameOfLife.example.controller;
 
 import GameOfLife.example.entity.Offer;
-import GameOfLife.example.json.Board;
-import GameOfLife.example.json.Message;
 import GameOfLife.example.json.JsonOffer;
 import GameOfLife.example.logik.OfferState;
 import GameOfLife.example.repository.GameRepository;
@@ -11,18 +9,15 @@ import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by sernowm on 10.08.2016.
+ * Created by raedschk on 10.08.2016.
  */
 @Controller
 public class boerseController {
@@ -43,7 +38,7 @@ public class boerseController {
 
     @MessageMapping("/boerse/start")
     public void start(Principal principal) throws Exception {
-        this.messagingTemplate.convertAndSendToUser(principal.getName(), "/out/game/state", getOfferList());
+        this.messagingTemplate.convertAndSendToUser(principal.getName(), "/out/boerse/list", getOfferList());
     }
 
     @MessageMapping("/boerse/add")
@@ -53,7 +48,7 @@ public class boerseController {
         {
             o = new Offer(principal.getName());
             oRepo.save(o);
-            boersechanged();
+            boerseChanged();
         }
     }
 
@@ -62,7 +57,7 @@ public class boerseController {
         if(oRepo.exists(principal.getName()))
         {
             oRepo.delete(principal.getName());
-            boersechanged();
+            boerseChanged();
         }
     }
 
@@ -71,9 +66,9 @@ public class boerseController {
 
     }
 
-    private void boersechanged()
+    private void boerseChanged()
     {
-        this.messagingTemplate.convertAndSend("/out/game/state", getOfferList());
+        this.messagingTemplate.convertAndSend("/out/boerse/list", getOfferList());
     }
 
     private List<JsonOffer> getOfferList()
