@@ -26,6 +26,7 @@ public class Game {
         this.spieler1 = spieler1;
         this.spieler2 = spieler2;
         this.board=board;
+        phase = GamePhase.Start;
     }
 
     public int getId() {

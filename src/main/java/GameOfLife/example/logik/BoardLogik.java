@@ -23,6 +23,8 @@ public class BoardLogik {
     private Game g;
     private Profil p;
     private int secontColor;
+    private Random rnd = new Random();
+    private int[] farben;
     public void init(Game g){
         this.g=g;
         this.p=pRepo.findOne(g.getSpieler1());
@@ -31,6 +33,7 @@ public class BoardLogik {
             this.secontColor=p.getColor2();
         else
             this.secontColor=p.getColor1();
+        farben = new int[]{0,0,0,0,this.p.getColor1(),this.secontColor};
     }
     public void set(int x,int y,String player){
         if(this.g.getPhase()==GamePhase.Start){
@@ -65,8 +68,6 @@ public class BoardLogik {
             checkWin();
         }
     }
-    Random rnd = new Random();
-    int[] farben = new int[]{0,0,0,0,this.p.getColor1(),this.secontColor};
     public void random(int x,int y){
         bnew[y][x]=farben[rnd.nextInt(farben.length-1)];
     }

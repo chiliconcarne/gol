@@ -37,7 +37,7 @@ public class gameController {
     public Message start(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
         if(g == null){
-            Profil p = pRepo.findOne(g.getSpieler1());
+            Profil p = pRepo.findOne(principal.getName());
             int[][] board = new int[p.getHeight()][p.getWidth()];
             for(int y = 0; y < p.getHeight(); y++){
                 for(int x = 0; x < p.getWidth(); x++){
