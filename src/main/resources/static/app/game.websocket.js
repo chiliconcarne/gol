@@ -1,6 +1,6 @@
 'use strict';
 
-function gameWebsocket(statechanged)
+function gameWebsocket(stateChanged, messageChanged)
 {
     var websocket = {};
 
@@ -13,7 +13,13 @@ function gameWebsocket(statechanged)
         {
             var state = JSON.parse(stateJson.body);
             console.log(state);
-            statechanged(state.g);
+            stateChanged(state.g);
+        });
+        stompClient.subscribe('/game/message', function(messageJson)
+        {
+            var message = JSON.parse(messageJson.body);
+            console.log(message);
+            messageChanged(message.msg);
         });
         stompClient.send("/app/start", {});
     });

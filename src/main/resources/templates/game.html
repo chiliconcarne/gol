@@ -13,7 +13,7 @@
 <body>
 <div class="text-center" ng-app="game" ng-controller="gameCntl">
     <h1>Lord of the Cell</h1>
-
+    <h1>{{spieler1}} VS {{spieler2}}</h1>
     <div class="board">
         <div class="row" ng-repeat="row in board">
             <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userClicked($parent.$index, $index)"></div>

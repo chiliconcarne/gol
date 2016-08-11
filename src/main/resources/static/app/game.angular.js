@@ -13,6 +13,8 @@
         var stateChanged = function(state)
         {
             $scope.board = state.board;
+            $scope.spieler1 = state.spieler1;
+            $scope.spieler2 = state.spieler2;
             $scope.$apply();
         };
 
