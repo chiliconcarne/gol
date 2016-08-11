@@ -27,10 +27,16 @@ public class BoardLogik {
             this.secontColor=p.getColor1();
     }
     public void set(int x,int y,String player){
-        if(this.p.getUsername()==player)
-            this.g.getBoard()[y][x]=this.p.getColor1();
-        else
-            this.g.getBoard()[y][x]=this.secontColor;
+        if(this.g.getPhase()==GamePhase.Start){
+            if(this.p.getUsername()==player)
+                if(x<(Math.ceil(this.p.getWidth()/5)*2)) {
+                    this.g.getBoard()[y][x] = this.p.getColor1();
+                }
+            else
+                if(x>(Math.ceil(this.p.getWidth()/5)*3)) {
+                    this.g.getBoard()[y][x] = this.secontColor;
+                }
+        }
     }
     public void step(){
 
