@@ -8,6 +8,7 @@
     {
         var listChanged = function(list)
         {
+            $scope.offer = list;
             $scope.$apply();
         };
 
@@ -18,5 +19,17 @@
         };
 
         var websocket = boerseWebsocket(listChanged, messageChanged);
+
+        $scope.add = function(){
+            websocket.add();
+        }
+
+        $scope.remove = function(){
+            websocket.remove();
+        }
+
+        $scope.accept = function(){
+            websocket.accept();
+        }
     }
 })();

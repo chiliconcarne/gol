@@ -4,7 +4,7 @@ function gameWebsocket(stateChanged, messageChanged)
 {
     var websocket = {};
 
-    var stompClient = Stomp.over(new SockJS('/app'));
+    var stompClient = Stomp.over(new SockJS('/websocket'));
     stompClient.connect({}, onstart);
 
     function onstart()
