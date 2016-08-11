@@ -12,16 +12,17 @@ public class Profil {
     @Id
     String username;
 
-    int color1, color2, width, height;
+    int color1, color2, width, height, win;
 
     public Profil() {}
 
-    public Profil(String username, int color1, int color2, int width, int height) {
+    public Profil(String username, int color1, int color2, int width, int height, int win) {
         this.username = username;
         this.color1 = color1;
         this.color2 = color2;
         this.width = width;
         this.height = height;
+        this.win = win;
     }
 
     public String getUsername() {
@@ -63,4 +64,8 @@ public class Profil {
     public void setHeight(int height) {
         this.height = height;
     }
+
+    public int getWin() { return win; }
+
+    public void setWin(int win) { this.win = win; }
 }

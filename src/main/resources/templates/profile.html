@@ -37,6 +37,7 @@
             <div><h4>Feldgröße auswählen:</h4>
                 <label for="sizeWidth">Feldbreite: </label><input type="number" min="1" max="100" name="width" id="sizeWidth" class="textField numberField" th:value="${profil.width}"/><br />
                 <label for="sizeHeight">Feldhöhe: </label><input type="number" min="1" max="100" name="height" id="sizeHeight" class="textField numberField" th:value="${profil.height}"/>
+                <label for="win">Gewinn nach (%) der Bevölkerung: </label><input type="number" min="20" max="100" name="win" id="win" class="textField numberField" th:value="${profil.win}"/>
             </div>
             <input type="hidden" name="color1" id="color1" th:value="${profil.color1}"/>
             <input type="hidden" name="color2" id="color2" th:value="${profil.color2}"/>
