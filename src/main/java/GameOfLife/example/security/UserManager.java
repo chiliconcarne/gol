@@ -29,7 +29,7 @@ public class UserManager {
         if(!inMemoryUserDetailsManager.userExists(username))
         {
             inMemoryUserDetailsManager.createUser(new User(username, passwordEncoder.encode(password), new ArrayList<GrantedAuthority>()));
-            pRepo.save(new Profil(username, 1, 2, 20, 20));
+            pRepo.save(new Profil(username, 1, 2, 20, 20, 50));
             return true;
         }
         else
