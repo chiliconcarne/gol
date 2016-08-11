@@ -11,6 +11,7 @@ public class Game {
     @Id
     int id;
     String spieler1,spieler2;
+
     private int[][] board = new int[30][30];
 
     public Game(){}
