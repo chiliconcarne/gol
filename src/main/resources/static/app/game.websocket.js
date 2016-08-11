@@ -13,7 +13,7 @@ function gameWebsocket(statechanged)
         {
             var state = JSON.parse(stateJson.body);
             console.log(state);
-            statechanged(state);
+            statechanged(state.g);
         });
         stompClient.send("/app/start", {});
     });
