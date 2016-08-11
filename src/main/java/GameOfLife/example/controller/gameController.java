@@ -2,6 +2,7 @@ package GameOfLife.example.controller;
 
 import GameOfLife.example.entity.Game;
 import GameOfLife.example.json.Board;
+import GameOfLife.example.json.Message;
 import GameOfLife.example.json.Position;
 import GameOfLife.example.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class gameController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     @MessageMapping("/start")
-    @SendTo("/game/board")
-    public String start(Principal principal) throws Exception {
+    @SendTo("/game/message")
+    public Message start(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
         if(g == null){
             gRepo.save(new Game(1,principal.getName(),null));
@@ -32,13 +33,13 @@ public class gameController {
             g.setSpieler2(principal.getName());
             gRepo.save(g);
         }
-        return "test";
+        return new Message(principal.getName()+" tritt dem Spiel bei.");
 
     }
     @MessageMapping("/ready")
-    @SendTo("/game/board")
-    public Board ready() throws Exception {
-        return new Board(gRepo.findOne(1));
+    @SendTo("/game/message")
+    public Message ready(Principal principal) throws Exception {
+        return new Message(principal.getName()+" ist bereit.");
     }
     @MessageMapping("/set")
     @SendTo("/game/board")
