@@ -1,5 +1,7 @@
 package GameOfLife.example.entity;
 
+import GameOfLife.example.logik.GamePhase;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,21 +13,19 @@ import javax.persistence.Id;
 public class Game {
     @Id
     int id;
-    String spieler1,spieler2;
+    String spieler1,spieler2,winner;
+    GamePhase phase;
+    int ready=0;
     @Column(length = 16581375)
     private int[][] board = new int[30][30];
 
     public Game(){}
 
-    public Game(int id, String spieler1, String spieler2) {
+    public Game(int id, String spieler1, String spieler2,int[][] board) {
         this.id = id;
         this.spieler1 = spieler1;
         this.spieler2 = spieler2;
-        for(int y = 0; y < 30; y++){
-            for(int x = 0; x < 30; x++){
-                board[y][x]=0;
-            }
-        }
+        this.board=board;
     }
 
     public int getId() {
@@ -58,5 +58,29 @@ public class Game {
 
     public void setBoard(int[][] board) {
         this.board = board;
+    }
+
+    public GamePhase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(GamePhase phase) {
+        this.phase = phase;
+    }
+
+    public int getReady() {
+        return ready;
+    }
+
+    public void setReady(int ready) {
+        this.ready = ready;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 }
