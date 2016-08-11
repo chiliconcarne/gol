@@ -58,8 +58,8 @@ public class BoardLogik {
                 } else if (this.g.getBoard()[y][x]==this.p.getColor1()) { //Freundliche Zelle explodiert
                     int dy=0,dx=0;
                     for(int i=1;i<=9;i++){
-                        dy=i/9-2;
-                        dx=i%3-1;
+                        dy=(i/9-2)+y;
+                        dx=(i%3-1)+x;
                         if(dy<0||dx<0||dy>this.p.getHeight()-1||dx>this.p.getWidth()-1)continue;
                         if(this.g.getBoard()[dy][dx]==0)
                             this.g.getBoard()[dy][dx]=this.p.getColor1();
@@ -75,8 +75,8 @@ public class BoardLogik {
                 } else if (this.g.getBoard()[y][x]==this.secontColor) { //Freundliche Zelle explodiert
                     int dy=0,dx=0;
                     for(int i=1;i<=9;i++){
-                        dy=i/9-2;
-                        dx=i%3-1;
+                        dy=(i/9-2)+y;
+                        dx=(i%3-1)+x;
                         if(dy<0||dx<0||dy>this.p.getHeight()-1||dx>this.p.getWidth()-1)continue;
                         if(this.g.getBoard()[dy][dx]==0)
                             this.g.getBoard()[dy][dx]=this.secontColor;
@@ -145,39 +145,15 @@ public class BoardLogik {
     public CheckCell checkCell(int x,int y){
         int spieler1=0;
         int spieler2=0;
-        if(bold[y][x]==this.p.getColor1())spieler1++;
-        if(bold[y][x]==this.secontColor)spieler2++;
-        if(x>0){
-            if(bold[y][x-1]==this.p.getColor1())spieler1++;
-            if(bold[y][x-1]==this.secontColor)spieler2++;
-        }
-        if(x<this.p.getWidth()-1){
-            if(bold[y][x+1]==this.p.getColor1())spieler1++;
-            if(bold[y][x+1]==this.secontColor)spieler2++;
-        }
-        if(y>0){
-            if(bold[y-1][x]==this.p.getColor1())spieler1++;
-            if(bold[y-1][x]==this.secontColor)spieler2++;
-        }
-        if(y<this.p.getHeight()-1){
-            if(bold[y+1][x]==this.p.getColor1())spieler1++;
-            if(bold[+1][x]==this.secontColor)spieler2++;
-        }
-        if(x>0&&y>0){
-            if(bold[y-1][x-1]==this.p.getColor1())spieler1++;
-            if(bold[y-1][x-1]==this.secontColor)spieler2++;
-        }
-        if(x>0&&y<this.p.getHeight()-1){
-            if(bold[y+1][x-1]==this.p.getColor1())spieler1++;
-            if(bold[y+1][x-1]==this.secontColor)spieler2++;
-        }
-        if(x<this.p.getWidth()-1&&y>0){
-            if(bold[y-1][x+1]==this.p.getColor1())spieler1++;
-            if(bold[y-1][x+1]==this.secontColor)spieler2++;
-        }
-        if(x<this.p.getWidth()-1&&y<this.p.getHeight()-1){
-            if(bold[y+1][x+1]==this.p.getColor1())spieler1++;
-            if(bold[y+1][x+1]==this.secontColor)spieler2++;
+        int dy=0,dx=0;
+        for(int i=1;i<=9;i++) {
+            dy = (i / 9 - 2) + y;
+            dx = (i % 3 - 1) + x;
+            if (dy < 0 || dx < 0 || dy > this.p.getHeight() - 1 || dx > this.p.getWidth() - 1) continue;
+            if (this.g.getBoard()[dy][dx] == this.p.getColor1())
+                spieler1++;
+            if (this.g.getBoard()[dy][dx] == this.secontColor)
+                spieler2++;
         }
         return new CheckCell(9-spieler1-spieler2,spieler1,spieler2);
     }
@@ -192,12 +168,13 @@ public class BoardLogik {
                     p1++;
             }
         }
-        if(p1>(p.getHeight()*p.getWidth())/2) {
+        int max = p.getHeight()*p.getWidth();
+        if((p1>max*0.5)||p2==0) {
             this.g.setPhase(GamePhase.Ende);
             this.g.setWinner(this.g.getPlayer1());
             this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer1()+" gewinnt das Spiel!"));
         }
-        if(p2>(p.getHeight()*p.getWidth())/2) {
+        if(p2>max*0.5||p1==0) {
             this.g.setPhase(GamePhase.Ende);
             this.g.setWinner(this.g.getPlayer2());
             this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer2()+" gewinnt das Spiel!"));
