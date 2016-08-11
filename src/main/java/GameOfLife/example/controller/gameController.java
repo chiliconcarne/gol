@@ -88,7 +88,7 @@ public class gameController {
         return new Board(bl.finish());
     }
 
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 3000)
     public void update(){
         List<Game> games = (List<Game>) gRepo.findAll();
         for(Game g : games){
