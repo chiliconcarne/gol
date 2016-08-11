@@ -28,8 +28,8 @@
             websocket.remove();
         }
 
-        $scope.accept = function(){
-            websocket.accept();
+        $scope.accept = function(username){
+            websocket.accept(username);
         }
     }
 })();

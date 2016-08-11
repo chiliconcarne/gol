@@ -93,3 +93,22 @@ a {
 .c5 { background-color: orange; }
 .c6 { background-color: aqua; }
 .c7 { background-color: MediumOrchid; }
+
+.boerseBtn {
+    border-radius: 5px;
+    border-width: 2px;
+    margin: 20px;
+    width: 300px;
+}
+
+.available {
+    background-color: blue;
+}
+
+.unavailable {
+    background-color: grey;
+}
+
+.inprogress {
+    background-color: red;
+}
