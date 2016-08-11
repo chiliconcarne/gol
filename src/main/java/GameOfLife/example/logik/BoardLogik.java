@@ -23,8 +23,7 @@ public class BoardLogik {
     private Game g;
     private Profil p;
     private int secontColor;
-    private Random rnd = new Random();
-    private int[] farben;
+    private int[][] bold,bnew;
     public void init(Game g){
         this.g=g;
         this.p=pRepo.findOne(g.getSpieler1());
@@ -33,24 +32,64 @@ public class BoardLogik {
             this.secontColor=p.getColor2();
         else
             this.secontColor=p.getColor1();
-        farben = new int[]{0,0,0,0,this.p.getColor1(),this.secontColor};
     }
     public void set(int x,int y,String player){
         if(this.g.getPhase()==GamePhase.Start){
             int percent = Math.round(this.p.getWidth()/5.0f) * 2;
             if(this.p.getUsername()==player) {
                 if (x < percent) {
-                    this.g.getBoard()[y][x] = this.p.getColor1();
+                    if (this.g.getBoard()[y][x]==0)
+                        this.g.getBoard()[y][x] = this.p.getColor1();
+                    else
+                        this.g.getBoard()[y][x] = 0;
                 }
             } else {
                 if (x >= this.p.getWidth()-percent) {
-                    this.g.getBoard()[y][x] = this.secontColor;
+                    if(this.g.getBoard()[y][x]==0)
+                        this.g.getBoard()[y][x] = this.secontColor;
+                    else
+                        this.g.getBoard()[y][x] = 0;
+                }
+            }
+        } else if (this.g.getPhase()==GamePhase.Spiel){
+            if(this.p.getUsername()==player){ // Spieler 1
+                if(this.g.getBoard()[y][x]==0){ //Neutrale Zelle wird wiedergeboren
+                    this.g.getBoard()[y][x]=this.p.getColor1();
+                } else if (this.g.getBoard()[y][x]==this.p.getColor1()) { //Freundliche Zelle explodiert
+                    int dy=0,dx=0;
+                    for(int i=1;i<=9;i++){
+                        dy=i/9-2;
+                        dx=i%3-1;
+                        if(dy<0||dx<0||dy>this.p.getHeight()-1||dx>this.p.getWidth()-1)continue;
+                        if(this.g.getBoard()[dy][dx]==0)
+                            this.g.getBoard()[dy][dx]=this.p.getColor1();
+                        else
+                            this.g.getBoard()[dy][dx]=0;
+                    }
+                } else if (this.g.getBoard()[y][x]==this.secontColor) { //Feindliche Zelle stirbt
+                    this.g.getBoard()[y][x]=0;
+                }
+            } else { // Spieler 2
+                if(this.g.getBoard()[y][x]==0){ //Neutrale Zelle wird wiedergeboren
+                    this.g.getBoard()[y][x]=this.secontColor;
+                } else if (this.g.getBoard()[y][x]==this.secontColor) { //Freundliche Zelle explodiert
+                    int dy=0,dx=0;
+                    for(int i=1;i<=9;i++){
+                        dy=i/9-2;
+                        dx=i%3-1;
+                        if(dy<0||dx<0||dy>this.p.getHeight()-1||dx>this.p.getWidth()-1)continue;
+                        if(this.g.getBoard()[dy][dx]==0)
+                            this.g.getBoard()[dy][dx]=this.secontColor;
+                        else
+                            this.g.getBoard()[dy][dx]=0;
+                    }
+                } else if (this.g.getBoard()[y][x]==this.p.getColor1()) { //Feindliche Zelle stirbt
+                    this.g.getBoard()[y][x]=0;
                 }
             }
         }
     }
-    int[][] bold;
-    int[][] bnew;
+
     public void step(){
         if(this.g.getPhase()==GamePhase.Spiel){
             bold = this.g.getBoard();
@@ -69,9 +108,6 @@ public class BoardLogik {
             this.g.setBoard(bnew);
             checkWin();
         }
-    }
-    public void random(int x,int y){
-        bnew[y][x]=farben[rnd.nextInt(farben.length-1)];
     }
     public void rulesLiving(int x,int y){
         CheckCell cc = checkCell(x,y);
