@@ -18,11 +18,22 @@
             $scope.$apply();
         };
 
-        var websocket = gameWebsocket(stateChanged);
+        var messageChanged = function(message)
+        {
+            $scope.message = message;
+            $scope.$apply();
+        };
+
+        var websocket = gameWebsocket(stateChanged, messageChanged);
 
         $scope.userClicked = function (x, y)
         {
             websocket.userClicked(x, y);
+        };
+
+        $scope.ready = function ()
+        {
+            websocket.ready();
         };
     }
 })();

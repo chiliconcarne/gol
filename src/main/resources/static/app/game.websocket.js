@@ -21,14 +21,20 @@ function gameWebsocket(stateChanged, messageChanged)
             console.log(message);
             messageChanged(message.msg);
         });
-        stompClient.send("/app/start", {});
+        stompClient.send("/app/start");
     });
 
     websocket.userClicked = function(x, y)
     {
         console.log('userClicked: x = ' + x + " y = " + y);
         stompClient.send("/app/set", {}, JSON.stringify({ 'x': x, 'y': y }));
-    }
+    };
+
+    websocket.ready = function()
+    {
+        console.log('ready');
+        stompClient.send("/app/ready");
+    };
 
     return websocket;
 }
