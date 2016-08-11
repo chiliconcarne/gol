@@ -26,8 +26,8 @@ public class BoardLogik {
     private int[][] bold,bnew;
     public void init(Game g){
         this.g=g;
-        this.p=pRepo.findOne(g.getSpieler1());
-        Profil p = pRepo.findOne(g.getSpieler2());
+        this.p=pRepo.findOne(g.getPlayer1());
+        Profil p = pRepo.findOne(g.getPlayer2());
         if(p.getColor1()==this.p.getColor1())
             this.secontColor=p.getColor2();
         else
@@ -194,13 +194,13 @@ public class BoardLogik {
         }
         if(p1>(p.getHeight()*p.getWidth())/2) {
             this.g.setPhase(GamePhase.Ende);
-            this.g.setWinner(this.g.getSpieler1());
-            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getSpieler1()+" gewinnt das Spiel!"));
+            this.g.setWinner(this.g.getPlayer1());
+            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer1()+" gewinnt das Spiel!"));
         }
         if(p2>(p.getHeight()*p.getWidth())/2) {
             this.g.setPhase(GamePhase.Ende);
-            this.g.setWinner(this.g.getSpieler2());
-            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getSpieler2()+" gewinnt das Spiel!"));
+            this.g.setWinner(this.g.getPlayer2());
+            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer2()+" gewinnt das Spiel!"));
         }
     }
     public Game finish(){

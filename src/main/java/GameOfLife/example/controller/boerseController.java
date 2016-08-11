@@ -1,6 +1,8 @@
 package GameOfLife.example.controller;
 
+import GameOfLife.example.entity.Game;
 import GameOfLife.example.entity.Offer;
+import GameOfLife.example.entity.Profil;
 import GameOfLife.example.json.JsonOffer;
 import GameOfLife.example.logik.OfferState;
 import GameOfLife.example.repository.GameRepository;
@@ -62,7 +64,24 @@ public class boerseController {
     }
 
     @MessageMapping("/boerse/accept")
-    public void accept(JsonOffer offer, Principal principal) throws Exception {
+    public void accept(String username, Principal principal) throws Exception {
+        Game g1 = gRepo.findOneByPlayer1OrPlayer2(principal.getName(), principal.getName());
+        Game g2 = gRepo.findOneByPlayer1OrPlayer2(username, username);
+        if(username != principal.getName() && oRepo.exists(username) && g1 == null && g2 == null)
+        {
+            Profil p = pRepo.findOne(principal.getName());
+            int[][] board = new int[p.getHeight()][p.getWidth()];
+            for(int y = 0; y < p.getHeight(); y++){
+                for(int x = 0; x < p.getWidth(); x++){
+                    board[y][x] = 0;
+                }
+            }
+            gRepo.save(new Game(1, username, principal.getName(), board));
+            oRepo.delete(username);
+
+            this.messagingTemplate.convertAndSendToUser(username, "/out/boerse/game", null);
+            this.messagingTemplate.convertAndSendToUser(principal.getName(), "/out/boerse/game", null);
+        }
 
     }
 
