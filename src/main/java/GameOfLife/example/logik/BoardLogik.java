@@ -6,6 +6,8 @@ import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Random;
+
 /**
  * Created by sernowm on 11.08.2016.
  */
@@ -39,7 +41,16 @@ public class BoardLogik {
         }
     }
     public void step(){
+        if(this.g.getPhase()==GamePhase.Spiel){
+            Random rnd = new Random();
+            int[] farben = new int[]{0,0,0,0,this.p.getColor1(),this.secontColor};
+            for(int y = 0; y < p.getHeight(); y++){
+                for(int x = 0; x < p.getWidth(); x++){
+                    this.g.getBoard()[y][x]=farben[rnd.nextInt(farben.length-1)];
+                }
+            }
 
+        }
     }
     public Game finish(){
         gRepo.save(this.g);
