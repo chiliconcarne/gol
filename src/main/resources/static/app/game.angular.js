@@ -24,9 +24,18 @@
 
         var websocket = gameWebsocket(stateChanged, messageChanged);
 
-        $scope.userClicked = function (x, y)
+        var mousedown = false;
+        var oldSetPos = {x: -1,y: -1};
+        $(document).mousedown(() => {mousedown = true;})
+        $(document).mouseup(() => {mousedown = false;})
+        $scope.userSet = function (x, y, force)
         {
-            websocket.userClicked(x, y);
+            if((mousedown || force) && (oldSetPos.x != x || oldSetPos.y != y))
+            {
+                oldSetPos.x = x;
+                oldSetPos.y = y;
+                websocket.userClicked(x, y);
+            }
         };
 
         $scope.ready = function ()

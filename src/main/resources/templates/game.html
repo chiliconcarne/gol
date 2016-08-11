@@ -6,6 +6,7 @@
     <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
     <script th:src="@{/js/sockjs-0.3.4.min.js}"></script>
     <script th:src="@{/js/stomp.min.js}"></script>
+    <script th:src="@{/js/jquery-3.1.0.min.js}"></script>
     <script th:src="@{/app/angular.js}"></script>
     <script th:src="@{/app/game.angular.js}"></script>
     <script th:src="@{/app/game.websocket.js}"></script>
@@ -17,7 +18,7 @@
     <h2>Status: {{message}}</h2>
     <div class="board">
         <div class="row" ng-repeat="row in board">
-            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userClicked($index, $parent.$index)"></div>
+            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mouseover="userSet($index, $parent.$index, false)"  ng-mousedown="userSet($index, $parent.$index, true)"></div>
         </div>
     </div>
     <button ng-click="ready();">ready</button>

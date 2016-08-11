@@ -76,7 +76,7 @@ public class BoardLogik {
     public void rulesLiving(int x,int y){
         CheckCell cc = checkCell(x,y);
         if(bold[y][x]==this.p.getColor1()){
-            if(cc.getSpieler1()<2||cc.getSpieler1()>3||cc.getSpieler2()==2) {
+            if(cc.getSpieler1()<3||cc.getSpieler1()>4||cc.getSpieler2()==2) {
                 bnew[y][x] = 0;
             } else if(cc.getSpieler2()==3) {
                 bnew[y][x]=this.secontColor;
@@ -85,7 +85,7 @@ public class BoardLogik {
             }
         }
         if(bold[y][x]==this.secontColor){
-            if(cc.getSpieler2()<2||cc.getSpieler2()>3||cc.getSpieler1()==2) {
+            if(cc.getSpieler2()<3||cc.getSpieler2()>4||cc.getSpieler1()==2) {
                 bnew[y][x] = 0;
             } else if(cc.getSpieler1()==3) {
                 bnew[y][x] = this.p.getColor1();
