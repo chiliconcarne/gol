@@ -45,12 +45,12 @@ public class gameController {
                 }
             }
             gRepo.save(new Game(1,principal.getName(),null,board));
+            return new Message(principal.getName()+" tritt dem Spiel bei.\nWarte auf anderen Spieler...");
         }else {
             g.setSpieler2(principal.getName());
             gRepo.save(g);
+            return new Message(principal.getName()+" tritt dem Spiel bei.\nSpiel beginnt in einem kurzen Moment.");
         }
-        return new Message(principal.getName()+" tritt dem Spiel bei.");
-
     }
     @MessageMapping("/ready")
     @SendTo("/game/message")
@@ -58,24 +58,26 @@ public class gameController {
         Game g = gRepo.findOne(1);
         if(g.getReady()==0&&g.getPhase()==GamePhase.Start) {
             g.setReady(1);
-            return new Message(principal.getName()+" ist bereit.");
+            gRepo.save(g);
+            return new Message(principal.getName()+" ist bereit. Und wartet auf "+g.getSpieler2()+".");
         }
         if(g.getReady()==1&&g.getPhase()==GamePhase.Start) {
             g.setReady(0);
             g.setPhase(GamePhase.Spiel);
+            gRepo.save(g);
             return new Message(principal.getName()+" ist bereit.\nDas Spiel beginnt.");
         }
         return new Message("Undefiniert");
     }
     @MessageMapping("/set")
-    @SendTo("/game/board")
+    @SendTo("/game/state")
     public Board set(Position pos, Principal principal) throws Exception {
         BoardLogik bl = ctx.getBean(BoardLogik.class);
         bl.init(gRepo.findOne(1));
         bl.set(pos.getX(),pos.getY(),principal.getName());
         return new Board(bl.finish());
     }
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 500)
     public void update(){
         Game g = gRepo.findOne(1);
         if(g!=null){
@@ -83,7 +85,7 @@ public class gameController {
                 BoardLogik bl = ctx.getBean(BoardLogik.class);
                 bl.init(gRepo.findOne(1));
                 bl.step();
-                this.messagingTemplate.convertAndSend("/game/board",new Board(bl.finish()));
+                this.messagingTemplate.convertAndSend("/game/state",new Board(bl.finish()));
             }
         }
     }

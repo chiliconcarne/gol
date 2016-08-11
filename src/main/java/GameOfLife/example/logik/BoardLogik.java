@@ -37,14 +37,16 @@ public class BoardLogik {
     }
     public void set(int x,int y,String player){
         if(this.g.getPhase()==GamePhase.Start){
-            if(this.p.getUsername()==player)
-                if(x<(Math.ceil(this.p.getWidth()/5)*2)) {
+            int percent = Math.round(this.p.getWidth()/5.0f) * 2;
+            if(this.p.getUsername()==player) {
+                if (x < percent) {
                     this.g.getBoard()[y][x] = this.p.getColor1();
                 }
-            else
-                if(x>(Math.ceil(this.p.getWidth()/5)*3)) {
+            } else {
+                if (x >= this.p.getWidth()-percent) {
                     this.g.getBoard()[y][x] = this.secontColor;
                 }
+            }
         }
     }
     int[][] bold;
@@ -56,11 +58,11 @@ public class BoardLogik {
             for(int y = 0; y < p.getHeight(); y++){
                 for(int x = 0; x < p.getWidth(); x++){
                     if(bold[y][x]>0){//Living Cell
-                        random(x,y);
-                        //rulesLiving(x,y);
+                        //random(x,y);
+                        rulesLiving(x,y);
                     } else { // Dead Cell
-                        random(x,y);
-                        //rulesDead(x,y);
+                        //random(x,y);
+                        rulesDead(x,y);
                     }
                 }
             }
