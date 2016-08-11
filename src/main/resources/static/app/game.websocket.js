@@ -11,8 +11,8 @@ function gameWebsocket(stateChanged, messageChanged)
     {
         console.log('Connected');
 
-        stompClient.subscribe('/out/game/state', stateArrived);
-        stompClient.subscribe('/out/game/message', messageArrived);
+        stompClient.subscribe('/user/out/game/state', stateArrived);
+        stompClient.subscribe('/user/out/game/message', messageArrived);
         stompClient.send("/in/game/start");
 
         function stateArrived(stateJson)
