@@ -56,16 +56,16 @@ public class gameController {
     @SendTo("/game/message")
     public Message ready(Principal principal) throws Exception {
         Game g = gRepo.findOne(1);
-        if(g.getReady()==0&&g.getPhase()==GamePhase.Start) {
+        if (g.getReady() == 0 && g.getPhase() == GamePhase.Start) {
             g.setReady(1);
             gRepo.save(g);
-            return new Message(principal.getName()+" ist bereit. Und wartet auf "+g.getSpieler2()+".");
+            return new Message(principal.getName() + " ist bereit. Und wartet auf " + g.getSpieler2() + ".");
         }
-        if(g.getReady()==1&&g.getPhase()==GamePhase.Start) {
+        if (g.getReady() == 1 && g.getPhase() == GamePhase.Start) {
             g.setReady(0);
             g.setPhase(GamePhase.Spiel);
             gRepo.save(g);
-            return new Message(principal.getName()+" ist bereit.\nDas Spiel beginnt.");
+            return new Message(principal.getName() + " ist bereit.\nDas Spiel beginnt.");
         }
         return new Message("Undefiniert");
     }

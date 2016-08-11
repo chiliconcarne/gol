@@ -4,16 +4,16 @@ function gameWebsocket(stateChanged, messageChanged)
 {
     var websocket = {};
 
-    var stompClient = Stomp.over(new SockJS('/game'));
+    var stompClient = Stomp.over(new SockJS('/app'));
     stompClient.connect({}, onstart);
 
     function onstart()
     {
         console.log('Connected');
 
-        stompClient.subscribe('/game/state', stateArrived);
-        stompClient.subscribe('/game/message', messageArrived);
-        stompClient.send("/app/start");
+        stompClient.subscribe('/out/game/state', stateArrived);
+        stompClient.subscribe('/out/game/message', messageArrived);
+        stompClient.send("/in/game/start");
 
         function stateArrived(stateJson)
         {
@@ -33,13 +33,13 @@ function gameWebsocket(stateChanged, messageChanged)
     websocket.userClicked = function(x, y)
     {
         console.log('userClicked: x = ' + x + " y = " + y);
-        stompClient.send("/app/set", {}, JSON.stringify({ 'x': x, 'y': y }));
+        stompClient.send("/in/game/set", {}, JSON.stringify({ 'x': x, 'y': y }));
     };
 
     websocket.ready = function()
     {
         console.log('ready');
-        stompClient.send("/app/ready");
+        stompClient.send("/in/game/ready");
     };
 
     return websocket;

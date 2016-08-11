@@ -13,7 +13,7 @@ function boerseWebsocket(listChanged, messageChanged)
 
         stompClient.subscribe('/boerse/list', listArrived);
         stompClient.subscribe('/boerse/message', messageArrived);
-        stompCLient.send('/game/start');
+        stompCLient.send('/game/update');
 
         function listArrived(listJSON)
         {
