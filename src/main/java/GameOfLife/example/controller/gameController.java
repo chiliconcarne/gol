@@ -7,6 +7,7 @@ import GameOfLife.example.json.Message;
 import GameOfLife.example.json.Position;
 import GameOfLife.example.logik.BoardLogik;
 import GameOfLife.example.logik.GamePhase;
+import GameOfLife.example.logik.PlayerState;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * Created by sernowm on 10.08.2016.
@@ -37,60 +39,72 @@ public class gameController {
     private ApplicationContext ctx;
 
     @MessageMapping("/game/start")
-    @SendTo("/out/game/message")
-    public Message start(Principal principal) throws Exception {
-        Game g = gRepo.findOne(1);
-        if(g == null) {
-            Profil p = pRepo.findOne(principal.getName());
-            int[][] board = new int[p.getHeight()][p.getWidth()];
-            for(int y = 0; y < p.getHeight(); y++){
-                for(int x = 0; x < p.getWidth(); x++){
-                    board[y][x] = 0;
-                }
-            }
-            gRepo.save(new Game(1, principal.getName(), null, board));
-            return new Message(principal.getName() + " tritt dem Spiel bei.\nWarte auf anderen Spieler...");
-        } else {
-            g.setSpieler2(principal.getName());
+    public void start(Principal principal) throws Exception {
+        String player = principal.getName();
+        Game g = getGame(player);
+
+        if(g != null)
+        {
+            g.setState(player,PlayerState.Connected);
             gRepo.save(g);
-            return new Message(principal.getName() + " tritt dem Spiel bei.\nSpiel beginnt in einem kurzen Moment.");
+            String opponent = g.getOpponent(player);
+
+            this.messagingTemplate.convertAndSendToUser(player, "/out/game/state", g);
+            this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message(player + " ist dem Spiel beigetreten."));
+            this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message("Du bist dem Spiel beigetreten."));
         }
     }
+
     @MessageMapping("/game/ready")
-    @SendTo("/out/game/message")
-    public Message ready(Principal principal) throws Exception {
-        Game g = gRepo.findOne(1);
-        if (g.getReady() == 0 && g.getPhase() == GamePhase.Start) {
-            g.setReady(1);
-            gRepo.save(g);
-            return new Message(principal.getName() + " ist bereit. Und wartet auf " + g.getSpieler2() + ".");
+    public void ready(Principal principal) throws Exception {
+        String player = principal.getName();
+        Game g = getGame(player);
+
+        if(g != null)
+        {
+            String opponent = g.getOpponent(player);
+
+            if (g.getState(player) != PlayerState.Ready)
+            {
+                g.setState(principal.getName(), PlayerState.Ready);
+
+                this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message("Du ist bereit." + (g.getState(opponent) == PlayerState.Ready ? "" : " Und wartet auf " + opponent + ".")));
+                this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message(player + " ist bereit."));
+
+                if (g.getStatePlayer1()==PlayerState.Ready&&g.getStatePlayer1()==g.getStatePlayer2()){
+                    g.setPhase(GamePhase.Spiel);
+                }
+
+                gRepo.save(g);
+            }
         }
-        if (g.getReady() == 1 && g.getPhase() == GamePhase.Start) {
-            g.setReady(0);
-            g.setPhase(GamePhase.Spiel);
-            gRepo.save(g);
-            return new Message(principal.getName() + " ist bereit.\nDas Spiel beginnt.");
-        }
-        return new Message("Undefiniert");
     }
+
     @MessageMapping("/game/set")
-    @SendTo("/out/game/state")
     public Board set(Position pos, Principal principal) throws Exception {
         BoardLogik bl = ctx.getBean(BoardLogik.class);
-        bl.init(gRepo.findOne(1));
+        bl.init(getGame(principal.getName()));
         bl.set(pos.getX(), pos.getY(), principal.getName());
         return new Board(bl.finish());
     }
+
     @Scheduled(fixedRate = 500)
     public void update(){
-        Game g = gRepo.findOne(1);
-        if(g != null){
-            if(g.getSpieler1() != null && g.getSpieler2() != null) {
+        List<Game> games = (List<Game>) gRepo.findAll();
+        for(Game g : games){
+            if(g.getStatePlayer1() != PlayerState.Disconnected && g.getStatePlayer2() != PlayerState.Disconnected){
                 BoardLogik bl = ctx.getBean(BoardLogik.class);
-                bl.init(gRepo.findOne(1));
+                bl.init(g);
                 bl.step();
-                this.messagingTemplate.convertAndSend("/out/game/state", new Board(bl.finish()));
+                Board board = new Board(bl.finish());
+                this.messagingTemplate.convertAndSendToUser(g.getPlayer1(),"/out/game/state", board);
+                this.messagingTemplate.convertAndSendToUser(g.getPlayer2(),"/out/game/state", board);
             }
         }
+    }
+
+    private Game getGame(String player)
+    {
+        return gRepo.findOneByPlayer1OrPlayer2(player, player);
     }
 }
