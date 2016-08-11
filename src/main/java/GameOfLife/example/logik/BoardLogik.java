@@ -169,12 +169,12 @@ public class BoardLogik {
             }
         }
         int max = p.getHeight()*p.getWidth();
-        if((p1>max*0.5)||p2==0) {
+        if((p1>max*(p.getWin()/100.0))||p2==0) {
             this.g.setPhase(GamePhase.Ende);
             this.g.setWinner(this.g.getPlayer1());
             this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer1()+" gewinnt das Spiel!"));
         }
-        if(p2>max*0.5||p1==0) {
+        if(p2>max*(p.getWin()/100.0)||p1==0) {
             this.g.setPhase(GamePhase.Ende);
             this.g.setWinner(this.g.getPlayer2());
             this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer2()+" gewinnt das Spiel!"));
