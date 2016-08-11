@@ -4,8 +4,10 @@ import GameOfLife.example.entity.Game;
 import GameOfLife.example.json.Board;
 import GameOfLife.example.json.Message;
 import GameOfLife.example.json.Position;
+import GameOfLife.example.logik.BoardLogik;
 import GameOfLife.example.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,6 +25,8 @@ public class gameController {
     private GameRepository gRepo;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private ApplicationContext ctx;
     @MessageMapping("/start")
     @SendTo("/game/message")
     public Message start(Principal principal) throws Exception {
@@ -44,14 +48,21 @@ public class gameController {
     @MessageMapping("/set")
     @SendTo("/game/board")
     public Board set(Position pos, Principal principal) throws Exception {
-        return new Board(gRepo.findOne(1));
+        BoardLogik bl = ctx.getBean(BoardLogik.class);
+        bl.init(gRepo.findOne(1));
+        bl.set(pos.getX(),pos.getY(),principal.getName());
+        return new Board(bl.finish());
     }
     @Scheduled(fixedRate = 5000)
     public void update(){
         Game g = gRepo.findOne(1);
         if(g!=null){
-            if(g.getSpieler1()!=null&&g.getSpieler2()!=null)
-                this.messagingTemplate.convertAndSend("/game/board",new Board(gRepo.findOne(1)));
+            if(g.getSpieler1()!=null&&g.getSpieler2()!=null) {
+                BoardLogik bl = ctx.getBean(BoardLogik.class);
+                bl.init(gRepo.findOne(1));
+                bl.step();
+                this.messagingTemplate.convertAndSend("/game/board",new Board(bl.finish()));
+            }
         }
     }
 }
