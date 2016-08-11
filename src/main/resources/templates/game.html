@@ -20,6 +20,7 @@
             <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userClicked($index, $parent.$index)"></div>
         </div>
     </div>
+    <div id="state"><h2>Status:</h2></div>
     <button ng-click="ready();">ready</button>
 </div>
 </body>

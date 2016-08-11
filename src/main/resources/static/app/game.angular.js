@@ -19,6 +19,7 @@
         var messageChanged = function(message)
         {
             $scope.message = message;
+            angular.element("#state").append(message);
             $scope.$apply();
         };
 
