@@ -44,7 +44,7 @@ function boerseWebsocket(listChanged, messageChanged)
         stompClient.send('/in/boerse/remove');
     }
 
-    websocket.accept = function(username="hans"){
+    websocket.accept = function(username){
         stompClient.send('/in/boerse/accept',{},username);
     }
 
