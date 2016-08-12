@@ -3,9 +3,11 @@ package GameOfLife.example.logik;
 import GameOfLife.example.entity.Game;
 import GameOfLife.example.entity.Profil;
 import GameOfLife.example.json.Message;
+import GameOfLife.example.logik.listener.RuleObserver;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.ProfilRepository;
 import GameOfLife.example.state.GamePhase;
+import GameOfLife.example.state.SourceState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
@@ -96,9 +98,7 @@ public class BoardLogik {
             bnew = new int[bold.length][bold[0].length];
             for(int y = 0; y < p.getHeight(); y++){
                 for(int x = 0; x < p.getWidth(); x++){
-                    if(bold[y][x]>0){//Living Cell
-                    } else { // Dead Cell
-                    }
+                    RuleObserver.getInstance().rule(new Cell(g,x,y), SourceState.Automatic);
                 }
             }
             this.g.setBoard(bnew);

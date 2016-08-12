@@ -5,26 +5,26 @@ package GameOfLife.example.logik.listener;
  */
 public class RuleListenerImpl implements RuleListener {
     @Override
-    public void revive(CellEvent event) {
+    public void onRevive(CellEvent event) {
     }
 
     @Override
-    public void overPopulation(CellEvent event) {
+    public void onOverPopulation(CellEvent event) {
     }
 
     @Override
-    public void underPopulation(CellEvent event) {
+    public void onUnderPopulation(CellEvent event) {
     }
 
     @Override
-    public void alive(CellEvent event) {
+    public void onAlive(CellEvent event) {
     }
 
     @Override
-    public void convert(CellEvent event) {
+    public void onConvert(CellEvent event) {
     }
 
     @Override
-    public void assassinate(CellEvent event) {
+    public void onAssassinate(CellEvent event) {
     }
 }

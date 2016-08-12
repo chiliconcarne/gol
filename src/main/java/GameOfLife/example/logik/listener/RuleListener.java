@@ -4,10 +4,10 @@ package GameOfLife.example.logik.listener;
  * Created by sernowm on 12.08.2016.
  */
 public interface RuleListener {
-    void revive(CellEvent event);
-    void overPopulation(CellEvent event);
-    void underPopulation(CellEvent event);
-    void alive(CellEvent event);
-    void convert(CellEvent event);
-    void assassinate(CellEvent event);
+    void onRevive(CellEvent event);
+    void onOverPopulation(CellEvent event);
+    void onUnderPopulation(CellEvent event);
+    void onAlive(CellEvent event);
+    void onConvert(CellEvent event);
+    void onAssassinate(CellEvent event);
 }
