@@ -112,7 +112,7 @@ public class gameController {
         SendBoardToPlayer(g);
     }
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 300)
     public void update(){
         List<Game> games = (List<Game>) gRepo.findAll();
         for(Game g : games){

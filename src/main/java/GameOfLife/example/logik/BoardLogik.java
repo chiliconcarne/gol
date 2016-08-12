@@ -72,6 +72,8 @@ public class BoardLogik {
     public void checkWin(){
         if(this.g.getPhase()==GamePhase.Spiel) {
             double winCon = (g.getWidth() * g.getHeight()) * (g.getWinCondition() / 100.0);
+            if(g.getZellenPlayer1() == 0 && g.getZellenPlayer2() == 0)
+                unentschieden(g);
             if(g.getZellenPlayer1() > winCon)
                 winner(g.getPlayer1(),"Überzahl Sieg");
             if(g.getZellenPlayer2() == 0)
@@ -87,6 +89,12 @@ public class BoardLogik {
         g.setWinner(winner);
         messagingTemplate.convertAndSendToUser(winner,"/out/game/message", new Message("Du gewinnt das Spiel durch "+reason+"!"));
         messagingTemplate.convertAndSendToUser(g.getOpponent(winner),"/out/game/message", new Message(winner + " gewinnt das Spiel durch "+reason+"!"));
+    }
+    public void unentschieden(){
+        g.setPhase(GamePhase.Ende);
+        g.setWinner("");
+        messagingTemplate.convertAndSendToUser(g.getPlayer1(),"/out/game/message", new Message("Das Spiel ging Unentschieden aus!"));
+        messagingTemplate.convertAndSendToUser(g.getPlayer2(),"/out/game/message", new Message("Das Spiel ging Unentschieden aus!"));
     }
     public Game finish(){
         gRepo.save(this.g);

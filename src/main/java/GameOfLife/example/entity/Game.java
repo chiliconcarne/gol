@@ -226,8 +226,8 @@ public class Game {
     }
 
     public CellState getCellState(int x, int y) {
-        if(board[x][y] == colorPlayer1) return CellState.player1;
-        else if(board[x][y] == colorPlayer2) return CellState.player2;
+        if(board[y][x] == colorPlayer1) return CellState.player1;
+        else if(board[y][x] == colorPlayer2) return CellState.player2;
         else return CellState.neutral;
     }
 
