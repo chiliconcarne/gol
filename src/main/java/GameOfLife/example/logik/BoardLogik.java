@@ -72,8 +72,10 @@ public class BoardLogik {
     public void checkWin(){
         if(this.g.getPhase()==GamePhase.Spiel) {
             double winCon = (g.getWidth() * g.getHeight()) * (g.getWinCondition() / 100.0);
-            if(g.getZellenPlayer1() == 0 && g.getZellenPlayer2() == 0)
-                unentschieden(g);
+            if(g.getZellenPlayer1() == 0 && g.getZellenPlayer2() == 0) {
+                unentschieden();
+                return;
+            }
             if(g.getZellenPlayer1() > winCon)
                 winner(g.getPlayer1(),"Überzahl Sieg");
             if(g.getZellenPlayer2() == 0)
