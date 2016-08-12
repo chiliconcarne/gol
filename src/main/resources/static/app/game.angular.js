@@ -22,7 +22,7 @@
                 {
                     for(var x = 0; x < $scope.board[0].length; x++)
                     {
-                        if($scope.board[x][y] != state.board[x][y]) $scope.board[x][y] = state.board[x][y];
+                        if($scope.board[y][x] != state.board[y][x]) $scope.board[y][x] = state.board[y][x];
                     }
                 }
             }

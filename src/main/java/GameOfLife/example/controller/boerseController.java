@@ -67,7 +67,7 @@ public class boerseController {
     public void accept(String username, Principal principal) throws Exception {
         Game g1 = gRepo.findOneByPlayer1OrPlayer2(principal.getName(), principal.getName());
         Game g2 = gRepo.findOneByPlayer1OrPlayer2(username, username);
-        if(username != principal.getName() && oRepo.exists(username) && g1 == null && g2 == null)
+        if(!username.equals(principal.getName()) && oRepo.exists(username) && g1 == null && g2 == null)
         {
             gRepo.save(new Game(pRepo.findOne(username), pRepo.findOne(principal.getName())));
             oRepo.delete(username);
