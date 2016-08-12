@@ -53,27 +53,27 @@ public class RuleObserver implements RuleListener, ActionRuleListener {
     public void rule(Cell cell){
         cellEvent = new CellEvent(cell);
 
-        // 1 - Unterbevölkerung
+        assassinate(); // 5
+        convert(); // 4
+        underPopulation(); // 1
+        alive(); // 2
+        overPopulation(); // 3
+        revive(); // 6
+
+    }
+
+    public void assassinate(){
+        Cell cell = cellEvent.getCell();
+        // 5 - Meucheln
         if(cell.getType() != CellState.neutral) {
-            if((cell.getFriendly()-1) < 2){
-                onUnderPopulation(cellEvent);
+            if(cell.getEnemy() == 2){
+                onAssassinate(cellEvent);
             }
         }
+    }
 
-        // 2 - Überleben
-        if(cell.getType() != CellState.neutral) {
-            if((cell.getFriendly()-1) == 2 || (cell.getFriendly()-1) == 3){
-                onAlive(cellEvent);
-            }
-        }
-
-        // 3 - Überbevölkerung
-        if(cell.getType() != CellState.neutral) {
-            if((cell.getFriendly()-1) > 3){
-                onOverPopulation(cellEvent);
-            }
-        }
-
+    public void convert(){
+        Cell cell = cellEvent.getCell();
         // 4 - Bekehren
         if(cell.getType() != CellState.neutral) {
             if(cell.getEnemy() == 3) {
@@ -81,14 +81,40 @@ public class RuleObserver implements RuleListener, ActionRuleListener {
                 onConvert(cellEvent);
             }
         }
+    }
 
-        // 5 - Meucheln
+    public void underPopulation(){
+        Cell cell = cellEvent.getCell();
+        // 1 - Unterbevölkerung
         if(cell.getType() != CellState.neutral) {
-            if(cell.getEnemy() == 2){
-                onKill(cellEvent);
+            if((cell.getFriendly()-1) < 2){
+                onUnderPopulation(cellEvent);
             }
         }
+    }
 
+    public void alive() {
+        Cell cell = cellEvent.getCell();
+        // 2 - Überleben
+        if(cell.getType() != CellState.neutral) {
+            if((cell.getFriendly()-1) == 2 || (cell.getFriendly()-1) == 3){
+                onAlive(cellEvent);
+            }
+        }
+    }
+
+    public void overPopulation(){
+        Cell cell = cellEvent.getCell();
+        // 3 - Überbevölkerung
+        if(cell.getType() != CellState.neutral) {
+            if((cell.getFriendly()-1) > 3){
+                onOverPopulation(cellEvent);
+            }
+        }
+    }
+
+    public void revive(){
+        Cell cell = cellEvent.getCell();
         // 6 - Beleben
         if(cell.getType() == CellState.neutral) {
             if(cell.getPlayer1() == 3 && cell.getPlayer2() != 3) {
@@ -100,8 +126,8 @@ public class RuleObserver implements RuleListener, ActionRuleListener {
                 onRevive(cellEvent);
             }
         }
-
     }
+
 
     @Override
     public void onKill(CellEvent event) {

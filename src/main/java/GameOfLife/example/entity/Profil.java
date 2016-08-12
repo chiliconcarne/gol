@@ -12,7 +12,7 @@ public class Profil {
     @Id
     String username;
 
-    int color1, color2, width, height, win;
+    int color1, color2, width, height, win, rounds;
 
     public Profil() {}
 
@@ -68,4 +68,12 @@ public class Profil {
     public int getWin() { return win; }
 
     public void setWin(int win) { this.win = win; }
+
+    public int getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(int rounds) {
+        this.rounds = rounds;
+    }
 }

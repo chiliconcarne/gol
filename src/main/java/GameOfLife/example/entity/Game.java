@@ -175,12 +175,20 @@ public class Game {
         this.punktePlayer1 = punktePlayer1;
     }
 
+    public void addPunktePlayer1(int punktePlayer1) {
+        this.punktePlayer1 += punktePlayer1;
+    }
+
     public int getPunktePlayer2() {
         return punktePlayer2;
     }
 
     public void setPunktePlayer2(int punktePlayer2) {
         this.punktePlayer2 = punktePlayer2;
+    }
+    public void addPunktePlayer2(int punktePlayer2) {
+
+        this.punktePlayer2 += punktePlayer2;
     }
 
     public int getZellenPlayer1() {

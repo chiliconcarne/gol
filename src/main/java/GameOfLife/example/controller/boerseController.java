@@ -100,7 +100,7 @@ public class boerseController {
         for(Game g : games)
         {
             Profil p = pRepo.findOne(g.getPlayer1());
-            offers.add(new JsonOffer(g.getPlayer1(), g.getPlayer2(), OfferState.InProgress, p.getWidth(), p.getHeight(), p.getWin()));
+            offers.add(new JsonOffer(g.getPlayer1(), g.getPlayer2(), OfferState.InProgress, g.getWidth(), g.getHeight(), g.getWinCondition()));
         }
 
         return offers;

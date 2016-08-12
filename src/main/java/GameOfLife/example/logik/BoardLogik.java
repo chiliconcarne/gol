@@ -76,14 +76,32 @@ public class BoardLogik {
                 unentschieden();
                 return;
             }
-            if(g.getZellenPlayer1() > winCon)
-                winner(g.getPlayer1(),"Überzahl Sieg");
-            if(g.getZellenPlayer2() == 0)
-                winner(g.getPlayer1(),"Vernichtender Sieg");
-            if(g.getZellenPlayer2() > winCon)
-                winner(g.getPlayer2(),"Überzahl Sieg");
-            if(g.getZellenPlayer1() == 0)
-                winner(g.getPlayer2(),"Vernichtender Sieg");
+            if(g.getZellenPlayer1() > winCon) {
+                g.addPunktePlayer1(25);
+                winner(g.getPlayer1(), "Eroberungssieg");
+            }
+            if(g.getZellenPlayer2() == 0) {
+                g.addPunktePlayer1(50);
+                winner(g.getPlayer1(), "Vernichtender Sieg");
+            }
+            if(g.getZellenPlayer2() > winCon) {
+                g.addPunktePlayer2(25);
+                winner(g.getPlayer2(), "Eroberungssieg");
+            }
+            if(g.getZellenPlayer1() == 0) {
+                g.addPunktePlayer2(50);
+                winner(g.getPlayer2(), "Vernichtender Sieg");
+            }
+            if(g.getRunde()>50){
+                if(g.getPunktePlayer1() == g.getPunktePlayer2()){
+                    unentschieden();
+                    return;
+                }
+                if(g.getPunktePlayer1() > g.getPunktePlayer2())
+                    winner(g.getPlayer1(),"Überlebenden Sieg");
+                if(g.getPunktePlayer2() > g.getPunktePlayer1())
+                    winner(g.getPlayer2(),"Überlebenden Sieg");
+            }
         }
     }
     public void winner(String winner, String reason){

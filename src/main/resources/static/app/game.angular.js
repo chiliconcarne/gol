@@ -7,6 +7,8 @@
     function gameCntl($scope)
     {
         $scope.board = [[]];
+        $scope.spieler1Punkte = 0;
+        $scope.spieler2Punkte = 0;
 
         var stateChanged = function(state)
         {
@@ -24,6 +26,8 @@
                     }
                 }
             }
+            $scope.spieler1Punkte = state.punktePlayer1;
+            $scope.spieler2Punkte = state.punktePlayer2;
             $scope.spieler1 = state.player1;
             $scope.spieler2 = state.player2;
             $scope.$apply();
