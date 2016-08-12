@@ -1,6 +1,6 @@
 package GameOfLife.example.json;
 
-import GameOfLife.example.logik.OfferState;
+import GameOfLife.example.state.OfferState;
 
 /**
  * Created by raedschk on 11.08.2016.

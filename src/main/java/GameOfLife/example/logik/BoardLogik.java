@@ -5,10 +5,9 @@ import GameOfLife.example.entity.Profil;
 import GameOfLife.example.json.Message;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.ProfilRepository;
+import GameOfLife.example.state.GamePhase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import java.util.Random;
 
 /**
  * Created by sernowm on 11.08.2016.
@@ -35,7 +34,7 @@ public class BoardLogik {
             this.secontColor=p.getColor1();
     }
     public void set(int x,int y,String player){
-        if(this.g.getPhase()==GamePhase.Start){
+        if(this.g.getPhase()== GamePhase.Start){
             int percent = Math.round(this.p.getWidth()/5.0f) * 2;
             if(this.p.getUsername()==player) {
                 if (x < percent) {
@@ -98,11 +97,7 @@ public class BoardLogik {
             for(int y = 0; y < p.getHeight(); y++){
                 for(int x = 0; x < p.getWidth(); x++){
                     if(bold[y][x]>0){//Living Cell
-                        //random(x,y);
-                        rulesLiving(x,y);
                     } else { // Dead Cell
-                        //random(x,y);
-                        rulesDead(x,y);
                     }
                 }
             }
@@ -110,59 +105,6 @@ public class BoardLogik {
             cellCount();
             checkWin();
         }
-    }
-
-    public void rulesLiving(int x,int y){
-        CheckCell cc = checkCell(x,y);
-        if(bold[y][x]==this.p.getColor1()){
-            if(cc.getSpieler1()<3||cc.getSpieler1()>4||cc.getSpieler2()==2) {
-                bnew[y][x] = 0;
-            } else if(cc.getSpieler2()==3) {
-                bnew[y][x]=this.secontColor;
-            } else {
-                bnew[y][x]=this.p.getColor1();
-            }
-        }
-        if(bold[y][x]==this.secontColor){
-            if(cc.getSpieler2()<3||cc.getSpieler2()>4||cc.getSpieler1()==2) {
-                bnew[y][x] = 0;
-            } else if(cc.getSpieler1()==3) {
-                bnew[y][x] = this.p.getColor1();
-            } else {
-                bnew[y][x]=this.secontColor;
-            }
-        }
-    }
-
-    public void rulesDead(int x,int y){
-        CheckCell cc = new CheckCell(g, x, y);
-        if(cc.getSpieler1() == 3 && cc.getSpieler2() != 3){
-            bnew[y][x]=this.p.getColor1();
-            return;
-        }
-        if(cc.getSpieler2()==3){
-            bnew[y][x]=this.secontColor;
-            return;
-        }
-        bnew[y][x]=0;
-    }
-
-    public void checkWin(){
-        int p1=0,p2=0;
-    public CheckCell checkCell(int x,int y){
-        int spieler1=0;
-        int spieler2=0;
-        int dy=0,dx=0;
-        for(int i=1;i<=9;i++) {
-            dy = (i / 9 - 2) + y;
-            dx = (i % 3 - 1) + x;
-            if (dy < 0 || dx < 0 || dy > this.p.getHeight() - 1 || dx > this.p.getWidth() - 1) continue;
-            if (this.g.getBoard()[dy][dx] == this.p.getColor1())
-                spieler1++;
-            if (this.g.getBoard()[dy][dx] == this.secontColor)
-                spieler2++;
-        }
-        return new CheckCell(9-spieler1-spieler2,spieler1,spieler2);
     }
     public void cellCount(){
         p1=0;p2=0;

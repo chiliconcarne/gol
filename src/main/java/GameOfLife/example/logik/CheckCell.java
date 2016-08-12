@@ -1,6 +1,7 @@
 package GameOfLife.example.logik;
 
 import GameOfLife.example.entity.Game;
+import GameOfLife.example.state.CellState;
 
 /**
  * Created by sernowm on 11.08.2016.

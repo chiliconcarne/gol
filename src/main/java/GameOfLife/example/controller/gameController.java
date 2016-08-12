@@ -1,19 +1,17 @@
 package GameOfLife.example.controller;
 
 import GameOfLife.example.entity.Game;
-import GameOfLife.example.entity.Profil;
 import GameOfLife.example.json.Board;
 import GameOfLife.example.json.Message;
 import GameOfLife.example.json.Position;
 import GameOfLife.example.logik.BoardLogik;
-import GameOfLife.example.logik.GamePhase;
-import GameOfLife.example.logik.PlayerState;
+import GameOfLife.example.state.GamePhase;
+import GameOfLife.example.state.PlayerState;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;

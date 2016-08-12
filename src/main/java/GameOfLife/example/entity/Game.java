@@ -1,9 +1,8 @@
 package GameOfLife.example.entity;
 
-import GameOfLife.example.logik.CellState;
-import GameOfLife.example.logik.GamePhase;
-import GameOfLife.example.logik.PlayerState;
-import GameOfLife.example.repository.ProfilRepository;
+import GameOfLife.example.state.CellState;
+import GameOfLife.example.state.GamePhase;
+import GameOfLife.example.state.PlayerState;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
