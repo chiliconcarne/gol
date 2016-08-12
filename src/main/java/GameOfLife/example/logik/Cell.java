@@ -78,4 +78,17 @@ public class Cell {
                 return 0;
         }
     }
+
+    public boolean isNeutral() {
+        return getCellState() == CellState.neutral;
+    }
+
+    public boolean isFriendly(String player) {
+        return getCellState() == ( player.equals(g.getPlayer1()) ? CellState.player1 : CellState.player2 );
+    }
+
+    public boolean isEnemy(String player) {
+        return getCellState() == ( player.equals(g.getPlayer1()) ? CellState.player2 : CellState.player1 );
+    }
+
 }

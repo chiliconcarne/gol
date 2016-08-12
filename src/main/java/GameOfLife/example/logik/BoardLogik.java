@@ -1,137 +1,92 @@
 package GameOfLife.example.logik;
 
 import GameOfLife.example.entity.Game;
-import GameOfLife.example.entity.Profil;
 import GameOfLife.example.json.Message;
+import GameOfLife.example.logik.listener.CellEvent;
 import GameOfLife.example.logik.listener.RuleObserver;
 import GameOfLife.example.repository.GameRepository;
-import GameOfLife.example.repository.ProfilRepository;
+import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
-import GameOfLife.example.state.SourceState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-/**
- * Created by sernowm on 11.08.2016.
- */
 public class BoardLogik {
     @Autowired
     GameRepository gRepo;
     @Autowired
-    ProfilRepository pRepo;
-    @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
     private Game g;
-    private Profil p;
-    private int secontColor;
+
     private int[][] bold,bnew;
-    private int p1=0,p2=0;
+
     public void init(Game g){
         this.g=g;
-        this.p=pRepo.findOne(g.getPlayer1());
-        Profil p = pRepo.findOne(g.getPlayer2());
-        if(p.getColor1()==this.p.getColor1())
-            this.secontColor=p.getColor2();
-        else
-            this.secontColor=p.getColor1();
     }
     public void set(int x,int y,String player){
-        if(this.g.getPhase()== GamePhase.Start){
-            int percent = Math.round(this.p.getWidth()/5.0f) * 2;
-            if(this.p.getUsername()==player) {
-                if (x < percent) {
-                    if (this.g.getBoard()[y][x]==0)
-                        this.g.getBoard()[y][x] = this.p.getColor1();
-                    else
-                        this.g.getBoard()[y][x] = 0;
-                }
-            } else {
-                if (x >= this.p.getWidth()-percent) {
-                    if(this.g.getBoard()[y][x]==0)
-                        this.g.getBoard()[y][x] = this.secontColor;
-                    else
-                        this.g.getBoard()[y][x] = 0;
-                }
-            }
-        } else if (this.g.getPhase()==GamePhase.Spiel){
-            if(this.p.getUsername()==player){ // Spieler 1
-                if(this.g.getBoard()[y][x]==0){ //Neutrale Zelle wird wiedergeboren
-                    this.g.getBoard()[y][x]=this.p.getColor1();
-                } else if (this.g.getBoard()[y][x]==this.p.getColor1()) { //Freundliche Zelle explodiert
-                    int dy=0,dx=0;
-                    for(int i=1;i<=9;i++){
-                        dy=(i/9-2)+y;
-                        dx=(i%3-1)+x;
-                        if(dy<0||dx<0||dy>this.p.getHeight()-1||dx>this.p.getWidth()-1)continue;
-                        if(this.g.getBoard()[dy][dx]==0)
-                            this.g.getBoard()[dy][dx]=this.p.getColor1();
-                        else
-                            this.g.getBoard()[dy][dx]=0;
-                    }
-                } else if (this.g.getBoard()[y][x]==this.secontColor) { //Feindliche Zelle stirbt
-                    this.g.getBoard()[y][x]=0;
-                }
-            } else { // Spieler 2
-                if(this.g.getBoard()[y][x]==0){ //Neutrale Zelle wird wiedergeboren
-                    this.g.getBoard()[y][x]=this.secontColor;
-                } else if (this.g.getBoard()[y][x]==this.secontColor) { //Freundliche Zelle explodiert
-                    int dy=0,dx=0;
-                    for(int i=1;i<=9;i++){
-                        dy=(i/9-2)+y;
-                        dx=(i%3-1)+x;
-                        if(dy<0||dx<0||dy>this.p.getHeight()-1||dx>this.p.getWidth()-1)continue;
-                        if(this.g.getBoard()[dy][dx]==0)
-                            this.g.getBoard()[dy][dx]=this.secontColor;
-                        else
-                            this.g.getBoard()[dy][dx]=0;
-                    }
-                } else if (this.g.getBoard()[y][x]==this.p.getColor1()) { //Feindliche Zelle stirbt
-                    this.g.getBoard()[y][x]=0;
-                }
-            }
+        if(x < 0 || y < 0 || x > g.getWidth() || y > g.getHeight())
+            return; // Falsche Coordinaten
+        switch(g.getPhase()){
+            case Start:
+                int bereich = g.getWidth()/5*2;
+                if(player.equals(g.getPlayer1()))
+                    if(x>bereich)return;
+                if(player.equals(g.getPlayer2()))
+                    if(x<g.getWidth()-bereich)return;
+                if(g.getBoard()[y][x]>0)
+                    g.getBoard()[y][x]=0;
+                else
+                    g.getBoard()[y][x] = player.equals(g.getPlayer1()) ? g.getColorPlayer1() : g.getColorPlayer2();
+                break;
+            case Spiel:
+                Cell cell = new Cell(g,x,y);
+                if(cell.isFriendly(player)) {
+                    CellEvent cellEvent = new CellEvent(cell);
+                    cellEvent.setTransform(player.equals(g.getPlayer1()) ? CellState.player1 : CellState.player2);
+                    RuleObserver.getInstance().onSpread(cellEvent);
+                } else if(cell.isNeutral()) {
+                    CellEvent cellEvent = new CellEvent(cell);
+                    cellEvent.setTransform(player.equals(g.getPlayer1()) ? CellState.player1 : CellState.player2);
+                    RuleObserver.getInstance().onPlayerRevive(cellEvent);
+                }else if(cell.isEnemy(player))
+                    RuleObserver.getInstance().onKill(new CellEvent(cell));
+                break;
         }
     }
 
     public void step(){
-        if(this.g.getPhase()==GamePhase.Spiel){
-            bold = this.g.getBoard();
-            bnew = new int[bold.length][bold[0].length];
-            for(int y = 0; y < p.getHeight(); y++){
-                for(int x = 0; x < p.getWidth(); x++){
-                    RuleObserver.getInstance().rule(new Cell(g,x,y), SourceState.Automatic);
+        switch(g.getPhase()){
+            case Spiel:
+                for(int y = 0; y < g.getHeight(); y++){
+                    for(int x = 0; x < g.getWidth(); x++){
+                        RuleObserver.getInstance().rule(new Cell(g,x,y));
+                    }
                 }
-            }
-            this.g.setBoard(bnew);
-            cellCount();
-            checkWin();
-        }
-    }
-    public void cellCount(){
-        p1=0;p2=0;
-        for(int y = 0; y < p.getHeight(); y++){
-            for(int x = 0; x < p.getWidth(); x++){
-                int cell = this.g.getBoard()[y][x];
-                if(cell==this.secontColor)
-                    p2++;
-                else if (cell==this.p.getColor1())
-                    p1++;
-            }
+                g.switchBoard();
+                g.addRunde();
+                g.cellCount();
+                checkWin();
+                break;
         }
     }
     public void checkWin(){
         if(this.g.getPhase()==GamePhase.Spiel) {
-            int max = p.getHeight() * p.getWidth();
-            if ((p1 > max * (p.getWin() / 100.0)) || p2 == 0) {
-                this.g.setPhase(GamePhase.Ende);
-                this.g.setWinner(this.g.getPlayer1());
-                this.messagingTemplate.convertAndSend("/game/message", new Message(this.g.getPlayer1() + " gewinnt das Spiel!"));
-            }
-            if (p2 > max * (p.getWin() / 100.0) || p1 == 0) {
-                this.g.setPhase(GamePhase.Ende);
-                this.g.setWinner(this.g.getPlayer2());
-                this.messagingTemplate.convertAndSend("/game/message", new Message(this.g.getPlayer2() + " gewinnt das Spiel!"));
-            }
+            double winCon = (g.getWidth() * g.getHeight()) * (g.getWinCondition() / 100.0);
+            if(g.getZellenPlayer1() > winCon)
+                winner(g.getPlayer1(),"Überzahl Sieg");
+            if(g.getZellenPlayer2() == 0)
+                winner(g.getPlayer1(),"Vernichtender Sieg");
+            if(g.getZellenPlayer2() > winCon)
+                winner(g.getPlayer2(),"Überzahl Sieg");
+            if(g.getZellenPlayer1() == 0)
+                winner(g.getPlayer2(),"Vernichtender Sieg");
         }
+    }
+    public void winner(String winner, String reason){
+        g.setPhase(GamePhase.Ende);
+        g.setWinner(winner);
+        messagingTemplate.convertAndSendToUser(winner,"/game/message", new Message("Du gewinnt das Spiel durch "+reason+"!"));
+        messagingTemplate.convertAndSendToUser(g.getOpponent(winner),"/game/message", new Message(winner + " gewinnt das Spiel durch "+reason+"!"));
     }
     public Game finish(){
         gRepo.save(this.g);

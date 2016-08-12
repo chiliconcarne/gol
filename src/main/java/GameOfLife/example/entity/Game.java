@@ -19,15 +19,18 @@ public class Game {
 
     private GamePhase phase;
 
+    private int winCondition;
+    private int runde=0;
+
+    @Column(length = 16581375)
+    private int[][] board,newBoard;
+
     private PlayerState statePlayer1;
     private PlayerState statePlayer2;
 
-    @Column(length = 16581375)
-    private int[][] board;
-
     private int colorPlayer1, colorPlayer2;
-
-    private int winCondition;
+    private int punktePlayer1=0, punktePlayer2=0;
+    private int zellenPlayer1=0, zellenPlayer2=0;
 
     public Game()
     {
@@ -52,7 +55,7 @@ public class Game {
         }
 
         colorPlayer1 = p1.getColor1();
-        colorPlayer1 = p2.getColor1() == colorPlayer1 ? p2.getColor2() : p2.getColor1();
+        colorPlayer2 = p2.getColor1() == colorPlayer1 ? p2.getColor2() : p2.getColor1();
 
         winCondition = p1.getWin();
     }
@@ -135,20 +138,23 @@ public class Game {
         this.board = board;
     }
 
+    public int getColorByCellState(CellState cellState){
+        switch(cellState){
+            case player1:
+                return getColorPlayer1();
+            case player2:
+                return getColorPlayer2();
+            default:
+                return 0;
+        }
+    }
+
     public int getColorPlayer1() {
         return colorPlayer1;
     }
 
-    public void setColorPlayer1(int colorPlayer1) {
-        this.colorPlayer1 = colorPlayer1;
-    }
-
     public int getColorPlayer2() {
         return colorPlayer2;
-    }
-
-    public void setColorPlayer2(int colorPlayer2) {
-        this.colorPlayer2 = colorPlayer2;
     }
 
     public int getWinCondition() {
@@ -157,6 +163,50 @@ public class Game {
 
     public void setWinCondition(int winCondition) {
         this.winCondition = winCondition;
+    }
+
+    public int getPunktePlayer1() {
+        return punktePlayer1;
+    }
+
+    public void setPunktePlayer1(int punktePlayer1) {
+        this.punktePlayer1 = punktePlayer1;
+    }
+
+    public int getPunktePlayer2() {
+        return punktePlayer2;
+    }
+
+    public void setPunktePlayer2(int punktePlayer2) {
+        this.punktePlayer2 = punktePlayer2;
+    }
+
+    public int getZellenPlayer1() {
+        return zellenPlayer1;
+    }
+
+    public void setZellenPlayer1(int zellenPlayer1) {
+        this.zellenPlayer1 = zellenPlayer1;
+    }
+
+    public int getZellenPlayer2() {
+        return zellenPlayer2;
+    }
+
+    public void setZellenPlayer2(int zellenPlayer2) {
+        this.zellenPlayer2 = zellenPlayer2;
+    }
+
+    public int getRunde() {
+        return runde;
+    }
+
+    public void setRunde(int runde) {
+        this.runde = runde;
+    }
+
+    public void addRunde(){
+        this.runde++;
     }
 
     public String getOpponent(String player)
@@ -185,5 +235,26 @@ public class Game {
 
     public int getWidth() {
         return board[0].length;
+    }
+
+    public void cellCount() {
+        for(int[] row : board){
+            for(int cell : row){
+                if(cell == colorPlayer1) zellenPlayer1++;
+                if(cell == colorPlayer2) zellenPlayer2++;
+            }
+        }
+    }
+
+    public int[][] getNewBoard() {
+        return newBoard;
+    }
+
+    public void setNewBoard(int[][] newBoard) {
+        this.newBoard = newBoard;
+    }
+
+    public void switchBoard() {
+        setBoard(getNewBoard());
     }
 }

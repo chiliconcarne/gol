@@ -2,31 +2,26 @@ package GameOfLife.example.logik.listener;
 
 import GameOfLife.example.entity.Game;
 import GameOfLife.example.logik.Cell;
-import GameOfLife.example.state.SourceState;
+import GameOfLife.example.state.CellState;
 
 /**
  * Created by sernowm on 12.08.2016.
  */
 public class CellEvent {
     private Cell cell;
-    private SourceState source;
-    private SourceState target;
     private Game game;
+    private CellState transform;
     private int[][] board;
 
-    public CellEvent(Cell cell, SourceState source) {
+    public CellEvent(Cell cell) {
         this.cell = cell;
-        this.source = source;
         this.game = cell.getGame();
         this.board = game.getBoard();
+        this.transform = cell.getType();
     }
 
     public Cell getCell() {
         return cell;
-    }
-
-    public SourceState getSource() {
-        return source;
     }
 
     public Game getGame() {
@@ -37,11 +32,11 @@ public class CellEvent {
         return board;
     }
 
-    public SourceState getTarget() {
-        return target;
+    public CellState getTransform() {
+        return transform;
     }
 
-    public void setTarget(SourceState target) {
-        this.target = target;
+    public void setTransform(CellState transform) {
+        this.transform = transform;
     }
 }
