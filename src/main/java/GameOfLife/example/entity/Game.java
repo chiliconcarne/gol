@@ -4,9 +4,7 @@ import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
 import GameOfLife.example.state.PlayerState;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by sernowm on 10.08.2016.
@@ -14,6 +12,7 @@ import javax.persistence.Id;
 @Entity
 public class Game {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private String player1, player2, winner;
@@ -28,6 +27,8 @@ public class Game {
 
     private int colorPlayer1, colorPlayer2;
 
+    private int winCondition;
+
     public Game()
     {
 
@@ -35,8 +36,6 @@ public class Game {
 
     public Game(Profil p1, Profil p2)
     {
-        id = 0;
-
         player1 = p1.getUsername();
         player2 = p2.getUsername();
 
@@ -54,9 +53,11 @@ public class Game {
 
         colorPlayer1 = p1.getColor1();
         colorPlayer1 = p2.getColor1() == colorPlayer1 ? p2.getColor2() : p2.getColor1();
+
+        winCondition = p1.getWin();
     }
 
-    public Game(int id, String player1, String player2, String winner, GamePhase phase, PlayerState statePlayer1, PlayerState statePlayer2, int[][] board, int colorPlayer1, int colorPlayer2) {
+    public Game(int id, String player1, String player2, String winner, GamePhase phase, PlayerState statePlayer1, PlayerState statePlayer2, int[][] board, int colorPlayer1, int colorPlayer2, int winCondition) {
         this.id = id;
         this.player1 = player1;
         this.player2 = player2;
@@ -67,6 +68,7 @@ public class Game {
         this.board = board;
         this.colorPlayer1 = colorPlayer1;
         this.colorPlayer2 = colorPlayer2;
+        this.winCondition = winCondition;
     }
 
     public int getId() {
@@ -147,6 +149,14 @@ public class Game {
 
     public void setColorPlayer2(int colorPlayer2) {
         this.colorPlayer2 = colorPlayer2;
+    }
+
+    public int getWinCondition() {
+        return winCondition;
+    }
+
+    public void setWinCondition(int winCondition) {
+        this.winCondition = winCondition;
     }
 
     public String getOpponent(String player)
