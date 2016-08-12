@@ -93,14 +93,14 @@ public class boerseController {
         {
             Game g = gRepo.findOneByPlayer1OrPlayer2(offer.getUsernname(), offer.getUsernname());
             Profil p = pRepo.findOne(offer.getUsernname());
-            offers.add(new JsonOffer(offer.getUsernname(), "GEGNER", g == null ? OfferState.Available : OfferState.Unavailable, p.getWidth(), p.getHeight(), 50));
+            offers.add(new JsonOffer(offer.getUsernname(), "GEGNER", g == null ? OfferState.Available : OfferState.Unavailable, p.getWidth(), p.getHeight(), p.getWin()));
         }
 
         List<Game> games = (List<Game>) gRepo.findAll();
         for(Game g : games)
         {
             Profil p = pRepo.findOne(g.getPlayer1());
-            offers.add(new JsonOffer(g.getPlayer1(), g.getPlayer2(), OfferState.InProgress, p.getWidth(), p.getHeight(), 50));
+            offers.add(new JsonOffer(g.getPlayer1(), g.getPlayer2(), OfferState.InProgress, p.getWidth(), p.getHeight(), p.getWin()));
         }
 
         return offers;

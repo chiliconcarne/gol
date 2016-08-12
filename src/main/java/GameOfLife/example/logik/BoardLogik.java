@@ -24,6 +24,7 @@ public class BoardLogik {
     private Profil p;
     private int secontColor;
     private int[][] bold,bnew;
+    private int p1=0,p2=0;
     public void init(Game g){
         this.g=g;
         this.p=pRepo.findOne(g.getPlayer1());
@@ -106,6 +107,7 @@ public class BoardLogik {
                 }
             }
             this.g.setBoard(bnew);
+            cellCount();
             checkWin();
         }
     }
@@ -147,6 +149,23 @@ public class BoardLogik {
 
     public void checkWin(){
         int p1=0,p2=0;
+    public CheckCell checkCell(int x,int y){
+        int spieler1=0;
+        int spieler2=0;
+        int dy=0,dx=0;
+        for(int i=1;i<=9;i++) {
+            dy = (i / 9 - 2) + y;
+            dx = (i % 3 - 1) + x;
+            if (dy < 0 || dx < 0 || dy > this.p.getHeight() - 1 || dx > this.p.getWidth() - 1) continue;
+            if (this.g.getBoard()[dy][dx] == this.p.getColor1())
+                spieler1++;
+            if (this.g.getBoard()[dy][dx] == this.secontColor)
+                spieler2++;
+        }
+        return new CheckCell(9-spieler1-spieler2,spieler1,spieler2);
+    }
+    public void cellCount(){
+        p1=0;p2=0;
         for(int y = 0; y < p.getHeight(); y++){
             for(int x = 0; x < p.getWidth(); x++){
                 int cell = this.g.getBoard()[y][x];
@@ -156,16 +175,20 @@ public class BoardLogik {
                     p1++;
             }
         }
-        int max = p.getHeight()*p.getWidth();
-        if((p1>max*0.5)||p2==0) {
-            this.g.setPhase(GamePhase.Ende);
-            this.g.setWinner(this.g.getPlayer1());
-            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer1()+" gewinnt das Spiel!"));
-        }
-        if(p2>max*0.5||p1==0) {
-            this.g.setPhase(GamePhase.Ende);
-            this.g.setWinner(this.g.getPlayer2());
-            this.messagingTemplate.convertAndSend("/game/message",new Message(this.g.getPlayer2()+" gewinnt das Spiel!"));
+    }
+    public void checkWin(){
+        if(this.g.getPhase()==GamePhase.Spiel) {
+            int max = p.getHeight() * p.getWidth();
+            if ((p1 > max * (p.getWin() / 100.0)) || p2 == 0) {
+                this.g.setPhase(GamePhase.Ende);
+                this.g.setWinner(this.g.getPlayer1());
+                this.messagingTemplate.convertAndSend("/game/message", new Message(this.g.getPlayer1() + " gewinnt das Spiel!"));
+            }
+            if (p2 > max * (p.getWin() / 100.0) || p1 == 0) {
+                this.g.setPhase(GamePhase.Ende);
+                this.g.setWinner(this.g.getPlayer2());
+                this.messagingTemplate.convertAndSend("/game/message", new Message(this.g.getPlayer2() + " gewinnt das Spiel!"));
+            }
         }
     }
     public Game finish(){
