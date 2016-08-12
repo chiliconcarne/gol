@@ -54,7 +54,7 @@ public class Game {
         }
 
         colorPlayer1 = p1.getColor1();
-        colorPlayer1
+        colorPlayer1 = p2.getColor1() == colorPlayer1 ? p2.getColor2() : p2.getColor1();
     }
 
     public Game(int id, String player1, String player2, String winner, GamePhase phase, PlayerState statePlayer1, PlayerState statePlayer2, int[][] board, int colorPlayer1, int colorPlayer2) {
