@@ -18,27 +18,23 @@ function gameWebsocket(stateChanged, messageChanged)
         function stateArrived(stateJson)
         {
             var state = JSON.parse(stateJson.body);
-            console.log(state);
-            stateChanged(state.g);
+            stateChanged(state);
         }
 
         function messageArrived(messageJson)
         {
             var message = JSON.parse(messageJson.body);
-            console.log(message);
             messageChanged(message.msg);
         }
     }
 
     websocket.userClicked = function(x, y)
     {
-        console.log('userClicked: x = ' + x + " y = " + y);
         stompClient.send("/in/game/set", {}, JSON.stringify({ 'x': x, 'y': y }));
     };
 
     websocket.ready = function()
     {
-        console.log('ready');
         stompClient.send("/in/game/ready");
     };
 

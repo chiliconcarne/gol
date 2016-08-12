@@ -10,7 +10,20 @@
 
         var stateChanged = function(state)
         {
-            $scope.board = state.board;
+            if($scope.board.length != state.board.length || $scope.board[0].length != state.board[0].length)
+            {
+                $scope.board = state.board;
+            }
+            else
+            {
+                for(var y = 0; y < $scope.board.length; y++)
+                {
+                    for(var x = 0; x < $scope.board[0].length; x++)
+                    {
+                        if($scope.board[x][y] != state.board[x][y]) $scope.board[x][y] = state.board[x][y];
+                    }
+                }
+            }
             $scope.spieler1 = state.player1;
             $scope.spieler2 = state.player2;
             $scope.$apply();
@@ -30,7 +43,7 @@
         $(document).mouseup(() => {mousedown = false;})
         $scope.userSet = function (x, y, force)
         {
-            if((mousedown || force) && (oldSetPos.x != x || oldSetPos.y != y))
+            if(force || (mousedown && (oldSetPos.x != x || oldSetPos.y != y)))
             {
                 oldSetPos.x = x;
                 oldSetPos.y = y;

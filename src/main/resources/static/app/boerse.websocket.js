@@ -20,14 +20,12 @@ function boerseWebsocket(listChanged, messageChanged)
         function listArrived(listJSON)
         {
             var list = JSON.parse(listJSON.body);
-            console.log(list);
             listChanged(list);
         }
 
         function messageArrived(messageJson)
         {
             var message = JSON.parse(messageJson.body);
-            console.log(message);
             messageChanged(message.msg);
         }
 

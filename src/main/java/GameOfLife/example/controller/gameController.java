@@ -1,7 +1,6 @@
 package GameOfLife.example.controller;
 
 import GameOfLife.example.entity.Game;
-import GameOfLife.example.json.Board;
 import GameOfLife.example.json.Message;
 import GameOfLife.example.json.Position;
 import GameOfLife.example.logik.BoardLogik;
@@ -105,9 +104,8 @@ public class gameController {
 
     private void SendBoardToPlayer(Game g)
     {
-        Board b = new Board(g);
-        this.messagingTemplate.convertAndSendToUser(g.getPlayer1(), "/out/game/state", b);
-        this.messagingTemplate.convertAndSendToUser(g.getPlayer2(), "/out/game/state", b);
+        this.messagingTemplate.convertAndSendToUser(g.getPlayer1(), "/out/game/state", g);
+        this.messagingTemplate.convertAndSendToUser(g.getPlayer2(), "/out/game/state", g);
     }
 
     private Game getGame(String player)
