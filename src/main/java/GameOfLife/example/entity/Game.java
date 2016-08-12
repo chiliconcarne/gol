@@ -4,9 +4,7 @@ import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
 import GameOfLife.example.state.PlayerState;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by sernowm on 10.08.2016.
@@ -14,6 +12,7 @@ import javax.persistence.Id;
 @Entity
 public class Game {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private String player1, player2, winner;
@@ -37,8 +36,6 @@ public class Game {
 
     public Game(Profil p1, Profil p2)
     {
-        id = 0;
-
         player1 = p1.getUsername();
         player2 = p2.getUsername();
 
