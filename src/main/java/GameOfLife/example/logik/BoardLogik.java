@@ -32,7 +32,7 @@ public class BoardLogik {
                 if(player.equals(g.getPlayer1()))
                     if(x>bereich)return;
                 if(player.equals(g.getPlayer2()))
-                    if(x<g.getWidth()-bereich)return;
+                    if(x<g.getWidth()-bereich-1)return;
                 if(g.getBoard()[y][x]>0)
                     g.getBoard()[y][x]=0;
                 else
@@ -85,8 +85,8 @@ public class BoardLogik {
     public void winner(String winner, String reason){
         g.setPhase(GamePhase.Ende);
         g.setWinner(winner);
-        messagingTemplate.convertAndSendToUser(winner,"/game/message", new Message("Du gewinnt das Spiel durch "+reason+"!"));
-        messagingTemplate.convertAndSendToUser(g.getOpponent(winner),"/game/message", new Message(winner + " gewinnt das Spiel durch "+reason+"!"));
+        messagingTemplate.convertAndSendToUser(winner,"/out/game/message", new Message("Du gewinnt das Spiel durch "+reason+"!"));
+        messagingTemplate.convertAndSendToUser(g.getOpponent(winner),"/out/game/message", new Message(winner + " gewinnt das Spiel durch "+reason+"!"));
     }
     public Game finish(){
         gRepo.save(this.g);

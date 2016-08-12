@@ -122,9 +122,11 @@ public class RuleObserver implements RuleListener, ActionRuleListener {
             for (int x = -1; x < 2; x++){
                 int dy = y + event.getCell().getY();
                 int dx = x + event.getCell().getX();
-                temp = new CellEvent(new Cell(event.getGame(),dx,dy));
-                temp.setTransform(event.getTransform());
-                toggleCellToNeutral(temp);
+                if (dy >= 0 && dx >= 0 && dy < event.getGame().getHeight() && dx < event.getGame().getWidth()) {
+                    temp = new CellEvent(new Cell(event.getGame(), dx, dy));
+                    temp.setTransform(event.getTransform());
+                    toggleCellToNeutral(temp);
+                }
             }
         }
         actionListener.forEach(actionListener -> actionListener.onSpread(cellEvent));

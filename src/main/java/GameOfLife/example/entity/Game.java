@@ -53,6 +53,7 @@ public class Game {
                 board[y][x] = 0;
             }
         }
+        newBoard = new int[getHeight()][getWidth()];
 
         colorPlayer1 = p1.getColor1();
         colorPlayer2 = p2.getColor1() == colorPlayer1 ? p2.getColor2() : p2.getColor1();
@@ -69,6 +70,7 @@ public class Game {
         this.statePlayer1 = statePlayer1;
         this.statePlayer2 = statePlayer2;
         this.board = board;
+        this.newBoard = new int[getHeight()][getWidth()];
         this.colorPlayer1 = colorPlayer1;
         this.colorPlayer2 = colorPlayer2;
         this.winCondition = winCondition;
@@ -238,6 +240,8 @@ public class Game {
     }
 
     public void cellCount() {
+        zellenPlayer1=0;
+        zellenPlayer2=0;
         for(int[] row : board){
             for(int cell : row){
                 if(cell == colorPlayer1) zellenPlayer1++;
@@ -256,5 +260,6 @@ public class Game {
 
     public void switchBoard() {
         setBoard(getNewBoard());
+        this.newBoard = new int[getHeight()][getWidth()];
     }
 }

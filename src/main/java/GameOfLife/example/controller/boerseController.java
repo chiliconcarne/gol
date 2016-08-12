@@ -74,11 +74,12 @@ public class boerseController {
 
             this.messagingTemplate.convertAndSendToUser(username, "/out/boerse/game", "");
             this.messagingTemplate.convertAndSendToUser(principal.getName(), "/out/boerse/game", "");
+            boerseChanged();
         }
 
     }
 
-    private void boerseChanged()
+    public void boerseChanged()
     {
         this.messagingTemplate.convertAndSend("/out/boerse/list", getOfferList());
     }

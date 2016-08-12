@@ -78,6 +78,30 @@ public class gameController {
         }
     }
 
+    @MessageMapping("/game/end")
+    public void end(Principal principal) throws Exception {
+        String player = principal.getName();
+        Game g = getGame(player);
+        if(g != null){
+            String opponent = g.getOpponent(player);
+            if(g.getPlayer1().equals(principal.getName())){
+                g.setPlayer1("Disconnected");
+            }
+            if(g.getPlayer2().equals(principal.getName())){
+                g.setPlayer2("Disconnected");
+            }
+            g.setPhase(GamePhase.Ende);
+            if(opponent!="Disconnected") {
+                this.messagingTemplate.convertAndSendToUser(opponent, "/out/game/message", new Message(player + " ist gegangen!"));
+                gRepo.save(g);
+            }else {
+                gRepo.delete(g);
+                boerseController boerseController = ctx.getBean(GameOfLife.example.controller.boerseController.class);
+                boerseController.boerseChanged();
+            }
+        }
+    }
+
     @MessageMapping("/game/set")
     public void set(Position pos, Principal principal) throws Exception {
         BoardLogik bl = ctx.getBean(BoardLogik.class);

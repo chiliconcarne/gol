@@ -29,9 +29,11 @@
             $scope.$apply();
         };
 
+        $scope.message = [];
+
         var messageChanged = function(message)
         {
-            $scope.message = message;
+            $scope.message[$scope.message.length] = message;
             $scope.$apply();
         };
 
@@ -54,6 +56,12 @@
         $scope.ready = function ()
         {
             websocket.ready();
+
+        };
+
+        $scope.end = function ()
+        {
+            websocket.end();
         };
     }
 })();

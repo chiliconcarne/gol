@@ -38,5 +38,11 @@ function gameWebsocket(stateChanged, messageChanged)
         stompClient.send("/in/game/ready");
     };
 
+    websocket.end = function()
+    {
+        stompClient.send("/in/game/end");
+        location.href="/profil";
+    };
+
     return websocket;
 }

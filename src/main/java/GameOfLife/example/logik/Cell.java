@@ -15,11 +15,11 @@ public class Cell {
         this.y = y;
         this.cellState = g.getCellState(x,y);
 
-        for(int dx = -1; dx <= 1; dx++) {
-            for(int dy = -1; dy <= 1; dy++) {
-                int nx = dx + x;
-                int ny = dy + y;
-                if (dy >= 0 && dx >= 0 && dy < g.getHeight() && dx < g.getWidth())
+        for(int dx = 0; dx <= 2; dx++) {
+            for(int dy = 0; dy <= 2; dy++) {
+                int nx = dx + x - 1;
+                int ny = dy + y - 1;
+                if (ny >= 0 && nx >= 0 && ny < g.getHeight() && nx < g.getWidth())
                 {
                     CellState cellState = g.getCellState(nx, ny);
                     switch (cellState)
