@@ -9,8 +9,9 @@ import java.util.Random;
  */
 public class Board {
     private Game g;
+
     public Board(Game g) {
-        this.g=g;
+        this.g = g;
     }
 
     public Game getG() {

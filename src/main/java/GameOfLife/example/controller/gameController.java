@@ -45,9 +45,10 @@ public class gameController {
 
         if(g != null)
         {
+            String opponent = g.getOpponent(player);
+
             g.setState(player,PlayerState.Connected);
             gRepo.save(g);
-            String opponent = g.getOpponent(player);
 
             this.messagingTemplate.convertAndSendToUser(player, "/out/game/state", g);
             this.messagingTemplate.convertAndSendToUser(player, "/out/game/message", new Message((g.getState(opponent) == PlayerState.Connected ? "Alle Spieler sind verbunden. Das Zellen setzten kann beginnen." : "Warten auf " + opponent + ".")));
@@ -81,26 +82,34 @@ public class gameController {
     }
 
     @MessageMapping("/game/set")
-    public Board set(Position pos, Principal principal) throws Exception {
+    public void set(Position pos, Principal principal) throws Exception {
         BoardLogik bl = ctx.getBean(BoardLogik.class);
-        bl.init(getGame(principal.getName()));
+        Game g = getGame(principal.getName());
+        bl.init(g);
         bl.set(pos.getX(), pos.getY(), principal.getName());
-        return new Board(bl.finish());
+        bl.finish();
+        SendBoardToPlayer(g);
     }
 
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 2000)
     public void update(){
         List<Game> games = (List<Game>) gRepo.findAll();
         for(Game g : games){
-            if(g.getStatePlayer1() != PlayerState.Disconnected && g.getStatePlayer2() != PlayerState.Disconnected){
+            if(g.getPhase() == GamePhase.Spiel && g.getStatePlayer1() != PlayerState.Disconnected && g.getStatePlayer2() != PlayerState.Disconnected){
                 BoardLogik bl = ctx.getBean(BoardLogik.class);
                 bl.init(g);
                 bl.step();
-                Board board = new Board(bl.finish());
-                this.messagingTemplate.convertAndSendToUser(g.getPlayer1(), "/out/game/state", board);
-                this.messagingTemplate.convertAndSendToUser(g.getPlayer2(), "/out/game/state", board);
+                bl.finish();
+                SendBoardToPlayer(g);
             }
         }
+    }
+
+    private void SendBoardToPlayer(Game g)
+    {
+        Board b = new Board(g);
+        this.messagingTemplate.convertAndSendToUser(g.getPlayer1(), "/out/game/state", b);
+        this.messagingTemplate.convertAndSendToUser(g.getPlayer2(), "/out/game/state", b);
     }
 
     private Game getGame(String player)

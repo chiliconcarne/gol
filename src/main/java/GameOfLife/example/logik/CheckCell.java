@@ -1,38 +1,44 @@
 package GameOfLife.example.logik;
 
+import GameOfLife.example.entity.Game;
+
 /**
  * Created by sernowm on 11.08.2016.
  */
 public class CheckCell {
-    private int neutral,spieler1,spieler2;
+    private int neutral, player1, player2;
+    private Game g;
 
-    public CheckCell(int neutral, int spieler1, int spieler2) {
-        this.neutral = neutral;
-        this.spieler1 = spieler1;
-        this.spieler2 = spieler2;
+    public CheckCell(Game g, int x, int y) {
+        this.g = g;
+
+        for(int dx = -1; dx <= 1; dx++) {
+            for(int dy = -1; dy <= 1; dy++) {
+                int nx = dx + x;
+                int ny = dy + y;
+                if (dy >= 0 && dx >= 0 && dy < g.getHeight() && dx < g.getWidth())
+                {
+                    CellState cellState = g.getCellState(nx, ny);
+                    switch (cellState)
+                    {
+                        case player1: player1++; break;
+                        case player2: player2++; break;
+                    }
+                }
+            }
+        }
+        neutral = 9 - player1 - player2;
     }
 
     public int getNeutral() {
         return neutral;
     }
 
-    public void setNeutral(int neutral) {
-        this.neutral = neutral;
+    public int getEnemy(String player) {
+        return player == g.getPlayer1() ? player2 : player1;
     }
 
-    public int getSpieler1() {
-        return spieler1;
-    }
-
-    public void setSpieler1(int spieler1) {
-        this.spieler1 = spieler1;
-    }
-
-    public int getSpieler2() {
-        return spieler2;
-    }
-
-    public void setSpieler2(int spieler2) {
-        this.spieler2 = spieler2;
+    public int getFriendly(String player) {
+        return player == g.getPlayer1() ? player1 : player2;
     }
 }

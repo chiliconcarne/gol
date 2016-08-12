@@ -70,14 +70,7 @@ public class boerseController {
         Game g2 = gRepo.findOneByPlayer1OrPlayer2(username, username);
         if(username != principal.getName() && oRepo.exists(username) && g1 == null && g2 == null)
         {
-            Profil p = pRepo.findOne(principal.getName());
-            int[][] board = new int[p.getHeight()][p.getWidth()];
-            for(int y = 0; y < p.getHeight(); y++){
-                for(int x = 0; x < p.getWidth(); x++){
-                    board[y][x] = 0;
-                }
-            }
-            gRepo.save(new Game(1, username, principal.getName(), board));
+            gRepo.save(new Game(pRepo.findOne(username), pRepo.findOne(principal.getName())));
             oRepo.delete(username);
 
             this.messagingTemplate.convertAndSendToUser(username, "/out/boerse/game", "");

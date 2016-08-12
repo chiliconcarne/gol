@@ -1,7 +1,9 @@
 package GameOfLife.example.entity;
 
+import GameOfLife.example.logik.CellState;
 import GameOfLife.example.logik.GamePhase;
 import GameOfLife.example.logik.PlayerState;
+import GameOfLife.example.repository.ProfilRepository;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,21 +27,47 @@ public class Game {
     @Column(length = 16581375)
     private int[][] board;
 
-    public Game(){}
+    private int colorPlayer1, colorPlayer2;
 
-    public Game(int id, String player1, String player2, int[][] board) {
+    public Game()
+    {
+
+    }
+
+    public Game(Profil p1, Profil p2)
+    {
+        id = 0;
+
+        player1 = p1.getUsername();
+        player2 = p2.getUsername();
+
+        phase = GamePhase.Start;
+
+        statePlayer1 = PlayerState.Disconnected;
+        statePlayer2 = PlayerState.Disconnected;
+
+        board = new int[p1.getHeight()][p1.getWidth()];
+        for(int y = 0; y < p1.getHeight(); y++){
+            for(int x = 0; x < p1.getWidth(); x++){
+                board[y][x] = 0;
+            }
+        }
+
+        colorPlayer1 = p1.getColor1();
+        colorPlayer1
+    }
+
+    public Game(int id, String player1, String player2, String winner, GamePhase phase, PlayerState statePlayer1, PlayerState statePlayer2, int[][] board, int colorPlayer1, int colorPlayer2) {
         this.id = id;
         this.player1 = player1;
         this.player2 = player2;
+        this.winner = winner;
+        this.phase = phase;
+        this.statePlayer1 = statePlayer1;
+        this.statePlayer2 = statePlayer2;
         this.board = board;
-        phase = GamePhase.Start;
-        statePlayer1 = PlayerState.Disconnected;
-        statePlayer2 = PlayerState.Disconnected;
-    }
-
-    public String getOpponent(String player)
-    {
-        return player == player1 ? player2 : player1;
+        this.colorPlayer1 = colorPlayer1;
+        this.colorPlayer2 = colorPlayer2;
     }
 
     public int getId() {
@@ -106,6 +134,27 @@ public class Game {
         this.board = board;
     }
 
+    public int getColorPlayer1() {
+        return colorPlayer1;
+    }
+
+    public void setColorPlayer1(int colorPlayer1) {
+        this.colorPlayer1 = colorPlayer1;
+    }
+
+    public int getColorPlayer2() {
+        return colorPlayer2;
+    }
+
+    public void setColorPlayer2(int colorPlayer2) {
+        this.colorPlayer2 = colorPlayer2;
+    }
+
+    public String getOpponent(String player)
+    {
+        return player == player1 ? player2 : player1;
+    }
+
     public PlayerState getState(String player) {
         return player == player1 ? statePlayer1 : statePlayer2;
     }
@@ -113,5 +162,19 @@ public class Game {
     public void setState(String player, PlayerState state) {
         if(player == player1) statePlayer1 = state;
         else statePlayer2 = state;
+    }
+
+    public CellState getCellState(int x, int y) {
+        if(board[x][y] == colorPlayer1) return CellState.player1;
+        else if(board[x][y] == colorPlayer2) return CellState.player2;
+        else return CellState.neutral;
+    }
+
+    public int getHeight() {
+        return board.length;
+    }
+
+    public int getWidth() {
+        return board[0].length;
     }
 }

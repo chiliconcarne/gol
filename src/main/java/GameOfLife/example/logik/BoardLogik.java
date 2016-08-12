@@ -109,6 +109,7 @@ public class BoardLogik {
             checkWin();
         }
     }
+
     public void rulesLiving(int x,int y){
         CheckCell cc = checkCell(x,y);
         if(bold[y][x]==this.p.getColor1()){
@@ -130,9 +131,10 @@ public class BoardLogik {
             }
         }
     }
+
     public void rulesDead(int x,int y){
-        CheckCell cc = checkCell(x,y);
-        if(cc.getSpieler1()==3&&cc.getSpieler2()!=3){
+        CheckCell cc = new CheckCell(g, x, y);
+        if(cc.getSpieler1() == 3 && cc.getSpieler2() != 3){
             bnew[y][x]=this.p.getColor1();
             return;
         }
@@ -142,21 +144,7 @@ public class BoardLogik {
         }
         bnew[y][x]=0;
     }
-    public CheckCell checkCell(int x,int y){
-        int spieler1=0;
-        int spieler2=0;
-        int dy=0,dx=0;
-        for(int i=1;i<=9;i++) {
-            dy = (i / 9 - 2) + y;
-            dx = (i % 3 - 1) + x;
-            if (dy < 0 || dx < 0 || dy > this.p.getHeight() - 1 || dx > this.p.getWidth() - 1) continue;
-            if (this.g.getBoard()[dy][dx] == this.p.getColor1())
-                spieler1++;
-            if (this.g.getBoard()[dy][dx] == this.secontColor)
-                spieler2++;
-        }
-        return new CheckCell(9-spieler1-spieler2,spieler1,spieler2);
-    }
+
     public void checkWin(){
         int p1=0,p2=0;
         for(int y = 0; y < p.getHeight(); y++){

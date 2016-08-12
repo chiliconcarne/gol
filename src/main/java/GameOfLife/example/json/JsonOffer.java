@@ -2,9 +2,6 @@ package GameOfLife.example.json;
 
 import GameOfLife.example.logik.OfferState;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 /**
  * Created by raedschk on 11.08.2016.
  */
