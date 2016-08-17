@@ -26,10 +26,14 @@
                     }
                 }
             }
-            $scope.spieler1Punkte = state.punktePlayer1;
-            $scope.spieler2Punkte = state.punktePlayer2;
-            $scope.spieler1 = state.player1;
-            $scope.spieler2 = state.player2;
+            $scope.player1 = state.player1;
+            $scope.player2 = state.player2;
+            if(state.phase=="Start") {
+                $scope.maxCells = ( state.width * state.height ) / 5;
+                $scope.player1.lager = $scope.maxCells - $scope.player1.cells;
+                $scope.player2.lager = $scope.maxCells - $scope.player2.cells;
+            } else
+                $scope.maxCells = ( state.width * state.height ) * ( state.winCondition / 100.0 );
             $scope.$apply();
         };
 
@@ -37,24 +41,15 @@
 
         var messageChanged = function(message)
         {
-            $scope.message[$scope.message.length] = message;
+            $scope.message[$scope.message.length] = message.body;
             $scope.$apply();
         };
 
         var websocket = gameWebsocket(stateChanged, messageChanged);
 
-        var mousedown = false;
-        var oldSetPos = {x: -1,y: -1};
-        $(document).mousedown(() => {mousedown = true;})
-        $(document).mouseup(() => {mousedown = false;})
-        $scope.userSet = function (x, y, force)
+        $scope.userSet = function (x, y)
         {
-            if(force || (mousedown && (oldSetPos.x != x || oldSetPos.y != y)))
-            {
-                oldSetPos.x = x;
-                oldSetPos.y = y;
-                websocket.userClicked(x, y);
-            }
+           websocket.userClicked(x, y);
         };
 
         $scope.ready = function ()

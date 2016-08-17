@@ -200,7 +200,7 @@ public class RuleObserver implements RuleListener, ActionRuleListener {
     }
 
     private void setCellToCellState(CellEvent event){
-        event.getGame().getNewBoard()[event.getCell().getY()][event.getCell().getX()]=event.getGame().getColorByCellState(event.getTransform());
+        event.getGame().getNewBoard()[event.getCell().getY()][event.getCell().getX()]=event.getGame().getPlayerByCellState(event.getTransform()).getColor();
     }
 
     private void toggleCellToNeutral(CellEvent event){

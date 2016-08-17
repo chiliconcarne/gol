@@ -2,7 +2,6 @@ package GameOfLife.example.entity;
 
 import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
-import GameOfLife.example.state.PlayerState;
 
 import javax.persistence.*;
 
@@ -15,9 +14,13 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private String player1, player2, winner;
+    @Column(length = 65025)
+    private Player player1, player2;
 
-    private GamePhase phase;
+    private GamePhase phase = GamePhase.Open;
+
+    //Only for DB Search
+    private String n1,n2;
 
     private int winCondition;
     private int runde=0;
@@ -25,55 +28,21 @@ public class Game {
     @Column(length = 16581375)
     private int[][] board,newBoard;
 
-    private PlayerState statePlayer1;
-    private PlayerState statePlayer2;
-
-    private int colorPlayer1, colorPlayer2;
-    private int punktePlayer1=0, punktePlayer2=0;
-    private int zellenPlayer1=0, zellenPlayer2=0;
-
-    public Game()
-    {
-
+    public Game() {
     }
 
-    public Game(Profil p1, Profil p2)
-    {
-        player1 = p1.getUsername();
-        player2 = p2.getUsername();
-
-        phase = GamePhase.Start;
-
-        statePlayer1 = PlayerState.Disconnected;
-        statePlayer2 = PlayerState.Disconnected;
-
-        board = new int[p1.getHeight()][p1.getWidth()];
-        for(int y = 0; y < p1.getHeight(); y++){
-            for(int x = 0; x < p1.getWidth(); x++){
+    public Game(Offer offer){
+        player1 = new Player(this,offer.getUsername(),offer.getColorPlayer1(),CellState.player1);
+        player2 = new Player(this,offer.getOpponent(),offer.getColorPlayer2(),CellState.player2);
+        n1=player1.getName();n2=player2.getName();
+        winCondition = offer.getWinCondition();
+        board = new int[offer.getBoardHeight()][offer.getBoardWidth()];
+        for(int y = 0; y < offer.getBoardHeight(); y++){
+            for(int x = 0; x < offer.getBoardWidth(); x++){
                 board[y][x] = 0;
             }
         }
         newBoard = new int[getHeight()][getWidth()];
-
-        colorPlayer1 = p1.getColor1();
-        colorPlayer2 = p2.getColor1() == colorPlayer1 ? p2.getColor2() : p2.getColor1();
-
-        winCondition = p1.getWin();
-    }
-
-    public Game(int id, String player1, String player2, String winner, GamePhase phase, PlayerState statePlayer1, PlayerState statePlayer2, int[][] board, int colorPlayer1, int colorPlayer2, int winCondition) {
-        this.id = id;
-        this.player1 = player1;
-        this.player2 = player2;
-        this.winner = winner;
-        this.phase = phase;
-        this.statePlayer1 = statePlayer1;
-        this.statePlayer2 = statePlayer2;
-        this.board = board;
-        this.newBoard = new int[getHeight()][getWidth()];
-        this.colorPlayer1 = colorPlayer1;
-        this.colorPlayer2 = colorPlayer2;
-        this.winCondition = winCondition;
     }
 
     public int getId() {
@@ -84,52 +53,12 @@ public class Game {
         this.id = id;
     }
 
-    public String getPlayer1() {
-        return player1;
-    }
-
-    public void setPlayer1(String player1) {
-        this.player1 = player1;
-    }
-
-    public String getPlayer2() {
-        return player2;
-    }
-
-    public void setPlayer2(String player2) {
-        this.player2 = player2;
-    }
-
-    public String getWinner() {
-        return winner;
-    }
-
-    public void setWinner(String winner) {
-        this.winner = winner;
-    }
-
     public GamePhase getPhase() {
         return phase;
     }
 
     public void setPhase(GamePhase phase) {
         this.phase = phase;
-    }
-
-    public PlayerState getStatePlayer1() {
-        return statePlayer1;
-    }
-
-    public void setStatePlayer1(PlayerState statePlayer1) {
-        this.statePlayer1 = statePlayer1;
-    }
-
-    public PlayerState getStatePlayer2() {
-        return statePlayer2;
-    }
-
-    public void setStatePlayer2(PlayerState statePlayer2) {
-        this.statePlayer2 = statePlayer2;
     }
 
     public int[][] getBoard() {
@@ -140,71 +69,12 @@ public class Game {
         this.board = board;
     }
 
-    public int getColorByCellState(CellState cellState){
-        switch(cellState){
-            case player1:
-                return getColorPlayer1();
-            case player2:
-                return getColorPlayer2();
-            default:
-                return 0;
-        }
-    }
-
-    public int getColorPlayer1() {
-        return colorPlayer1;
-    }
-
-    public int getColorPlayer2() {
-        return colorPlayer2;
-    }
-
     public int getWinCondition() {
         return winCondition;
     }
 
     public void setWinCondition(int winCondition) {
         this.winCondition = winCondition;
-    }
-
-    public int getPunktePlayer1() {
-        return punktePlayer1;
-    }
-
-    public void setPunktePlayer1(int punktePlayer1) {
-        this.punktePlayer1 = punktePlayer1;
-    }
-
-    public void addPunktePlayer1(int punktePlayer1) {
-        this.punktePlayer1 += punktePlayer1;
-    }
-
-    public int getPunktePlayer2() {
-        return punktePlayer2;
-    }
-
-    public void setPunktePlayer2(int punktePlayer2) {
-        this.punktePlayer2 = punktePlayer2;
-    }
-    public void addPunktePlayer2(int punktePlayer2) {
-
-        this.punktePlayer2 += punktePlayer2;
-    }
-
-    public int getZellenPlayer1() {
-        return zellenPlayer1;
-    }
-
-    public void setZellenPlayer1(int zellenPlayer1) {
-        this.zellenPlayer1 = zellenPlayer1;
-    }
-
-    public int getZellenPlayer2() {
-        return zellenPlayer2;
-    }
-
-    public void setZellenPlayer2(int zellenPlayer2) {
-        this.zellenPlayer2 = zellenPlayer2;
     }
 
     public int getRunde() {
@@ -219,43 +89,12 @@ public class Game {
         this.runde++;
     }
 
-    public String getOpponent(String player)
-    {
-        return player == player1 ? player2 : player1;
-    }
-
-    public PlayerState getState(String player) {
-        return player == player1 ? statePlayer1 : statePlayer2;
-    }
-
-    public void setState(String player, PlayerState state) {
-        if(player == player1) statePlayer1 = state;
-        else statePlayer2 = state;
-    }
-
-    public CellState getCellState(int x, int y) {
-        if(board[y][x] == colorPlayer1) return CellState.player1;
-        else if(board[y][x] == colorPlayer2) return CellState.player2;
-        else return CellState.neutral;
-    }
-
     public int getHeight() {
         return board.length;
     }
 
     public int getWidth() {
         return board[0].length;
-    }
-
-    public void cellCount() {
-        zellenPlayer1=0;
-        zellenPlayer2=0;
-        for(int[] row : board){
-            for(int cell : row){
-                if(cell == colorPlayer1) zellenPlayer1++;
-                if(cell == colorPlayer2) zellenPlayer2++;
-            }
-        }
     }
 
     public int[][] getNewBoard() {
@@ -269,5 +108,111 @@ public class Game {
     public void switchBoard() {
         setBoard(getNewBoard());
         this.newBoard = new int[getHeight()][getWidth()];
+    }
+
+    public void copyBoard() {
+        setNewBoard(getBoard());
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public String getN1() {
+        return n1;
+    }
+
+    public void setN1(String n1) {
+        this.n1 = n1;
+    }
+
+    public String getN2() {
+        return n2;
+    }
+
+    public void setN2(String n2) {
+        this.n2 = n2;
+    }
+
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
+    }
+
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
+    }
+
+    public Player getOpponent(String player)
+    {
+        return player.equals(player1.getName()) ? player2 : player1;
+    }
+
+    public Player getOpponent(Player player)
+    {
+        return player.equals(player1) ? player2 : player1;
+    }
+
+    public Player getPlayer(String player) {
+        return player.equals(player1.getName()) ? player1 : player2;
+    }
+
+    public Player getPlayer(Player player) {
+        return player.equals(player1) ? player1 : player2;
+    }
+
+    public Player getPlayerByCellState(CellState cellState){
+        if(cellState==player1.getCellState())
+            return player1;
+        if(cellState==player2.getCellState())
+            return player2;
+        return null;
+    }
+
+    public Player getPlayerByColor(int color){
+        if(color==player1.getColor())
+            return player1;
+        if(color==player2.getColor())
+            return player2;
+        return null;
+    }
+
+    public void cellCount() {
+        player1.setCells(0);
+        player2.setCells(0);
+        for(int[] row : board){
+            for(int cell : row){
+                if(getPlayerByColor(cell)!=null)
+                    getPlayerByColor(cell).addCells(1);
+            }
+        }
+    }
+
+    public CellState getCellState(int x,int y){
+        if(getPlayerByColor(board[y][x]) == null){
+            return CellState.neutral;
+        }
+        return getPlayerByColor(board[y][x]).getCellState();
+    }
+
+    public void addEnergy() {
+        int maxEnergy = getHeight() * getWidth() / 4;
+        if(getPlayer1().getLager()<5){
+            getPlayer1().addEnergy(getPlayer1().getCells());
+            if(getPlayer1().getEnergy()>maxEnergy){
+                getPlayer1().addLager(1);
+                getPlayer1().addEnergy(-maxEnergy);
+            }
+        }
+        if(getPlayer2().getLager()<5){
+            getPlayer2().addEnergy(getPlayer2().getCells());
+            if(getPlayer2().getEnergy()>maxEnergy){
+                getPlayer2().addLager(1);
+                getPlayer2().addEnergy(-maxEnergy);
+            }
+        }
     }
 }

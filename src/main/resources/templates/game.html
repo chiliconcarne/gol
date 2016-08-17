@@ -14,10 +14,10 @@
 <body>
 <div class="text-center" ng-app="game" ng-controller="gameCntl">
     <h1>Lord of the Cell</h1>
-    <h1>{{spieler1}} {{spieler1Punkte}} VS {{spieler2}} {{spieler2Punkte}}</h1>
+    <h1>{{player1.name}} Zellen: {{player1.cells}}/{{maxCells}} Lager: {{player1.lager}} VS {{player2.name}} Zellen: {{player2.cells}}/{{maxCells}} Lager: {{player2.lager}}</h1>
     <div class="board">
         <div class="row" ng-repeat="row in board">
-            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mouseover="userSet($index, $parent.$index, false)"  ng-mousedown="userSet($index, $parent.$index, true)"></div>
+            <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userSet($index, $parent.$index)"></div>
         </div>
     </div>
     <button class="ready" ng-click="ready();">Bereit</button>

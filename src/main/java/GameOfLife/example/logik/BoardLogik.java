@@ -9,7 +9,9 @@ import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BoardLogik {
     @Autowired
     GameRepository gRepo;
@@ -26,32 +28,39 @@ public class BoardLogik {
     public void set(int x,int y,String player){
         if(x < 0 || y < 0 || x > g.getWidth() || y > g.getHeight())
             return; // Falsche Coordinaten
-        switch(g.getPhase()){
+        switch(g.getPhase()) {
             case Start:
-                int bereich = g.getWidth()/5*2;
-                if(player.equals(g.getPlayer1()))
-                    if(x>bereich)return;
-                if(player.equals(g.getPlayer2()))
-                    if(x<g.getWidth()-bereich-1)return;
-                if(g.getBoard()[y][x]>0)
-                    g.getBoard()[y][x]=0;
-                else
-                    g.getBoard()[y][x] = player.equals(g.getPlayer1()) ? g.getColorPlayer1() : g.getColorPlayer2();
+                int maxCells = (g.getWidth() * g.getHeight() / 5);
+                int bereich = g.getWidth() / 5 * 2;
+                if (player.equals(g.getPlayer1().getName()))
+                    if (x > bereich) return;
+                if (player.equals(g.getPlayer2().getName()))
+                    if (x < g.getWidth() - bereich - 1) return;
+                if (g.getBoard()[y][x] > 0)
+                    g.getBoard()[y][x] = 0;
+                else if (g.getPlayer(player).getCells() < maxCells)
+                    g.getBoard()[y][x] = g.getPlayer(player).getColor();
                 break;
             case Spiel:
-                Cell cell = new Cell(g,x,y);
-                if(cell.isFriendly(player)) {
-                    CellEvent cellEvent = new CellEvent(cell);
-                    cellEvent.setTransform(player.equals(g.getPlayer1()) ? CellState.player1 : CellState.player2);
-                    RuleObserver.getInstance().onSpread(cellEvent);
-                } else if(cell.isNeutral()) {
-                    CellEvent cellEvent = new CellEvent(cell);
-                    cellEvent.setTransform(player.equals(g.getPlayer1()) ? CellState.player1 : CellState.player2);
-                    RuleObserver.getInstance().onPlayerRevive(cellEvent);
-                }else if(cell.isEnemy(player))
-                    RuleObserver.getInstance().onKill(new CellEvent(cell));
+                if (g.getPlayer(player).getLager() > 0) {
+                    g.copyBoard();
+                    Cell cell = new Cell(g, x, y);
+                    if (cell.isFriendly(player)) {
+                        CellEvent cellEvent = new CellEvent(cell);
+                        cellEvent.setTransform(g.getPlayer(player).getCellState());
+                        RuleObserver.getInstance().onSpread(cellEvent);
+                    } else if (cell.isNeutral()) {
+                        CellEvent cellEvent = new CellEvent(cell);
+                        cellEvent.setTransform(g.getPlayer(player).getCellState());
+                        RuleObserver.getInstance().onPlayerRevive(cellEvent);
+                    } else if (cell.isEnemy(player))
+                        RuleObserver.getInstance().onKill(new CellEvent(cell));
+                    g.getPlayer(player).addLager(-1);
+                    g.switchBoard();
+                }
                 break;
         }
+        g.cellCount();
     }
 
     public void step(){
@@ -65,59 +74,64 @@ public class BoardLogik {
                 g.switchBoard();
                 g.addRunde();
                 g.cellCount();
+                g.addEnergy();
                 checkWin();
                 break;
         }
     }
     public void checkWin(){
         if(this.g.getPhase()==GamePhase.Spiel) {
-            double winCon = (g.getWidth() * g.getHeight()) * (g.getWinCondition() / 100.0);
-            if(g.getZellenPlayer1() == 0 && g.getZellenPlayer2() == 0) {
-                unentschieden();
-                return;
+            if(false) { //Vernichtender Sieg
+                if (g.getPlayer1().getCells() == 0 && g.getPlayer2().getCells() == 0) {
+                    unentschieden();
+                    return;
+                }
+                if (g.getPlayer2().getCells() == 0) {
+                    g.getPlayer1().addPoints(50);
+                    calcWinner("Vernichtender Sieg");
+                }
+                if (g.getPlayer1().getCells() == 0) {
+                    g.getPlayer2().addPoints(50);
+                    calcWinner("Vernichtender Sieg");
+                }
             }
-            if(g.getZellenPlayer1() > winCon) {
-                g.addPunktePlayer1(25);
-                calcWinner("Eroberungssieg");
+            if(true) {//Eroberungssieg
+                double winCon = (g.getWidth() * g.getHeight()) * (g.getWinCondition() / 100.0);
+                if (g.getPlayer1().getCells() > winCon) {
+                    g.getPlayer1().addPoints(25);
+                    calcWinner("Eroberungssieg");
+                }
+                if (g.getPlayer2().getCells() > winCon) {
+                    g.getPlayer2().addPoints(25);
+                    calcWinner("Eroberungssieg");
+                }
             }
-            if(g.getZellenPlayer2() == 0) {
-                g.addPunktePlayer1(50);
-                calcWinner("Vernichtender Sieg");
-            }
-            if(g.getZellenPlayer2() > winCon) {
-                g.addPunktePlayer2(25);
-                calcWinner("Eroberungssieg");
-            }
-            if(g.getZellenPlayer1() == 0) {
-                g.addPunktePlayer2(50);
-                calcWinner("Vernichtender Sieg");
-            }
-            if(g.getRunde()>200){
-                calcWinner("Überlebenden Sieg");
+            if(false) {//Überlebender Sieg
+                if (g.getRunde() > 200) {
+                    calcWinner("Überlebenden Sieg");
+                }
             }
         }
     }
     public void calcWinner(String sieg){
-        if(g.getPunktePlayer1() == g.getPunktePlayer2()){
+        if(g.getPlayer1().getCells() == g.getPlayer2().getCells()){
             unentschieden();
             return;
         }
-        if(g.getPunktePlayer1() > g.getPunktePlayer2())
-            winner(g.getPlayer1(),sieg);
-        if(g.getPunktePlayer2() > g.getPunktePlayer1())
-            winner(g.getPlayer2(),sieg);
+        if(g.getPlayer1().getCells() > g.getPlayer2().getCells())
+            winner(g.getPlayer1().getName(),sieg);
+        if(g.getPlayer2().getCells() > g.getPlayer1().getCells())
+            winner(g.getPlayer2().getName(),sieg);
     }
     public void winner(String winner, String reason){
         g.setPhase(GamePhase.Ende);
-        g.setWinner(winner);
-        messagingTemplate.convertAndSendToUser(winner,"/out/game/message", new Message("Du gewinnt das Spiel durch "+reason+"!"));
-        messagingTemplate.convertAndSendToUser(g.getOpponent(winner),"/out/game/message", new Message(winner + " gewinnt das Spiel durch "+reason+"!"));
+        messagingTemplate.convertAndSendToUser(winner,"/out/game/message","Du gewinnt das Spiel durch "+reason+"!");
+        messagingTemplate.convertAndSendToUser(g.getOpponent(winner).getName(),"/out/game/message",winner + " gewinnt das Spiel durch "+reason+"!");
     }
     public void unentschieden(){
         g.setPhase(GamePhase.Ende);
-        g.setWinner("");
-        messagingTemplate.convertAndSendToUser(g.getPlayer1(),"/out/game/message", new Message("Das Spiel ging Unentschieden aus!"));
-        messagingTemplate.convertAndSendToUser(g.getPlayer2(),"/out/game/message", new Message("Das Spiel ging Unentschieden aus!"));
+        messagingTemplate.convertAndSendToUser(g.getPlayer1().getName(),"/out/game/message","Das Spiel ging Unentschieden aus!");
+        messagingTemplate.convertAndSendToUser(g.getPlayer2().getName(),"/out/game/message","Das Spiel ging Unentschieden aus!");
     }
     public Game finish(){
         gRepo.save(this.g);

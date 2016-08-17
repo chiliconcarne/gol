@@ -12,19 +12,13 @@ function gameWebsocket(stateChanged, messageChanged)
         console.log('Connected');
 
         stompClient.subscribe('/user/out/game/state', stateArrived);
-        stompClient.subscribe('/user/out/game/message', messageArrived);
+        stompClient.subscribe('/user/out/game/message', messageChanged);
         stompClient.send("/in/game/start");
 
         function stateArrived(stateJson)
         {
             var state = JSON.parse(stateJson.body);
             stateChanged(state);
-        }
-
-        function messageArrived(messageJson)
-        {
-            var message = JSON.parse(messageJson.body);
-            messageChanged(message.msg);
         }
     }
 
@@ -41,7 +35,7 @@ function gameWebsocket(stateChanged, messageChanged)
     websocket.end = function()
     {
         stompClient.send("/in/game/end");
-        location.href="/profil";
+        location.href="/lobby";
     };
 
     return websocket;

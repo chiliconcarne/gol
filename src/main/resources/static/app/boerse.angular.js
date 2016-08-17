@@ -14,7 +14,7 @@
 
         var messageChanged = function(message)
         {
-            $scope.message = message;
+            $scope.message = message.body;
             $scope.$apply();
         };
 
@@ -30,6 +30,11 @@
 
         $scope.accept = function(username){
             websocket.accept(username);
+        }
+
+        $scope.leave = function(){
+            websocket.leave();
+            location.href='/profile.html';
         }
     }
 })();

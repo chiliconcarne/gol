@@ -13,7 +13,7 @@ function boerseWebsocket(listChanged, messageChanged)
 
         stompClient.subscribe('/user/out/boerse/list', listArrived);
         stompClient.subscribe('/out/boerse/list', listArrived);
-        stompClient.subscribe('/user/out/boerse/message', messageArrived);
+        stompClient.subscribe('/user/out/boerse/message', messageChanged);
         stompClient.subscribe('/user/out/boerse/game', gameArrived);
         stompClient.send('/in/boerse/start');
 
@@ -21,12 +21,6 @@ function boerseWebsocket(listChanged, messageChanged)
         {
             var list = JSON.parse(listJSON.body);
             listChanged(list);
-        }
-
-        function messageArrived(messageJson)
-        {
-            var message = JSON.parse(messageJson.body);
-            messageChanged(message.msg);
         }
 
         function gameArrived(gameJson){
@@ -44,6 +38,10 @@ function boerseWebsocket(listChanged, messageChanged)
 
     websocket.accept = function(username){
         stompClient.send('/in/boerse/accept',{},username);
+    }
+
+    websocket.leave = function(){
+        stompClient.send('/in/boerse/leave');
     }
 
     return websocket;

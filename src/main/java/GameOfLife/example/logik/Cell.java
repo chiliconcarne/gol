@@ -84,11 +84,11 @@ public class Cell {
     }
 
     public boolean isFriendly(String player) {
-        return getCellState() == ( player.equals(g.getPlayer1()) ? CellState.player1 : CellState.player2 );
+        return getCellState() == g.getPlayer(player).getCellState();
     }
 
     public boolean isEnemy(String player) {
-        return getCellState() == ( player.equals(g.getPlayer1()) ? CellState.player2 : CellState.player1 );
+        return getCellState() != g.getPlayer(player).getCellState();
     }
 
 }
