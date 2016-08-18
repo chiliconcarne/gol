@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="'Profil von ' + ${profil.username}" />
-    <script th:src="@{/js/jquery-3.1.0.min.js}"></script>
-    <script th:src="@{/js/profile.js}"></script>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/bootstrap-theme.min.css}" rel="stylesheet" media="screen" />
     <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/profile.css}" rel="stylesheet" media="screen" />
+    <script th:src="@{/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/profile.js}" type="text/javascript"></script>
 </head>
 <body>
-<h2 th:text="'Profil von ' + ${profil.username}" />
-    <hr />
+    <div class="page-header">
+        <h1>Profil von <b th:text="${profil.username}"/><span><form th:action="@{/logout}" method="post" id="logoutBtn"><input type="submit" value="Ausloggen" class="btn btn-danger glyphicon glyphicon-off"/></form></span></h1>
+    </div>
     <div class="options">
         <div><h4>Farbe auswählen:</h4>
             <div class="colorContainer first">
@@ -22,6 +27,7 @@
                 <div class="color c7" data-color="7"></div>
             </div>
         </div>
+        <br /><br />
         <div><h4>Zweitfarbe auswählen:</h4>
             <div class="colorContainer second">
                 <div class="color c1" data-color="1"></div>
@@ -33,25 +39,32 @@
                 <div class="color c7" data-color="7"></div>
             </div>
         </div>
+        <br /><br />
         <form action="/profil" method="POST">
-            <div><h4>Feldgröße auswählen:</h4>
-                <label for="sizeWidth">Feldbreite: </label><input type="number" min="1" max="100" name="width" id="sizeWidth" class="textField numberField" th:value="${profil.width}"/><br />
-                <label for="sizeHeight">Feldhöhe: </label><input type="number" min="1" max="100" name="height" id="sizeHeight" class="textField numberField" th:value="${profil.height}"/><br />
-                <label for="win">Gewinn (%): </label><input type="number" min="20" max="100" name="win" id="win" class="textField numberField" th:value="${profil.win}"/>
+            <div><h4>Weite Optionen:</h4>
+                <div class="input-group">
+                    <span class="input-group-addon">Feldbreite:</span>
+                    <input type="number" min="10" max="100" name="width" id="sizeWidth" class="form-control" th:value="${profil.width}" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Feldhöhe:</span>
+                    <input type="number" min="10" max="100" name="height" id="sizeHeight" class="form-control" th:value="${profil.height}" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Gewinn Kondition:</span>
+                    <input type="number" min="20" max="100" name="win" id="win" class="form-control" th:value="${profil.win}" />
+                    <span class="input-group-addon">%</span>
+                </div>
             </div>
             <input type="hidden" name="color1" id="color1" th:value="${profil.color1}"/>
             <input type="hidden" name="color2" id="color2" th:value="${profil.color2}"/>
             <input type="hidden" name="username" th:value="${profil.username}"/>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="submit" name="save" value="Speichern" class="btnToLink" />
+            <div class="btn-group" role="group" style="width:100%">
+                <button type="submit" class="btn btn-success" name="save" value="Speichern" style="width:50%"><span class="glyphicon glyphicon-floppy-disk"></span> Profil Speichern</button>
+                <a href="/lobby" role="button" class="btn btn-default" style="width:50%"><span class="glyphicon glyphicon-ok-sign"></span> Zur Lobby gehen</a>
+            </div>
         </form>
     </div>
-    <div class="warten" style="display:none">
-        <img th:src="@{/img/warten.gif}" />
-    </div>
-    <div><a href="/lobby" id="start">Spieler B&ouml;rse beitreten</a></div>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Ausloggen"/>
-    </form>
 </body>
 </html>

@@ -1,0 +1,11 @@
+.list-group-item-inactive {
+    background-color: #ddd;
+}
+
+.list-group-item {
+    font-size: 1.5em !important;
+}
+
+.list-group-item-info {
+    cursor: pointer;
+}

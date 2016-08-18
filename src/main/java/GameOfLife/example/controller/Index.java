@@ -46,7 +46,11 @@ public class Index implements ErrorController {
     }
 
     @RequestMapping("/lobby")
-    public String lobby(){
+    public String lobby(Model model,
+                        HttpServletRequest request
+    ) {
+        Profil p = pRepo.findOne(request.getRemoteUser());
+        model.addAttribute("profil", p);
         return "lobby";
     }
 

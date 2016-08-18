@@ -1,0 +1,34 @@
+.cell {
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin-left: 1px;
+}
+
+.board .row {
+    margin-bottom: 1px;
+    height: 20px;
+}
+
+.board {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.c0 { background-color: #ddd; }
+.c1 { background-color: blue; }
+.c2 { background-color: red; }
+.c3 { background-color: green; }
+.c4 { background-color: yellow; }
+.c5 { background-color: orange; }
+.c6 { background-color: aqua; }
+.c7 { background-color: MediumOrchid; }
+
+.progress {
+    margin: 0px;
+}

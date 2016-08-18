@@ -3,28 +3,70 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Lord of the Cell</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/bootstrap-theme.min.css}" rel="stylesheet" media="screen" />
     <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
-    <script th:src="@{/js/sockjs-0.3.4.min.js}"></script>
-    <script th:src="@{/js/stomp.min.js}"></script>
-    <script th:src="@{/js/jquery-3.1.0.min.js}"></script>
-    <script th:src="@{/app/angular.js}"></script>
-    <script th:src="@{/app/game.angular.js}"></script>
-    <script th:src="@{/app/game.websocket.js}"></script>
+    <link th:href="@{/css/game.css}" rel="stylesheet" media="screen" />
+    <script th:src="@{/js/sockjs-0.3.4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/stomp.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/app/angular.js}" type="text/javascript"></script>
+    <script th:src="@{/app/game.angular.js}" type="text/javascript"></script>
+    <script th:src="@{/app/game.websocket.js}" type="text/javascript"></script>
 </head>
 <body>
 <div class="text-center" ng-app="game" ng-controller="gameCntl">
-    <h1>Lord of the Cell</h1>
-    <h1>{{player1.name}} Zellen: {{player1.cells}}/{{maxCells}} Lager: {{player1.lager}} VS {{player2.name}} Zellen: {{player2.cells}}/{{maxCells}} Lager: {{player2.lager}}</h1>
+    <div class="page-header">
+        <h1>Lord of the Cell</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 panel {{'c' + player1.color}}">
+            <div class="panel-heading"><b>{{player1.name}}</b></div>
+            <!--<div class="panel-body"></div>-->
+            <ul class="list-group">
+                <li class="list-group-item"><i>Lager: </i> {{player1.lager}}</li>
+                <li class="list-group-item">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:{{player1.energieP}}%">
+                            {{player1.energieP}}%
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item"><i>Zellen: </i> {{player1.cells}}/{{maxCells}}</li>
+            </ul>
+        </div>
+        <div class="col-sm-6 panel {{'c' + player2.color}}">
+            <div class="panel-heading"><b>{{player2.name}}</b></div>
+            <!--<div class="panel-body"></div>-->
+            <ul class="list-group">
+                <li class="list-group-item"><i>Lager: </i> {{player2.lager}}</li>
+                <li class="list-group-item">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:{{player2.energieP}}%">
+                            {{player2.energieP}}%
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item"><i>Zellen: </i> {{player2.cells}}/{{maxCells}}</li>
+            </ul>
+        </div>
+    </div>
     <div class="board">
         <div class="row" ng-repeat="row in board">
             <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userSet($index, $parent.$index)"></div>
         </div>
     </div>
-    <button class="ready" ng-click="ready();">Bereit</button>
-    <button class="finish" ng-click="end();">Beenden</button>
-    <h4>Status:</h4>
-    <ul>
-        <li ng-repeat="msg in message">{{ msg }}</li>
+    <br />
+    <br />
+    <div class="btn-group row" role="group" style="width:100%">
+        <button class="ready btn btn-success col-md-6" ng-click="ready();"><span class="glyphicon glyphicon-ok"></span> Bereit</button>
+        <button class="finish btn btn-danger col-md-6" ng-click="end();"><span class="glyphicon glyphicon-arrow-left"></span> Beenden</button>
+    </div>
+    <br /><br />
+    <ul class="list-group">
+        <li class="list-group-item active">Status:</li>
+        <li ng-repeat="msg in message" class="list-group-item">{{ msg }}</li>
     </ul>
 </div>
 </body>

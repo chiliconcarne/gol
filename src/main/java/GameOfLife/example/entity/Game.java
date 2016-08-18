@@ -199,7 +199,7 @@ public class Game {
     }
 
     public void addEnergy() {
-        int maxEnergy = getHeight() * getWidth() / 4;
+        int maxEnergy = getHeight() * getWidth();
         if(getPlayer1().getLager()<5){
             getPlayer1().addEnergy(getPlayer1().getCells());
             if(getPlayer1().getEnergy()>maxEnergy){

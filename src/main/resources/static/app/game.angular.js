@@ -28,6 +28,10 @@
             }
             $scope.player1 = state.player1;
             $scope.player2 = state.player2;
+            $scope.player1.energieP = (state.player1.energie) * 100 / (state.width * state.height);
+            $scope.player2.energieP = (state.player2.energie) * 100 / (state.width * state.height);
+            console.info($scope);
+            console.info(state.player1);
             if(state.phase=="Start") {
                 $scope.maxCells = ( state.width * state.height ) / 5;
                 $scope.player1.lager = $scope.maxCells - $scope.player1.cells;

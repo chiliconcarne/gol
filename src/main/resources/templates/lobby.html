@@ -3,28 +3,36 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Lord of the Cell</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/bootstrap-theme.min.css}" rel="stylesheet" media="screen" />
     <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
-    <script th:src="@{/js/sockjs-0.3.4.min.js}"></script>
-    <script th:src="@{/js/stomp.min.js}"></script>
-    <script th:src="@{/js/jquery-3.1.0.min.js}"></script>
-    <script th:src="@{/app/angular.js}"></script>
-    <script th:src="@{/app/boerse.angular.js}"></script>
-    <script th:src="@{/app/boerse.websocket.js}"></script>
+    <link th:href="@{/css/lobby.css}" rel="stylesheet" media="screen" />
+    <script th:src="@{/js/sockjs-0.3.4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/stomp.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/app/angular.js}" type="text/javascript"></script>
+    <script th:src="@{/app/boerse.angular.js}" type="text/javascript"></script>
+    <script th:src="@{/app/boerse.websocket.js}" type="text/javascript"></script>
 </head>
 <body>
 <div class="text-center" ng-app="boerse" ng-controller="boerseCntl">
-    <h1>Lord of the Cell</h1>
-    <h2>Status: {{message}}</h2>
+    <div class="page-header">
+        <h1>Lobby von <b th:text="${profil.username}"/></h1>
+    </div>
+    <div ng-show="message!=null" class="alert alert-danger" role="alert">{{message}}</div>
     <div class="offer">
-        <div class="row" ng-repeat="row in offer" >
-            <div ng-show="row.offerState=='Available'" ng-click="accept( row.username )" class="boerseBtn available">Verfügbares Spiel: {{ row.username }} Brettweite: {{ row.boardWidth }} Bretthöhe: {{ row.boardHeight }} Siegbedingung: {{ row.winCondition }}%</div>
-            <div ng-show="row.offerState=='Unavailable'" class="boerseBtn unavailable">Inaktives Spiel: {{ row.username }} Brettweite: {{ row.boardWidth }} Bretthöhe: {{ row.boardHeight }} Siegbedingung: {{ row.winCondition }}%</div>
-            <div ng-show="row.offerState=='InProgress'" class="boerseBtn inprogress">Laufendes Spiel: {{ row.username + ' VS ' + row.opponent }} Brettweite: {{ row.boardWidth }} Bretthöhe: {{ row.boardHeight }} Siegbedingung: {{ row.winCondition }}%</div>
+        <div class="list-group" ng-repeat="row in offer" >
+            <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.username )">Verfügbares Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</a>
+            <div class="list-group-item list-group-item-inactive" ng-show="row.offerState=='Unavailable'">Inaktives Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            <div class="list-group-item list-group-item-danger" ng-show="row.offerState=='InProgress'">Laufendes Spiel: {{ row.username + ' VS ' + row.opponent }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
         </div>
     </div>
-    <button ng-click="add()">Hinzufügen</button><br />
-    <button ng-click="remove()">Entfernen</button><br />
-    <button ng-click="leave()">Zum Profil</button>
+    <div class="btn-group row" role="group" style="width:100%">
+        <button ng-click="add()" type="button" class="btn btn-success col-md-4"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+        <button ng-click="remove()" type="button" class="btn btn-warning col-md-4"><span class="glyphicon glyphicon-trash"></span> Entfernen</button>
+        <button ng-click="leave()" type="button" class="btn btn-danger col-md-4"><span class="glyphicon glyphicon-arrow-left"></span> Zurück zum Profil</button>
+    </div>
 </div>
 </body>
 </html>
