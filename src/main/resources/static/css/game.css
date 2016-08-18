@@ -1,3 +1,5 @@
+@import url("/css/colors.css");
+
 .cell {
     float: left;
     width: 20px;
@@ -20,15 +22,21 @@
     display: inline-block;
 }
 
-.c0 { background-color: #ddd; }
-.c1 { background-color: blue; }
-.c2 { background-color: red; }
-.c3 { background-color: green; }
-.c4 { background-color: yellow; }
-.c5 { background-color: orange; }
-.c6 { background-color: aqua; }
-.c7 { background-color: MediumOrchid; }
-
 .progress {
     margin: 0px;
+}
+
+.panel {
+    padding: 2px;
+}
+
+.panel .list-group-item {
+    color: black;
+}
+
+.panel .list-group-item:first-child {
+    border-radius: 5px 5px 0px 0px;
+}
+.panel .list-group-item:last-child {
+    border-radius: 0px 0px 5px 5px;
 }

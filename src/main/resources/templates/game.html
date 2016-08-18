@@ -25,33 +25,54 @@
             <div class="panel-heading"><b>{{player1.name}}</b></div>
             <!--<div class="panel-body"></div>-->
             <ul class="list-group">
-                <li class="list-group-item"><i>Lager: </i> {{player1.lager}}</li>
                 <li class="list-group-item">
+                    <div><i>Lager: </i> {{player1.lager}}</div>
                     <div class="progress">
                         <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:{{player1.energieP}}%">
                             {{player1.energieP}}%
                         </div>
                     </div>
                 </li>
-                <li class="list-group-item"><i>Zellen: </i> {{player1.cells}}/{{maxCells}}</li>
+                <li class="list-group-item">
+                    <div><i>Zellen: </i> {{player1.cells}}/{{maxCells}}</div>
+                    <div class="progress">
+                        <div class="progress-bar {{'c' + player1.color}} progress-bar-striped active" role="progressbar" style="width:{{player1.cellsP}}%">
+                            {{player1.cellsP}}%
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <i>Punkte:</i> {{player1.points}}
+                </li>
             </ul>
         </div>
         <div class="col-sm-6 panel {{'c' + player2.color}}">
             <div class="panel-heading"><b>{{player2.name}}</b></div>
             <!--<div class="panel-body"></div>-->
             <ul class="list-group">
-                <li class="list-group-item"><i>Lager: </i> {{player2.lager}}</li>
                 <li class="list-group-item">
+                    <div><i>Lager: </i> {{player2.lager}}</div>
                     <div class="progress">
                         <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:{{player2.energieP}}%">
                             {{player2.energieP}}%
                         </div>
                     </div>
                 </li>
-                <li class="list-group-item"><i>Zellen: </i> {{player2.cells}}/{{maxCells}}</li>
+                <li class="list-group-item">
+                    <div><i>Zellen: </i> {{player2.cells}}/{{maxCells}}</div>
+                    <div class="progress">
+                        <div class="progress-bar {{'c' + player2.color}} progress-bar-striped active" role="progressbar" style="width:{{player2.cellsP}}%">
+                            {{player2.cellsP}}%
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <i>Punkte:</i> {{player2.points}}
+                </li>
             </ul>
         </div>
     </div>
+    <div class="alert alert-info" role="alert">{{message[message.length-1]}}</div>
     <div class="board">
         <div class="row" ng-repeat="row in board">
             <div class="cell {{'c' + cell}}" ng-repeat="cell in row track by $index" ng-mousedown="userSet($index, $parent.$index)"></div>
@@ -60,8 +81,8 @@
     <br />
     <br />
     <div class="btn-group row" role="group" style="width:100%">
-        <button class="ready btn btn-success col-md-6" ng-click="ready();"><span class="glyphicon glyphicon-ok"></span> Bereit</button>
-        <button class="finish btn btn-danger col-md-6" ng-click="end();"><span class="glyphicon glyphicon-arrow-left"></span> Beenden</button>
+        <button class="ready btn btn-success" style="width:50%" ng-click="ready();"><span class="glyphicon glyphicon-ok"></span> Bereit</button>
+        <button class="finish btn btn-danger" style="width:50%" ng-click="end();"><span class="glyphicon glyphicon-arrow-left"></span> Beenden</button>
     </div>
     <br /><br />
     <ul class="list-group">

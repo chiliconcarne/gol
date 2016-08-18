@@ -26,18 +26,19 @@
                     }
                 }
             }
+            var max = parseInt(state.width) * parseInt(state.height);
             $scope.player1 = state.player1;
             $scope.player2 = state.player2;
-            $scope.player1.energieP = (state.player1.energie) * 100 / (state.width * state.height);
-            $scope.player2.energieP = (state.player2.energie) * 100 / (state.width * state.height);
-            console.info($scope);
-            console.info(state.player1);
+            $scope.player1.energieP = Math.round(parseInt(state.player1.energy) * 100 / max);
+            $scope.player2.energieP = Math.round(parseInt(state.player2.energy) * 100 / max);
             if(state.phase=="Start") {
-                $scope.maxCells = ( state.width * state.height ) / 5;
+                $scope.maxCells = max / 5;
                 $scope.player1.lager = $scope.maxCells - $scope.player1.cells;
                 $scope.player2.lager = $scope.maxCells - $scope.player2.cells;
             } else
-                $scope.maxCells = ( state.width * state.height ) * ( state.winCondition / 100.0 );
+                $scope.maxCells = max * ( parseInt(state.winCondition) / 100.0 );
+            $scope.player1.cellsP = $scope.player1.cells * 100 / $scope.maxCells;
+            $scope.player2.cellsP = $scope.player2.cells * 100 / $scope.maxCells;
             $scope.$apply();
         };
 
@@ -59,7 +60,7 @@
         $scope.ready = function ()
         {
             websocket.ready();
-
+            jQuery(".ready").attr("disabled","disabled");
         };
 
         $scope.end = function ()

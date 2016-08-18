@@ -7,6 +7,7 @@ import GameOfLife.example.logik.listener.RuleObserver;
 import GameOfLife.example.repository.GameRepository;
 import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
+import GameOfLife.example.state.PlayerState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -30,16 +31,18 @@ public class BoardLogik {
             return; // Falsche Coordinaten
         switch(g.getPhase()) {
             case Start:
-                int maxCells = (g.getWidth() * g.getHeight() / 5);
-                int bereich = g.getWidth() / 5 * 2;
-                if (player.equals(g.getPlayer1().getName()))
-                    if (x > bereich) return;
-                if (player.equals(g.getPlayer2().getName()))
-                    if (x < g.getWidth() - bereich - 1) return;
-                if (g.getBoard()[y][x] > 0)
-                    g.getBoard()[y][x] = 0;
-                else if (g.getPlayer(player).getCells() < maxCells)
-                    g.getBoard()[y][x] = g.getPlayer(player).getColor();
+                if(g.getPlayer(player).getPlayerState() != PlayerState.Ready) {
+                    int maxCells = (g.getWidth() * g.getHeight() / 5);
+                    int bereich = g.getWidth() / 5 * 2;
+                    if (player.equals(g.getPlayer1().getName()))
+                        if (x > bereich) return;
+                    if (player.equals(g.getPlayer2().getName()))
+                        if (x < g.getWidth() - bereich - 1) return;
+                    if (g.getBoard()[y][x] > 0)
+                        g.getBoard()[y][x] = 0;
+                    else if (g.getPlayer(player).getCells() < maxCells)
+                        g.getBoard()[y][x] = g.getPlayer(player).getColor();
+                }
                 break;
             case Spiel:
                 if (g.getPlayer(player).getLager() > 0) {
@@ -81,16 +84,16 @@ public class BoardLogik {
     }
     public void checkWin(){
         if(this.g.getPhase()==GamePhase.Spiel) {
-            if(false) { //Vernichtender Sieg
-                if (g.getPlayer1().getCells() == 0 && g.getPlayer2().getCells() == 0) {
+            if(true) { //Vernichtender Sieg
+                if (g.getPlayer1().getCells() == 0 && g.getPlayer1().getLager() <= 1 && g.getPlayer2().getCells() == 0 && g.getPlayer2().getLager() <= 1) {
                     unentschieden();
                     return;
                 }
-                if (g.getPlayer2().getCells() == 0) {
+                if (g.getPlayer2().getCells() == 0 && g.getPlayer2().getLager() <= 1) {
                     g.getPlayer1().addPoints(50);
                     calcWinner("Vernichtender Sieg");
                 }
-                if (g.getPlayer1().getCells() == 0) {
+                if (g.getPlayer1().getCells() == 0 && g.getPlayer1().getLager() <= 1) {
                     g.getPlayer2().addPoints(50);
                     calcWinner("Vernichtender Sieg");
                 }

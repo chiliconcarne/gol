@@ -23,15 +23,15 @@
     <div ng-show="message!=null" class="alert alert-danger" role="alert">{{message}}</div>
     <div class="offer">
         <div class="list-group" ng-repeat="row in offer" >
-            <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.username )">Verfügbares Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</a>
-            <div class="list-group-item list-group-item-inactive" ng-show="row.offerState=='Unavailable'">Inaktives Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
-            <div class="list-group-item list-group-item-danger" ng-show="row.offerState=='InProgress'">Laufendes Spiel: {{ row.username + ' VS ' + row.opponent }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.username )">Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</a>
+            <div class="list-group-item list-group-item-inactive" ng-show="row.offerState=='Unavailable'">Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            <div class="list-group-item list-group-item-danger" ng-show="row.offerState=='InProgress'">{{ row.username + ' VS ' + row.opponent }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
         </div>
     </div>
     <div class="btn-group row" role="group" style="width:100%">
-        <button ng-click="add()" type="button" class="btn btn-success col-md-4"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
-        <button ng-click="remove()" type="button" class="btn btn-warning col-md-4"><span class="glyphicon glyphicon-trash"></span> Entfernen</button>
-        <button ng-click="leave()" type="button" class="btn btn-danger col-md-4"><span class="glyphicon glyphicon-arrow-left"></span> Zurück zum Profil</button>
+        <button ng-click="add()" type="button" class="btn btn-success" style="width:33%"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+        <button ng-click="remove()" type="button" class="btn btn-warning" style="width:33%"><span class="glyphicon glyphicon-trash"></span> Entfernen</button>
+        <button ng-click="leave()" type="button" class="btn btn-danger" style="width:34%"><span class="glyphicon glyphicon-arrow-left"></span> Zurück zum Profil</button>
     </div>
 </div>
 </body>
