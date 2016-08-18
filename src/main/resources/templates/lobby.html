@@ -20,7 +20,11 @@
     <div class="page-header">
         <h1>Lobby von <b th:text="${profil.username}"/></h1>
     </div>
-    <div ng-show="message!=null" class="alert alert-danger" role="alert">{{message}}</div>
+    <div class="modal fade bs-example-modal-lg" id="boerseMsg" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content alert alert-danger" role="alert">{{message}}</div>
+        </div>
+    </div>
     <div class="offer">
         <div class="list-group" ng-repeat="row in offer" >
             <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.username )">Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</a>

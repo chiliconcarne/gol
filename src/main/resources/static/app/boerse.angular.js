@@ -16,6 +16,7 @@
         {
             $scope.message = message.body;
             $scope.$apply();
+            $('#boerseMsg').modal('show');
         };
 
         var websocket = boerseWebsocket(listChanged, messageChanged);

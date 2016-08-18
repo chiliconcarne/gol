@@ -1,11 +1,9 @@
 package GameOfLife.example.logik;
 
 import GameOfLife.example.entity.Game;
-import GameOfLife.example.json.Message;
 import GameOfLife.example.logik.listener.CellEvent;
 import GameOfLife.example.logik.listener.RuleObserver;
 import GameOfLife.example.repository.GameRepository;
-import GameOfLife.example.state.CellState;
 import GameOfLife.example.state.GamePhase;
 import GameOfLife.example.state.PlayerState;
 import org.springframework.beans.factory.annotation.Autowired;

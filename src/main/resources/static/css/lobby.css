@@ -9,3 +9,7 @@
 .list-group-item-info {
     cursor: pointer;
 }
+
+.alert {
+    font-size: 1.7em;
+}
