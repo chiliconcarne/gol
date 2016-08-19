@@ -12,6 +12,8 @@ public class boerseController {
     @Autowired
     private BoerseService boerse;
 
+
+
     @MessageMapping("/boerse/start")
     public void start(Principal principal) throws Exception {
         boerse.start(principal.getName());

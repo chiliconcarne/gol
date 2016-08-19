@@ -27,9 +27,21 @@
     </div>
     <div class="offer">
         <div class="list-group" ng-repeat="row in offer" >
-            <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.username )">Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</a>
-            <div class="list-group-item list-group-item-inactive" ng-show="row.offerState=='Unavailable'">Spiel von {{ row.username }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
-            <div class="list-group-item list-group-item-danger" ng-show="row.offerState=='InProgress'">{{ row.username + ' VS ' + row.opponent }} <span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }} <span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.username )">
+                <div style="display:inline-block;width:33%;text-align:right;margin-right:3%;margin-left:-20%;">Spiel von {{ row.username }}</div>
+                <div style="display:inline-block;width:10%;"><span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }}</div>
+                <div style="display:inline-block;width:10%;"><span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            </a>
+            <div class="list-group-item list-group-item-inactive" ng-show="row.offerState=='Unavailable'">
+                <div style="display:inline-block;width:33%;text-align:right;margin-right:3%;margin-left:-20%;">Spiel von {{ row.username }}</div>
+                <div style="display:inline-block;width:10%;"><span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }}</div>
+                <div style="display:inline-block;width:10%;"><span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            </div>
+            <div class="list-group-item list-group-item-danger" ng-show="row.offerState=='InProgress'">
+                <div style="display:inline-block;width:33%;text-align:right;margin-right:3%;margin-left:-20%;">{{ row.username + ' VS ' + row.opponent }}</div>
+                <div style="display:inline-block;width:10%;"><span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }}</div>
+                <div style="display:inline-block;width:10%;"><span class="glyphicon glyphicon-star"></span> {{ row.winCondition }}%</div>
+            </div>
         </div>
     </div>
     <div class="btn-group row" role="group" style="width:100%">
