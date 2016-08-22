@@ -19,8 +19,8 @@ public class Game {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "game")
     private Settings settings;
 
-    @OneToMany(mappedBy = "team")
-    private List<Team> teams;
+    @OneToMany(mappedBy = "game")
+    private List<Team> tams;
 
     public Game() {
     }

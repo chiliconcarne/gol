@@ -15,7 +15,7 @@ public class Team {
     private int teamId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teams")
+    @JoinColumn(name = "gameId")
     private Game game;
 
     @OneToMany(mappedBy = "team")

@@ -15,7 +15,7 @@ public class GamePlayer {
     private int gamePlayerId;
     private int gameId;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gamePlayer")
+    @JoinColumn(name = "playerId")
     private Player player;
     private int livingCells;
     private int clicks;
@@ -28,7 +28,7 @@ public class GamePlayer {
     private PlayerState playerState;
     private Color color;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gamePlayers")
+    @JoinColumn(name = "teamId")
     private Team team;
 
     public GamePlayer() {

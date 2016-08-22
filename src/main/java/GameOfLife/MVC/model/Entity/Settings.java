@@ -14,10 +14,10 @@ public class Settings {
     @GeneratedValue
     private int settingsId;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "settings")
+    @JoinColumn(name = "offerId")
     private Offer offer;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "settings")
+    @JoinColumn(name = "gameId")
     private Game game;
     private int boardWidth;
     private int boardHeight;
