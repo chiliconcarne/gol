@@ -131,7 +131,7 @@ public class GameService {
         send(g.getPlayer2().getName(),"state",g);
     }
 
-    @Scheduled(fixedRate = 700)
+    //@Scheduled(fixedRate = 700)
     public void step() {
         List<Game> games = (List<Game>) gRepo.findAll();
         for(Game g : games){
