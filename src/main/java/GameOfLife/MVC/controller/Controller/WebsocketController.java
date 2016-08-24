@@ -1,6 +1,7 @@
 package GameOfLife.MVC.controller.Controller;
 
 import GameOfLife.MVC.controller.Configuration.UserManager;
+import GameOfLife.MVC.controller.Json.Position;
 import GameOfLife.MVC.controller.Listener.Event.WebsocketEvent;
 import GameOfLife.MVC.controller.Listener.GameLobbyWebsocketListener;
 import GameOfLife.MVC.controller.Listener.GameWebsocketListener;
@@ -25,6 +26,14 @@ public class WebsocketController {
     @Autowired
     private UserManager userManager;
 
+    @MessageMapping("/lobby/ready")
+    public void ready(String data,Principal principal){
+        WebsocketEvent<String> event=new WebsocketEvent<String>(data,"ready",userManager.getUserByName(principal.getName()));
+        for (LobbyWebsocketListener lwl : lobbyWebsocketListeners) {
+            lwl.onReadyToPlay(event);
+        }
+    }
+
     @MessageMapping("/lobby/{command}")
     public void lobby(@DestinationVariable String command,Principal principal){
         WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()));
@@ -33,9 +42,6 @@ public class WebsocketController {
             switch (command) {
                 case "add":
                     lwl.onAddGameOffer(event);
-                    break;
-                case "ready":
-                    lwl.onReadyToPlay(event);
                     break;
                 case "leave":
                     lwl.onGoToTheProfile(event);
@@ -50,15 +56,20 @@ public class WebsocketController {
             }
         }
     }
+
+    @MessageMapping("/game/click")
+    public void click(Position pos, Principal principal){
+        WebsocketEvent<Position> event=new WebsocketEvent<Position>(pos,"click",userManager.getUserByName(principal.getName()));
+        for (GameWebsocketListener lwl : gameWebsocketListeners)
+            lwl.onClickCells(event);
+    }
+
     @MessageMapping("/game/{command}")
     public void game(@DestinationVariable String command,Principal principal){
         WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()));
 
         for (GameWebsocketListener lwl : gameWebsocketListeners) {
             switch (command) {
-                case "click":
-                    lwl.onClickCells(event);
-                    break;
                 case "ready":
                     lwl.onReady(event);
                     break;

@@ -36,13 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/register", "/login", "/css/**", "/js/**", "/vander/**").permitAll()
+                .antMatchers("/register", "/login", "/css/**", "/js/**", "/vander/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/profil", true)
+                .defaultSuccessUrl("/lobby", true)
                 .permitAll()
                 .and()
                 .logout()
@@ -55,7 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.jdbcAuthentication()
                 .passwordEncoder(passwordEncoder())
                 .dataSource(dataSource)
-                .rolePrefix("ROLE_");
+                .rolePrefix("ROLE_")
+                .usersByUsernameQuery("select username as principal, password as credentials, true from users where username = ?")
+                .authoritiesByUsernameQuery("select username as principal, authority as role from authorities where username = ?");
     }
 
     @Bean

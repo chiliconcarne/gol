@@ -1,14 +1,15 @@
 package GameOfLife.MVC.controller.Configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,37 +18,26 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @Scope("session")
-public class Index implements ErrorController {
+public class Index {
 
     @Autowired
     UserManager userManager;
 
-    @RequestMapping("/testWebsocket")
-    public String testWebsocket() { return "testWebsocket"; }
-
     @RequestMapping("/")
-    public String index(Model model) {
-        return "redirect:profil";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model model) {
-        return "login";
-    }
-
-    @RequestMapping("/lobby")
-    public String lobby(Model model,
-                        HttpServletRequest request
-    ) {
+    public String index(Model model,HttpServletRequest request){
+        model.addAttribute("username",request.getUserPrincipal().getName());
         return "lobby";
     }
 
-    @RequestMapping("/{side}")
-    public String fallback(
-            Model model,
-            HttpServletRequest request
-    ) {
-        return "redirect:profil";
+    @RequestMapping("/lobby")
+    public String lobby(Model model,HttpServletRequest request) {
+        model.addAttribute("username",request.getUserPrincipal().getName());
+        return "lobby";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -60,39 +50,8 @@ public class Index implements ErrorController {
         return userManager.createNewUser(username, password);
     }
 
-    @RequestMapping(value = "/profil", method = RequestMethod.GET)
-    public String settings2(
-            Model model,
-            HttpServletRequest request
-    ) {
-        return "profile";
-    }
-
-    @RequestMapping(value = "/profil", method = RequestMethod.POST)
-    public String settings(
-            Model model,
-            HttpServletRequest request
-    ) {
-        return "redirect:profil";
-    }
-
-    @RequestMapping("/conway")
-    public String conway(Model model) {
-        return "conway";
-    }
-
-    @RequestMapping("/game")
-    public String game(Model model) {
-        return "game";
-    }
-
-    @RequestMapping("/error")
-    public String error(Model model) {
-        return "404";
-    }
-
-    @Override
-    public String getErrorPath() {
-        return "/error";
+    @RequestMapping("/test")
+    public String test(){
+        return "WebSocketTest";
     }
 }

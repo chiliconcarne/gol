@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Title</title>
-    <script th:src="@{/js/sockjs-0.3.4.min.js}" type="text/javascript"></script>
-    <script th:src="@{/js/stomp.min.js}" type="text/javascript"></script>
-    <script th:src="@{/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vander/js/sockjs-1.1.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vander/js/stomp.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vander/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
     <script>
         var stompClient = Stomp.over(new SockJS('/websocket'));
         stompClient.connect({}, onstart);
@@ -13,27 +13,30 @@
             console.log('Connected');
             stompClient.subscribe('/topic/msg', msg);
             function msg(jsonJ) {
-                var json = JSON.parse(jsonJ.body);
+                var json = jsonJ.body;
                 console.info(json);
-                $("#msg").append(json);
+                $("#msg").append(json+"<br />");
             }
         }
-        stompClient.send("/app/lobby/add");
-        stompClient.send("/app/lobby/ready");
-        stompClient.send("/app/lobby/leave");
-        stompClient.send("/app/lobby/connect");
-        stompClient.send("/app/lobby/delete");
-        stompClient.send("/app/game/click");
-        stompClient.send("/app/game/ready");
-        stompClient.send("/app/game/connect");
-        stompClient.send("/app/game/end");
-        stompClient.send("/app/gameLobby/start");
-        stompClient.send("/app/gameLobby/selectTeam");
-        stompClient.send("/app/gameLobby/leave");
-        stompClient.send("/app/gameLobby/connect");
+        function onReady(){
+            stompClient.send("/app/lobby/add");
+            stompClient.send("/app/lobby/ready", {}, "Max");
+            stompClient.send("/app/lobby/leave");
+            stompClient.send("/app/lobby/connect");
+            stompClient.send("/app/lobby/delete");
+            stompClient.send("/app/game/click", {}, JSON.stringify({ 'x': 6, 'y': 5 }));
+            stompClient.send("/app/game/ready");
+            stompClient.send("/app/game/connect");
+            stompClient.send("/app/game/end");
+            stompClient.send("/app/gameLobby/start");
+            stompClient.send("/app/gameLobby/selectTeam");
+            stompClient.send("/app/gameLobby/leave");
+            stompClient.send("/app/gameLobby/connect");
+        }
     </script>
 </head>
 <body>
+    <button onClick="onReady()">Start</button>
     <div id="msg"></div>
 </body>
 </html>

@@ -1,5 +1,9 @@
 package GameOfLife.MVC.controller.Configuration;
 
+import GameOfLife.MVC.model.Entity.Authorities;
+import GameOfLife.MVC.model.Entity.Users;
+import GameOfLife.MVC.model.Repository.AuthoritiesRepository;
+import GameOfLife.MVC.model.Repository.UsersRepository;
 import GameOfLife.example.entity.Profil;
 import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,19 +59,22 @@ public class UserManager {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
+    private AuthoritiesRepository authoritiesRepository;
+
+
+
     public String createNewUser(String username, String password) {
         if(validatPassword(password)) {
-            try {
-                UserDetails user = auth.getDefaultUserDetailsService().loadUserByUsername(username);
+            if(usersRepository.findOne(username)==null){
+                usersRepository.save(new Users(username,passwordEncoder.encode(password)));
+                authoritiesRepository.save(new Authorities(username,"ROLE_USER"));
                 return "redirect:login?registered";
-            } catch(UsernameNotFoundException ex) {
-                try {
-                    auth.jdbcAuthentication().withUser(username).password(password).roles("USER");
-                    return "redirect:login?registered";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            } else
+                return "redirect:login?registered";
         }
         return "redirect:login?passwordExeption";
     }

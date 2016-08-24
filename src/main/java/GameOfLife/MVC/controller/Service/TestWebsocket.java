@@ -1,6 +1,7 @@
 package GameOfLife.MVC.controller.Service;
 
 import GameOfLife.MVC.controller.Controller.WebsocketController;
+import GameOfLife.MVC.controller.Json.Position;
 import GameOfLife.MVC.controller.Listener.Event.WebsocketEvent;
 import GameOfLife.MVC.controller.Listener.GameLobbyWebsocketListener;
 import GameOfLife.MVC.controller.Listener.GameWebsocketListener;
@@ -27,60 +28,61 @@ public class TestWebsocket implements GameLobbyWebsocketListener, GameWebsocketL
 
     @Override
     public void onStart(WebsocketEvent event) {
-        send();
+        send("onStart");
     }
 
     @Override
     public void onLeave(WebsocketEvent event) {
-        send();
+        send("onLeave");
     }
 
     @Override
     public void onReady(WebsocketEvent event) {
-        send();
+        send("onReady "+(String)event.getDaten());
     }
 
     @Override
     public void onAddGameOffer(WebsocketEvent event) {
-        send();
+        send("onAddGameOffer");
     }
 
     @Override
     public void onDeleteGameOffer(WebsocketEvent event) {
-        send();
+        send("onDeleteGameOffer");
     }
 
     @Override
     public void onGoToTheProfile(WebsocketEvent event) {
-        send();
+        send("onGoToTheProfile");
     }
 
     @Override
     public void onReadyToPlay(WebsocketEvent event) {
-        send();
+        send("onReadyToPlay");
     }
 
     @Override
     public void onConnect(WebsocketEvent event) {
-        send();
+        send("onConnect");
     }
 
     @Override
     public void onEnd(WebsocketEvent event) {
-        send();
+        send("onEnd");
     }
 
     @Override
     public void onClickCells(WebsocketEvent event) {
-        send();
+        Position pos = (Position) event.getDaten();
+        send("onClickCells "+pos.getX()+" "+pos.getY());
     }
 
     @Override
     public void onSelectTeam(WebsocketEvent event) {
-        send();
+        send("onSelectTeam");
     }
 
-    private void send(){
-        this.messagingTemplate.convertAndSend("/topic/msg","Korrekt");
+    private void send(String name){
+        this.messagingTemplate.convertAndSend("/topic/msg","Korrekt "+name);
     }
 }
