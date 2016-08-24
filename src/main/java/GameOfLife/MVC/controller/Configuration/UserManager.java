@@ -4,9 +4,11 @@ import GameOfLife.example.entity.Profil;
 import GameOfLife.example.repository.ProfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
@@ -48,23 +50,26 @@ public class UserManager {
     }
 
     @Autowired
-    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    private AuthenticationManagerBuilder auth;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ProfilRepository pRepo;
-
-    public boolean createNewUser(String username, String password) {
+    public String createNewUser(String username, String password) {
         if(validatPassword(password)) {
-            if (!inMemoryUserDetailsManager.userExists(username)) {
-                inMemoryUserDetailsManager.createUser(new User(username, passwordEncoder.encode(password), new ArrayList<GrantedAuthority>()));
-                pRepo.save(new Profil(username, 1, 2, 20, 20, 50));
-                return true;
+            try {
+                UserDetails user = auth.getDefaultUserDetailsService().loadUserByUsername(username);
+                return "redirect:login?registered";
+            } catch(UsernameNotFoundException ex) {
+                try {
+                    auth.jdbcAuthentication().withUser(username).password(password).roles("USER");
+                    return "redirect:login?registered";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-        return false;
+        return "redirect:login?passwordExeption";
     }
 
     private boolean validatPassword(String password) {
@@ -74,6 +79,6 @@ public class UserManager {
     }
 
     public UserDetails getUserByName(String name) {
-        return inMemoryUserDetailsManager.loadUserByUsername(name);
+        return auth.getDefaultUserDetailsService().loadUserByUsername(name);
     }
 }

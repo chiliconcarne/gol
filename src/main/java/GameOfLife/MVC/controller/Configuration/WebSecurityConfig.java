@@ -5,6 +5,7 @@ package GameOfLife.MVC.controller.Configuration;
  */
 
 import GameOfLife.MVC.controller.Configuration.UserManager;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,10 @@ import java.util.Properties;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private javax.sql.DataSource dataSource;
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -47,14 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inMemoryUserDetailsManager()).passwordEncoder(passwordEncoder());
-
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        final Properties users = new Properties();
-        return new InMemoryUserDetailsManager(users);
+        auth.jdbcAuthentication()
+                .passwordEncoder(passwordEncoder())
+                .dataSource(dataSource)
+                .rolePrefix("ROLE_");
     }
 
     @Bean

@@ -37,6 +37,7 @@
 
     <div th:if="${param.registered}" class="alert alert-success" role="alert">Du hast dich erfolgreich registriert und kannst dich jetzt einloggen.</div>
     <div th:if="${param.alreadyExists}" class="alert alert-danger" role="alert">Der Nutzername existiert schon. Bitte versuche einen anderen Benutzernamen.</div>
+    <div th:if="${param.passwordExeption}" class="alert alert-danger" role="alert">Passwort ist Falsch.</div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><div role="button">Registration</div></h3>
