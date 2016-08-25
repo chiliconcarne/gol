@@ -1,45 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="'Profil von ' + ${profil.username}" />
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <link th:href="@{/css/bootstrap-theme.min.css}" rel="stylesheet" media="screen" />
-    <link th:href="@{/css/app.css}" rel="stylesheet" media="screen" />
+    <title>Conway Game Of Life</title>
+    <link th:href="@{/vander/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/vander/css/bootstrap-theme.min.css}" rel="stylesheet" media="screen" />
     <link th:href="@{/css/profile.css}" rel="stylesheet" media="screen" />
-    <link th:href="@{/css/jquery-ui.min.css}" rel="stylesheet" media="screen" />
-    <link th:href="@{/css/jquery-ui.structure.min.css}" rel="stylesheet" media="screen" />
-    <script th:src="@{/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
-    <script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
-    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vander/js/jquery-3.1.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vander/js/bootstrap.min.js}" type="text/javascript"></script>
     <script th:src="@{/js/profile.js}" type="text/javascript"></script>
 </head>
 <body>
     <div class="page-header">
-        <h1>Profil von <b th:text="${profil.username}"/><span><form th:action="@{/logout}" method="post" id="logoutBtn"><input type="submit" value="Ausloggen" class="btn btn-danger glyphicon glyphicon-off"/></form></span></h1>
+        <h1>Profil von <b th:text="${profile.name}"/><span><form th:action="@{/logout}" method="post" id="logoutBtn"><input type="submit" value="Ausloggen" class="btn btn-danger glyphicon glyphicon-off"/></form></span></h1>
     </div>
     <div class="options">
-        <div><h4>Farbe auswählen:</h4>
-            <div class="colorContainer first">
-                <div class="color c1" data-color="1"></div>
-                <div class="color c2" data-color="2"></div>
-                <div class="color c3" data-color="3"></div>
-                <div class="color c4" data-color="4"></div>
-                <div class="color c5" data-color="5"></div>
-                <div class="color c6" data-color="6"></div>
-                <div class="color c7" data-color="7"></div>
+        <div class="row">
+            <div class="colors col-md-6">
+                <div><h4>Farbe auswählen:</h4>
+                    <div class="colorContainer first">
+                        <div class="color c1" data-color="1"></div>
+                        <div class="color c2" data-color="2"></div>
+                        <div class="color c3" data-color="3"></div>
+                        <div class="color c4" data-color="4"></div>
+                        <div class="color c5" data-color="5"></div>
+                        <div class="color c6" data-color="6"></div>
+                        <div class="color c7" data-color="7"></div>
+                    </div>
+                </div>
+                <br /><br />
+                <div><h4>Zweitfarbe auswählen:</h4>
+                    <div class="colorContainer second">
+                        <div class="color c1" data-color="1"></div>
+                        <div class="color c2" data-color="2"></div>
+                        <div class="color c3" data-color="3"></div>
+                        <div class="color c4" data-color="4"></div>
+                        <div class="color c5" data-color="5"></div>
+                        <div class="color c6" data-color="6"></div>
+                        <div class="color c7" data-color="7"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <br /><br />
-        <div><h4>Zweitfarbe auswählen:</h4>
-            <div class="colorContainer second">
-                <div class="color c1" data-color="1"></div>
-                <div class="color c2" data-color="2"></div>
-                <div class="color c3" data-color="3"></div>
-                <div class="color c4" data-color="4"></div>
-                <div class="color c5" data-color="5"></div>
-                <div class="color c6" data-color="6"></div>
-                <div class="color c7" data-color="7"></div>
+            <div class="avatar col-md-6">
+                <input type="file" name="avatar" accept=".gif,.jpg,.png,.jpeg"/>
             </div>
         </div>
         <br /><br />
@@ -47,21 +50,21 @@
             <div><h4>Weite Optionen:</h4>
                 <div class="input-group">
                     <span class="input-group-addon">Feldbreite:</span>
-                    <input type="number" min="10" max="100" name="width" id="sizeWidth" class="form-control" th:value="${profil.width}" />
+                    <input type="number" min="10" max="100" name="width" id="sizeWidth" class="form-control" th:value="${profile.board_width}" />
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Feldhöhe:</span>
-                    <input type="number" min="10" max="100" name="height" id="sizeHeight" class="form-control" th:value="${profil.height}" />
+                    <input type="number" min="10" max="100" name="height" id="sizeHeight" class="form-control" th:value="${profile.board_height}" />
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Gewinn Kondition:</span>
-                    <input type="number" min="20" max="100" name="win" id="win" class="form-control" th:value="${profil.win}" />
+                    <input type="number" min="20" max="100" name="win" id="win" class="form-control" th:value="${profile.winCondition}" />
                     <span class="input-group-addon">%</span>
                 </div>
             </div>
-            <input type="hidden" name="color1" id="color1" th:value="${profil.color1}"/>
-            <input type="hidden" name="color2" id="color2" th:value="${profil.color2}"/>
-            <input type="hidden" name="username" th:value="${profil.username}"/>
+            <input type="hidden" name="color1" id="color1" th:value="${profile.color1}"/>
+            <input type="hidden" name="color2" id="color2" th:value="${profile.color2}"/>
+            <input type="hidden" name="username" th:value="${profile.name}"/>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="btn-group" role="group" style="width:100%">
                 <button type="submit" class="btn btn-success" name="save" value="Speichern" style="width:50%"><span class="glyphicon glyphicon-floppy-disk"></span> Profil Speichern</button>

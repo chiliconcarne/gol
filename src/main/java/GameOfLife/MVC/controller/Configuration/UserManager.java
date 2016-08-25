@@ -1,8 +1,10 @@
 package GameOfLife.MVC.controller.Configuration;
 
 import GameOfLife.MVC.model.Entity.Authorities;
+import GameOfLife.MVC.model.Entity.Player;
 import GameOfLife.MVC.model.Entity.Users;
 import GameOfLife.MVC.model.Repository.AuthoritiesRepository;
+import GameOfLife.MVC.model.Repository.PlayerRepository;
 import GameOfLife.MVC.model.Repository.UsersRepository;
 import GameOfLife.example.entity.Profil;
 import GameOfLife.example.repository.ProfilRepository;
@@ -65,13 +67,15 @@ public class UserManager {
     @Autowired
     private AuthoritiesRepository authoritiesRepository;
 
-
+    @Autowired
+    PlayerRepository playerRepository;
 
     public String createNewUser(String username, String password) {
         if(validatPassword(password)) {
             if(usersRepository.findOne(username)==null){
                 usersRepository.save(new Users(username,passwordEncoder.encode(password)));
                 authoritiesRepository.save(new Authorities(username,"ROLE_USER"));
+                playerRepository.save(new Player(username));
                 return "redirect:login?registered";
             } else
                 return "redirect:login?registered";

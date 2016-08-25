@@ -1,5 +1,7 @@
 package GameOfLife.MVC.controller.Configuration;
 
+import GameOfLife.MVC.model.Entity.Player;
+import GameOfLife.MVC.model.Repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ public class Index {
 
     @Autowired
     UserManager userManager;
+    @Autowired
+    PlayerRepository playerRepository;
 
     @RequestMapping("/")
     public String index(Model model,HttpServletRequest request){
@@ -53,5 +57,13 @@ public class Index {
     @RequestMapping("/test")
     public String test(){
         return "WebSocketTest";
+    }
+
+    @RequestMapping("/profile")
+    public String profile(Model model,HttpServletRequest request){
+        Player player=playerRepository.findOneByName(request.getUserPrincipal().getName());
+        model.addAttribute("profile",player);
+        return "profile";
+
     }
 }

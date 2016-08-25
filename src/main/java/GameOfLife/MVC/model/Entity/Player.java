@@ -1,5 +1,6 @@
 package GameOfLife.MVC.model.Entity;
 
+import GameOfLife.MVC.controller.Enum.Color;
 import GameOfLife.MVC.controller.Enum.GameType;
 
 import javax.persistence.*;
@@ -12,14 +13,16 @@ public class Player {
     @Id
     @GeneratedValue
     private int playerId;
-    private int user_id;
-    private int color1;
-    private int color2;
+    private String name;
+    private Color color1;
+    private Color color2;
     private int win;
     private int draw;
     private int lost;
     private int img_width;
     private int img_height;
+    private int board_width;
+    private int board_height;
     private int winCondition;
     private GameType gameType;
     private String avatar;
@@ -29,20 +32,19 @@ public class Player {
 
     public Player() {}
 
-    public Player(int playerId, int user_id, int color1, int color2, int win, int draw, int lost, int img_width, int img_height, int winCondition, GameType gameType, String avatar, GamePlayer gamePlayer) {
-        this.playerId = playerId;
-        this.user_id = user_id;
-        this.color1 = color1;
-        this.color2 = color2;
-        this.win = win;
-        this.draw = draw;
-        this.lost = lost;
-        this.img_width = img_width;
-        this.img_height = img_height;
-        this.winCondition = winCondition;
-        this.gameType = gameType;
-        this.avatar = avatar;
-        this.gamePlayer = gamePlayer;
+    public Player(String name) {
+        this.playerId = 0;
+        this.name = name;
+        this.color1 = Color.blue;
+        this.color2 = Color.green;
+        this.win = 0;
+        this.draw = 0;
+        this.lost = 0;
+        this.winCondition = 50;
+        this.board_height = 67;
+        this.board_width = 90;
+        this.gameType = GameType.duel;
+        this.gamePlayer = null;
     }
 
     public int getImg_width() {
@@ -61,27 +63,27 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public String getName() {
+        return name;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getColor1() {
+    public Color getColor1() {
         return color1;
     }
 
-    public void setColor1(int color1) {
+    public void setColor1(Color color1) {
         this.color1 = color1;
     }
 
-    public int getColor2() {
+    public Color getColor2() {
         return color2;
     }
 
-    public void setColor2(int color2) {
+    public void setColor2(Color color2) {
         this.color2 = color2;
     }
 
@@ -147,5 +149,21 @@ public class Player {
 
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
+    }
+
+    public int getBoard_width() {
+        return board_width;
+    }
+
+    public void setBoard_width(int board_width) {
+        this.board_width = board_width;
+    }
+
+    public int getBoard_height() {
+        return board_height;
+    }
+
+    public void setBoard_height(int board_height) {
+        this.board_height = board_height;
     }
 }
