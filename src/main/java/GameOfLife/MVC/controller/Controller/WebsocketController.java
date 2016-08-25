@@ -9,6 +9,7 @@ import GameOfLife.MVC.controller.Listener.LobbyWebsocketListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -25,6 +26,9 @@ public class WebsocketController {
 
     @Autowired
     private UserManager userManager;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/lobby/ready")
     public void ready(String data,Principal principal){
@@ -108,6 +112,7 @@ public class WebsocketController {
 
     public void addLobbyWebsocketListener(LobbyWebsocketListener lobbyWebsocketListener)
     {
+        System.out.println("Register new Listener");
         lobbyWebsocketListeners.add(lobbyWebsocketListener);
     }
 
@@ -119,5 +124,9 @@ public class WebsocketController {
     public void addGameWebsocketListener(GameWebsocketListener gameWebsocketListener)
     {
         gameWebsocketListeners.add(gameWebsocketListener);
+    }
+
+    public void send(String topic,Object data){
+        this.messagingTemplate.convertAndSend(topic,data);
     }
 }

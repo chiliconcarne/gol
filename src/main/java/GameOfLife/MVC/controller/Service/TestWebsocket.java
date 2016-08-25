@@ -38,7 +38,7 @@ public class TestWebsocket implements GameLobbyWebsocketListener, GameWebsocketL
 
     @Override
     public void onReady(WebsocketEvent event) {
-        send("onReady "+(String)event.getDaten());
+        send("onReady");
     }
 
     @Override
@@ -58,7 +58,7 @@ public class TestWebsocket implements GameLobbyWebsocketListener, GameWebsocketL
 
     @Override
     public void onReadyToPlay(WebsocketEvent event) {
-        send("onReadyToPlay");
+        send("onReadyToPlay "+(String)event.getDaten());
     }
 
     @Override
