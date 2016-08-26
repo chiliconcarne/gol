@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 @Controller
 public class FileUploadController {
 
-    public static final String ROOT = "src/main/users/avatar/";
+    public static final String ROOT = "src/main/resources/static/img";
 
     @Autowired
     private PlayerRepository playerRepository;
