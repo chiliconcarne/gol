@@ -35,7 +35,7 @@
 
         $scope.leave = function(){
             websocket.leave();
-            location.href='/profile.html';
+            location.href='/profile';
         }
     }
 })();

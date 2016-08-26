@@ -34,9 +34,23 @@ public class FileUploadController {
     ) {
         Player player=playerRepository.findOneByName(request.getUserPrincipal().getName());
         model.addAttribute("profile",player);
-        String name = file.getOriginalFilename().replaceFirst(file.getName(),request.getUserPrincipal().getName());
-        name = name.toLowerCase().replace(" ","_");
-        if (!file.isEmpty()) {
+        String name = request.getUserPrincipal().getName().toLowerCase().replace(" ","_");
+        switch(file.getContentType()){
+            case "image/png":
+                name += ".png";
+                break;
+            case "image/jpeg":
+                name += ".jpg";
+                break;
+            case "image/gif":
+                name += ".gif";
+                break;
+            default:
+                name = "";
+        }
+        System.out.println(file.getContentType());
+        System.out.println(name);
+        if (!file.isEmpty() && name != "") {
             try {
                 if(player.getAvatar()!=null){
                     Paths.get(ROOT,name).toFile().delete();
