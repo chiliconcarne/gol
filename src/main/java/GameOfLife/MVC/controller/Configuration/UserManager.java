@@ -78,7 +78,7 @@ public class UserManager {
                 playerRepository.save(new Player(username));
                 return "redirect:login?registered";
             } else
-                return "redirect:login?registered";
+                return "redirect:login?alreadyExists";
         }
         return "redirect:login?passwordExeption";
     }

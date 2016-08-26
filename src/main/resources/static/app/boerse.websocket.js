@@ -42,6 +42,8 @@ function boerseWebsocket(listChanged, messageChanged)
 
     websocket.leave = function(){
         stompClient.send('/in/boerse/leave');
+        stompClient.discconnect();
+        location.href="/profile";
     }
 
     return websocket;

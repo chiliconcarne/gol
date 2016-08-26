@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
  * Created by sernowm on 04.08.2016.
  */
 @Controller
-@Scope("session")
 public class Index {
 
     @Autowired
@@ -59,11 +58,14 @@ public class Index {
         return "WebSocketTest";
     }
 
-    @RequestMapping("/profile")
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model,HttpServletRequest request){
         Player player=playerRepository.findOneByName(request.getUserPrincipal().getName());
+        if(player.getAvatar()!=null)
+            player.setAvatar("/img/"+player.getAvatar());
+        else
+            player.setAvatar("/img/warten.gif");
         model.addAttribute("profile",player);
         return "profile";
-
     }
 }

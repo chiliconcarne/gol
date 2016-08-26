@@ -14,6 +14,7 @@
     <div class="page-header">
         <h1>Profil von <b th:text="${profile.name}"/><span><form th:action="@{/logout}" method="post" id="logoutBtn"><input type="submit" value="Ausloggen" class="btn btn-danger glyphicon glyphicon-off"/></form></span></h1>
     </div>
+    <form action="/profile" method="POST" enctype="multipart/form-data">
     <div class="options">
         <div class="row">
             <div class="colors col-md-6">
@@ -43,34 +44,34 @@
             </div>
             <div class="avatar col-md-6">
                 <input type="file" name="avatar" accept=".gif,.jpg,.png,.jpeg"/>
+                <img th:src="${profile.avatar}" />
             </div>
         </div>
         <br /><br />
-        <form action="/profil" method="POST">
-            <div><h4>Weite Optionen:</h4>
-                <div class="input-group">
-                    <span class="input-group-addon">Feldbreite:</span>
-                    <input type="number" min="10" max="100" name="width" id="sizeWidth" class="form-control" th:value="${profile.board_width}" />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Feldhöhe:</span>
-                    <input type="number" min="10" max="100" name="height" id="sizeHeight" class="form-control" th:value="${profile.board_height}" />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Gewinn Kondition:</span>
-                    <input type="number" min="20" max="100" name="win" id="win" class="form-control" th:value="${profile.winCondition}" />
-                    <span class="input-group-addon">%</span>
-                </div>
+        <div><h4>Weite Optionen:</h4>
+            <div class="input-group">
+                <span class="input-group-addon">Feldbreite:</span>
+                <input type="number" min="10" max="100" name="width" id="sizeWidth" class="form-control" th:value="${profile.board_width}" />
             </div>
-            <input type="hidden" name="color1" id="color1" th:value="${profile.color1}"/>
-            <input type="hidden" name="color2" id="color2" th:value="${profile.color2}"/>
-            <input type="hidden" name="username" th:value="${profile.name}"/>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <div class="btn-group" role="group" style="width:100%">
-                <button type="submit" class="btn btn-success" name="save" value="Speichern" style="width:50%"><span class="glyphicon glyphicon-floppy-disk"></span> Profil Speichern</button>
-                <a href="/lobby" role="button" class="btn btn-default" style="width:50%"><span class="glyphicon glyphicon-ok-sign"></span> Zur Lobby gehen</a>
+            <div class="input-group">
+                <span class="input-group-addon">Feldhöhe:</span>
+                <input type="number" min="10" max="100" name="height" id="sizeHeight" class="form-control" th:value="${profile.board_height}" />
             </div>
-        </form>
+            <div class="input-group">
+                <span class="input-group-addon">Gewinn Kondition:</span>
+                <input type="number" min="20" max="100" name="win" id="win" class="form-control" th:value="${profile.winCondition}" />
+                <span class="input-group-addon">%</span>
+            </div>
+        </div>
+        <input type="hidden" name="color1" id="color1" th:value="${profile.color1}"/>
+        <input type="hidden" name="color2" id="color2" th:value="${profile.color2}"/>
+        <input type="hidden" name="username" th:value="${profile.name}"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="btn-group" role="group" style="width:100%">
+            <button type="submit" class="btn btn-success" name="save" value="Speichern" style="width:50%"><span class="glyphicon glyphicon-floppy-disk"></span> Profil Speichern</button>
+            <a href="/lobby" role="button" class="btn btn-default" style="width:50%"><span class="glyphicon glyphicon-ok-sign"></span> Zur Lobby gehen</a>
+        </div>
     </div>
+    </form>
 </body>
 </html>
