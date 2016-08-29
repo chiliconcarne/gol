@@ -29,19 +29,19 @@ function boerseWebsocket(listChanged, messageChanged)
     }
 
     websocket.add = function() {
-        stompClient.send('/in/boerse/add');
+        stompClient.send('/app/lobby/add');
     }
 
     websocket.remove = function() {
-        stompClient.send('/in/boerse/remove');
+        stompClient.send('/app/lobby/remove');
     }
 
     websocket.accept = function(username){
-        stompClient.send('/in/boerse/accept',{},username);
+        stompClient.send('/app/lobby/accept',{},username);
     }
 
     websocket.leave = function(){
-        stompClient.send('/in/boerse/leave');
+        stompClient.send('/app/lobby/leave');
         stompClient.disconnect();
     }
 

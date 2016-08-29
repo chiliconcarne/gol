@@ -112,7 +112,6 @@ public class WebsocketController {
 
     public void addLobbyWebsocketListener(LobbyWebsocketListener lobbyWebsocketListener)
     {
-        System.out.println("Register new Listener");
         lobbyWebsocketListeners.add(lobbyWebsocketListener);
     }
 

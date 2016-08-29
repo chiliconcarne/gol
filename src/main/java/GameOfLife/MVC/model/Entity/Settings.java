@@ -29,6 +29,16 @@ public class Settings {
     public Settings() {
     }
 
+    public Settings(int boardWidth, int boardHeight, int winCondition, Color team1Color, Color team2Color, GameType gameType) {
+        this.settingsId = 0;
+        this.boardWidth = boardWidth;
+        this.boardHeight = boardHeight;
+        this.winCondition = winCondition;
+        this.team1Color = team1Color;
+        this.team2Color = team2Color;
+        this.gameType = gameType;
+    }
+
     public Settings(int settingsId, Offer offer, Game game, int boardWidth, int boardHeight, int winCondition, Color team1Color, Color team2Color, GameType gameType) {
         this.settingsId = settingsId;
         this.offer = offer;

@@ -14,14 +14,16 @@ public class Offer {
     private int offerId;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "offer")
     private Settings settings;
+    private String offerGenerator;
     private OfferState offerState;
 
     public Offer() {
     }
 
-    public Offer(int offerId, Settings settings, OfferState offerState) {
+    public Offer(int offerId, Settings settings, String offerGenerator, OfferState offerState) {
         this.offerId = offerId;
         this.settings = settings;
+        this.offerGenerator = offerGenerator;
         this.offerState = offerState;
     }
 
@@ -33,19 +35,27 @@ public class Offer {
         this.offerId = offerId;
     }
 
-    public OfferState getOfferState() {
-        return offerState;
-    }
-
-    public void setOfferState(OfferState offerState) {
-        this.offerState = offerState;
-    }
-
     public Settings getSettings() {
         return settings;
     }
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+    }
+
+    public String getOfferGenerator() {
+        return offerGenerator;
+    }
+
+    public void setOfferGenerator(String offerGenerator) {
+        this.offerGenerator = offerGenerator;
+    }
+
+    public OfferState getOfferState() {
+        return offerState;
+    }
+
+    public void setOfferState(OfferState offerState) {
+        this.offerState = offerState;
     }
 }

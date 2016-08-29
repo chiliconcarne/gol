@@ -21,9 +21,9 @@ public class TestWebsocket implements GameLobbyWebsocketListener, GameWebsocketL
 
     @Autowired
     public TestWebsocket(WebsocketController websocketController){
-        websocketController.addLobbyWebsocketListener(this);
+        /*websocketController.addLobbyWebsocketListener(this);
         websocketController.addGameLobbyWebsocketListener(this);
-        websocketController.addGameWebsocketListener(this);
+        websocketController.addGameWebsocketListener(this);*/
     }
 
     @Override
