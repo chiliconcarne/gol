@@ -38,7 +38,7 @@ public class Lobby implements LobbyWebsocketListener {
 
     private void sendList(){
         List<Offer> offers = (List<Offer>) offerRepository.findAll();
-        offers.sort((e1,e2) -> {
+        /*offers.sort((e1,e2) -> {
             if(e1.getOfferState()==e2.getOfferState()){
                 return e1.getOfferGenerator().compareTo(e2.getOfferGenerator());
             } else {
@@ -56,25 +56,28 @@ public class Lobby implements LobbyWebsocketListener {
                  }
                 return 0;
             }
-        });
-        messagingTemplate.convertAndSend("/out/boerse/list",offers);
+        });*/
+        messagingTemplate.convertAndSend("/topic/lobby/list",offers);
     }
 
     @Override
     public void onAddGameOffer(WebsocketEvent event)  {
         Player player=playerRepository.findOneByName(event.getUser().getUsername());
-        Settings settings=new Settings(
-                player.getBoard_width(),
-                player.getBoard_height(),
-                player.getWinCondition(),
-                player.getColor1(),
-                player.getColor2(),
-                player.getGameType()
-        );
-        settingsRepository.save(settings);
-        Offer offer=new Offer(0,settings,player.getName(),OfferState.Available);
-        offerRepository.save(offer);
-        sendList();
+        Offer offer=offerRepository.findOneByOfferGenerator(player.getName());
+        if(offer==null) {
+            Settings settings = new Settings(
+                    player.getBoard_width(),
+                    player.getBoard_height(),
+                    player.getWinCondition(),
+                    player.getColor1(),
+                    player.getColor2(),
+                    player.getGameType()
+            );
+            settingsRepository.save(settings);
+            offer = new Offer(0, settings, player.getName(), OfferState.Available);
+            offerRepository.save(offer);
+            sendList();
+        }
     }
 
     @Override
@@ -96,6 +99,7 @@ public class Lobby implements LobbyWebsocketListener {
 
     @Override
     public void onReadyToPlay(WebsocketEvent event) {
+
 
     }
 

@@ -11,11 +11,11 @@ function boerseWebsocket(listChanged, messageChanged)
     {
         console.log('Connected');
 
-        stompClient.subscribe('/user/out/boerse/list', listArrived);
-        stompClient.subscribe('/out/boerse/list', listArrived);
-        stompClient.subscribe('/user/out/boerse/message', messageChanged);
-        stompClient.subscribe('/user/out/boerse/game', gameArrived);
-        stompClient.send('/in/boerse/start');
+        stompClient.subscribe('/user/topic/lobby/list', listArrived);
+        stompClient.subscribe('/topic/lobby/list', listArrived);
+        stompClient.subscribe('/user/topic/lobby/message', messageChanged);
+        stompClient.subscribe('/user/topic/lobby/game', gameArrived);
+        stompClient.send('/app/lobby/start');
 
         function listArrived(listJSON)
         {
