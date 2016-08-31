@@ -113,9 +113,7 @@ public class Lobby implements LobbyWebsocketListener {
     @Override
     public void onReadyToPlay(WebsocketEvent event) {
         String room = (String) event.getDaten();
-        Player player = playerRepository.findOneByName(event.getUser().getUsername());
-        Offer offer = offerRepository.findOneByOfferGenerator(player.getName());
-        GamePlayer gamePlayer = new GamePlayer();
+        messagingTemplate.convertAndSendToUser(event.getUser().getUsername(),"/topic/lobby/game",room);
     }
 
     @Override

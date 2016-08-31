@@ -62,16 +62,16 @@ public class WebsocketController {
         }
     }
 
-    @MessageMapping("/game/click")
-    public void click(Position pos, Principal principal){
-        WebsocketEvent<Position> event=new WebsocketEvent<Position>(pos,"click",userManager.getUserByName(principal.getName()));
+    @MessageMapping("/game/{room}/click")
+    public void click(Position pos, @DestinationVariable String room, Principal principal){
+        WebsocketEvent<Position> event=new WebsocketEvent<Position>(pos,"click",userManager.getUserByName(principal.getName()),room);
         for (GameWebsocketListener lwl : gameWebsocketListeners)
             lwl.onClickCells(event);
     }
 
-    @MessageMapping("/game/{command}")
-    public void game(@DestinationVariable String command,Principal principal){
-        WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()));
+    @MessageMapping("/game/{room}/{command}")
+    public void game(@DestinationVariable String command,@DestinationVariable String room, Principal principal){
+        WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()),room);
 
         for (GameWebsocketListener lwl : gameWebsocketListeners) {
             switch (command) {
@@ -88,9 +88,9 @@ public class WebsocketController {
             }
         }
     }
-    @MessageMapping("/gameLobby/{command}")
-    public void gameLobby(@DestinationVariable String command,Principal principal){
-        WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()));
+    @MessageMapping("/gameLobby/{room}/{command}")
+    public void gameLobby(@DestinationVariable String command,@DestinationVariable String room,Principal principal){
+        WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()),room);
 
         for (GameLobbyWebsocketListener lwl : gameLobbyWebsocketListeners) {
             switch (command) {

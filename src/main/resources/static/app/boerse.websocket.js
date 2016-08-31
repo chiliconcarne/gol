@@ -24,7 +24,7 @@ function boerseWebsocket(listChanged, messageChanged)
 
         function gameArrived(gameJson){
             websocket.leave();
-            location.href="/game";
+            location.href="/gameLobby?room="+gameJson.body;
         }
     }
 
@@ -36,8 +36,8 @@ function boerseWebsocket(listChanged, messageChanged)
         stompClient.send('/app/lobby/delete');
     }
 
-    websocket.accept = function(username){
-        stompClient.send('/app/lobby/accept',{},username);
+    websocket.accept = function(room){
+        stompClient.send('/app/lobby/accept',{},room);
     }
 
     websocket.leave = function(){

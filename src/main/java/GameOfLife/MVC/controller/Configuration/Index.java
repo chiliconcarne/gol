@@ -68,4 +68,12 @@ public class Index {
         model.addAttribute("profile",player);
         return "profile";
     }
+
+    @RequestMapping("/gameLobby")
+    public String gameLobby(Model model,HttpServletRequest request,@RequestParam("room") String room) {
+        model.addAttribute("username",request.getUserPrincipal().getName());
+        model.addAttribute("room",room);
+        return "gameLobby";
+    }
+
 }

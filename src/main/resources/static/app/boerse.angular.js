@@ -30,8 +30,8 @@
             websocket.remove();
         }
 
-        $scope.accept = function(username){
-            websocket.accept(username);
+        $scope.accept = function(room){
+            websocket.accept(room);
         }
 
         $scope.leave = function(){
