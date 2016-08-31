@@ -88,6 +88,14 @@ public class WebsocketController {
             }
         }
     }
+
+    @MessageMapping("/game/{room}/selectTeam")
+    public void click(String team, @DestinationVariable String room, Principal principal){
+        WebsocketEvent<String> event=new WebsocketEvent<String>(team,"selectTeam",userManager.getUserByName(principal.getName()),room);
+        for (GameLobbyWebsocketListener lwl : gameLobbyWebsocketListeners)
+            lwl.onSelectTeam(event);
+    }
+
     @MessageMapping("/gameLobby/{room}/{command}")
     public void gameLobby(@DestinationVariable String command,@DestinationVariable String room,Principal principal){
         WebsocketEvent event=new WebsocketEvent(command,userManager.getUserByName(principal.getName()),room);
@@ -96,9 +104,6 @@ public class WebsocketController {
             switch (command) {
                 case "start":
                     lwl.onStart(event);
-                    break;
-                case "selectTeam":
-                    lwl.onSelectTeam(event);
                     break;
                 case "leave":
                     lwl.onLeave(event);

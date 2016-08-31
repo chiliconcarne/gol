@@ -23,7 +23,30 @@
             <div class="modal-content alert alert-danger" role="alert">{{message}}</div>
         </div>
     </div>
-
+    <div>
+        <table>
+            <tr>
+                <td>Team Red</td>
+                <td>Team Blue</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="list-group" ng-repeat="row in team1" >
+                        {{ row.name }}
+                    </div>
+                </td>
+                <td>
+                    <div class="list-group" ng-repeat="row in team2" >
+                        {{ row.name }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><button ng-click="joinTeamRed()">Join Team Red</button></td>
+                <td><button ng-click="joinTeamBlue()">Join Team Blue</button></td>
+            </tr>
+        </table>
+    </div>
 </div>
 </body>
 </html>

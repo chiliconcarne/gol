@@ -44,6 +44,6 @@ public class GameLobby implements GameLobbyWebsocketListener {
 
     @Override
     public void onSelectTeam(WebsocketEvent event) {
-
+        System.out.println("Der Spieler möchte dem Team "+event.getDaten()+" Joinen");
     }
 }

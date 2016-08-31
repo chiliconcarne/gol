@@ -18,12 +18,17 @@ function gameLobbyWebsocket(userChanged, msgChanged)
         stompClient.send("/app/gameLobby/"+room+"/connect");
 
         function userArrived(userJson){
-            userChanged(userJson);
+            userChanged(JSON.parse(userJson.body));
         }
 
         function msgArrived(msgJson){
             msgChanged(msgJson);
         }
+
+    }
+
+    function joinTeam(side){
+        /
     }
 
     return websocket;

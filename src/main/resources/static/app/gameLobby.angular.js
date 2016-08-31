@@ -20,7 +20,9 @@ function getQueryVariable(variable) {
     {
 
         function userChanged(user){
-
+            $scope.team1 = user.team1;
+            $scope.team2 = user.team2;
+            $scope.$apply();
         }
 
         function msgChanged(msg){
@@ -30,5 +32,12 @@ function getQueryVariable(variable) {
 
         var websocket = gameLobbyWebsocket(userChanged, msgChanged);
 
+        $scope.joinTeamRed = function(){
+
+        }
+
+        $scope.joinTeamBlue = function(){
+
+        }
     }
 })();

@@ -20,9 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kulandas on 29.08.2016.
- */
 @Service
 public class Lobby implements LobbyWebsocketListener {
     @Autowired
