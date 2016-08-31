@@ -5,6 +5,7 @@ import GameOfLife.MVC.controller.Enum.OfferState;
 import GameOfLife.MVC.controller.Json.OfferJson;
 import GameOfLife.MVC.controller.Listener.Event.WebsocketEvent;
 import GameOfLife.MVC.controller.Listener.LobbyWebsocketListener;
+import GameOfLife.MVC.model.Entity.GamePlayer;
 import GameOfLife.MVC.model.Entity.Offer;
 import GameOfLife.MVC.model.Entity.Player;
 import GameOfLife.MVC.model.Entity.Settings;
@@ -79,7 +80,6 @@ public class Lobby implements LobbyWebsocketListener {
                     player.getColor2(),
                     player.getGameType()
             );
-
             offer = new Offer(0, player.getName(), OfferState.Available);
             settings.setOffer(offer);
             settingsRepository.save(settings);
@@ -112,7 +112,10 @@ public class Lobby implements LobbyWebsocketListener {
 
     @Override
     public void onReadyToPlay(WebsocketEvent event) {
-
+        String room = (String) event.getDaten();
+        Player player = playerRepository.findOneByName(event.getUser().getUsername());
+        Offer offer = offerRepository.findOneByOfferGenerator(player.getName());
+        GamePlayer gamePlayer = new GamePlayer();
     }
 
     @Override

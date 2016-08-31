@@ -35,8 +35,8 @@ public class GamePlayer {
 
     }
 
-    public GamePlayer(int gamePlayerId, int gameId, Player player, int livingCells, int clicks, int killCellByRule, int killCellByPlayer, int convertCells, int explodeCells, int createCellByRule, int createCellByPlayer, PlayerState playerState, Color color, Team team) {
-        this.gamePlayerId = gamePlayerId;
+    public GamePlayer(int gameId, Player player, int livingCells, int clicks, int killCellByRule, int killCellByPlayer, int convertCells, int explodeCells, int createCellByRule, int createCellByPlayer, PlayerState playerState, Color color, Team team) {
+        this.gamePlayerId = 0;
         this.gameId = gameId;
         this.player = player;
         this.livingCells = livingCells;

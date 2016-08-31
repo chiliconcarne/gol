@@ -4,6 +4,7 @@ import GameOfLife.MVC.controller.Enum.Color;
 import GameOfLife.MVC.controller.Enum.GameType;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * Created by kulandas on 22.08.2016.
@@ -25,6 +26,7 @@ public class Settings {
     private Color team1Color;
     private Color team2Color;
     private GameType gameType;
+    private String room;
 
     public Settings() {
     }
@@ -37,6 +39,7 @@ public class Settings {
         this.team1Color = team1Color;
         this.team2Color = team2Color;
         this.gameType = gameType;
+        this.room = UUID.randomUUID().toString();
     }
 
     public Settings(int settingsId, Offer offer, Game game, int boardWidth, int boardHeight, int winCondition, Color team1Color, Color team2Color, GameType gameType) {
@@ -49,6 +52,7 @@ public class Settings {
         this.team1Color = team1Color;
         this.team2Color = team2Color;
         this.gameType = gameType;
+        this.room = UUID.randomUUID().toString();
     }
 
     public int getSettingsId() {
@@ -121,5 +125,13 @@ public class Settings {
 
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }

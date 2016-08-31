@@ -11,9 +11,8 @@ function boerseWebsocket(listChanged, messageChanged)
     {
         console.log('Connected');
 
-        stompClient.subscribe('/user/topic/lobby/list', listArrived);
         stompClient.subscribe('/topic/lobby/list', listArrived);
-        stompClient.subscribe('/user/topic/lobby/message', messageChanged);
+        stompClient.subscribe('/user/topic/lobby/msg', messageChanged);
         stompClient.subscribe('/user/topic/lobby/game', gameArrived);
         stompClient.send('/app/lobby/start');
 
@@ -24,6 +23,7 @@ function boerseWebsocket(listChanged, messageChanged)
         }
 
         function gameArrived(gameJson){
+            websocket.leave();
             location.href="/game";
         }
     }

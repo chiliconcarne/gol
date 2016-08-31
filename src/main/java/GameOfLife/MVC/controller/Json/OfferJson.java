@@ -18,6 +18,7 @@ public class OfferJson {
     private int boardHeight;
     private int winCondition;
     private GameType gameType;
+    private String room;
 
     public OfferJson(Player player, Offer offer) {
         this.win = player.getWin();
@@ -29,6 +30,7 @@ public class OfferJson {
         this.boardHeight = offer.getSettings().getBoardHeight();
         this.winCondition = offer.getSettings().getWinCondition();
         this.gameType = offer.getSettings().getGameType();
+        this.room = offer.getSettings().getRoom();
     }
 
     public int getWin() {
@@ -101,5 +103,13 @@ public class OfferJson {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }
