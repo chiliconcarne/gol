@@ -62,7 +62,7 @@ public class Index {
     public String profile(Model model,HttpServletRequest request){
         Player player=playerRepository.findOneByName(request.getUserPrincipal().getName());
         if(player.getAvatar()!=null)
-            player.setAvatar("/img/"+player.getAvatar());
+            player.setAvatar("res/img/"+player.getAvatar());
         else
             player.setAvatar("/img/warten.gif");
         model.addAttribute("profile",player);

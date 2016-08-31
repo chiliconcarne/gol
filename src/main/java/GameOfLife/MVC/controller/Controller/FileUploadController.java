@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 @Controller
 public class FileUploadController {
 
-    public static final String ROOT = "src/main/resources/static/img";
+    public static final String ROOT = "res/img/";
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -49,6 +49,8 @@ public class FileUploadController {
         }
         if (!file.isEmpty() && name != "") {
             try {
+                Paths.get(ROOT,name).toFile().mkdirs();
+                System.err.println(Paths.get(ROOT,name).toFile().getAbsolutePath());
                 if(player.getAvatar()!=null){
                     Paths.get(ROOT,name).toFile().delete();
                 }

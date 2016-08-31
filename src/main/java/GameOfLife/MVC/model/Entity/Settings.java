@@ -13,10 +13,10 @@ public class Settings {
     @Id
     @GeneratedValue
     private int settingsId;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "offerId")
     private Offer offer;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "gameId")
     private Game game;
     private int boardWidth;

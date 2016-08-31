@@ -2,6 +2,7 @@ package GameOfLife.MVC.controller.Service;
 
 import GameOfLife.MVC.controller.Controller.WebsocketController;
 import GameOfLife.MVC.controller.Enum.OfferState;
+import GameOfLife.MVC.controller.Json.OfferJson;
 import GameOfLife.MVC.controller.Listener.Event.WebsocketEvent;
 import GameOfLife.MVC.controller.Listener.LobbyWebsocketListener;
 import GameOfLife.MVC.model.Entity.Offer;
@@ -15,6 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +40,7 @@ public class Lobby implements LobbyWebsocketListener {
 
     private void sendList(){
         List<Offer> offers = (List<Offer>) offerRepository.findAll();
-        /*offers.sort((e1,e2) -> {
+        offers.sort((e1,e2) -> {
             if(e1.getOfferState()==e2.getOfferState()){
                 return e1.getOfferGenerator().compareTo(e2.getOfferGenerator());
             } else {
@@ -56,8 +58,12 @@ public class Lobby implements LobbyWebsocketListener {
                  }
                 return 0;
             }
-        });*/
-        messagingTemplate.convertAndSend("/topic/lobby/list",offers);
+        });
+        ArrayList<OfferJson> offerJsons = new ArrayList();
+        for ( Offer o : offers ){
+            offerJsons.add(new OfferJson(playerRepository.findOneByName(o.getOfferGenerator()),o));
+        }
+        messagingTemplate.convertAndSend("/topic/lobby/list",offerJsons);
     }
 
     @Override
@@ -73,8 +79,10 @@ public class Lobby implements LobbyWebsocketListener {
                     player.getColor2(),
                     player.getGameType()
             );
+
+            offer = new Offer(0, player.getName(), OfferState.Available);
+            settings.setOffer(offer);
             settingsRepository.save(settings);
-            offer = new Offer(0, settings, player.getName(), OfferState.Available);
             offerRepository.save(offer);
             sendList();
         }
@@ -84,22 +92,26 @@ public class Lobby implements LobbyWebsocketListener {
     public void onDeleteGameOffer(WebsocketEvent event) {
         Player player=playerRepository.findOneByName(event.getUser().getUsername());
         Offer offer=offerRepository.findOneByOfferGenerator(player.getName());
-        offerRepository.delete(offer);
-        sendList();
+        if(offer!=null) {
+            settingsRepository.delete(offer.getSettings());
+            offerRepository.delete(offer);
+            sendList();
+        }
     }
 
     @Override
     public void onGoToTheProfile(WebsocketEvent event) {
         Player player=playerRepository.findOneByName(event.getUser().getUsername());
         Offer offer=offerRepository.findOneByOfferGenerator(player.getName());
-        offer.setOfferState(OfferState.Unavailable);
-        offerRepository.save(offer);
-        sendList();
+        if(offer!=null) {
+            offer.setOfferState(OfferState.Unavailable);
+            offerRepository.save(offer);
+            sendList();
+        }
     }
 
     @Override
     public void onReadyToPlay(WebsocketEvent event) {
-
 
     }
 

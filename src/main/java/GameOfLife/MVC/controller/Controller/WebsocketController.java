@@ -30,8 +30,9 @@ public class WebsocketController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/lobby/ready")
+    @MessageMapping("/lobby/accept")
     public void ready(String data,Principal principal){
+        if(principal.getName().equals(data))return;
         WebsocketEvent<String> event=new WebsocketEvent<String>(data,"ready",userManager.getUserByName(principal.getName()));
         for (LobbyWebsocketListener lwl : lobbyWebsocketListeners) {
             lwl.onReadyToPlay(event);
@@ -50,7 +51,7 @@ public class WebsocketController {
                 case "leave":
                     lwl.onGoToTheProfile(event);
                     break;
-                case "connect":
+                case "start":
                     lwl.onConnect(event);
                     break;
                 case "delete":

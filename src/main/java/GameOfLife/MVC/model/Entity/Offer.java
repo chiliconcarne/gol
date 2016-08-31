@@ -12,7 +12,7 @@ public class Offer {
     @Id
     @GeneratedValue
     private int offerId;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "offer")
+    @OneToOne(mappedBy = "offer")
     private Settings settings;
     private String offerGenerator;
     private OfferState offerState;
@@ -20,9 +20,8 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(int offerId, Settings settings, String offerGenerator, OfferState offerState) {
+    public Offer(int offerId, String offerGenerator, OfferState offerState) {
         this.offerId = offerId;
-        this.settings = settings;
         this.offerGenerator = offerGenerator;
         this.offerState = offerState;
     }

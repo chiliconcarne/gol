@@ -33,7 +33,7 @@ function boerseWebsocket(listChanged, messageChanged)
     }
 
     websocket.remove = function() {
-        stompClient.send('/app/lobby/remove');
+        stompClient.send('/app/lobby/delete');
     }
 
     websocket.accept = function(username){

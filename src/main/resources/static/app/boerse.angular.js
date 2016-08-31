@@ -10,6 +10,7 @@
         {
             $scope.offer = list;
             $scope.$apply();
+            console.info($scope.offer);
         };
 
         var messageChanged = function(message)
