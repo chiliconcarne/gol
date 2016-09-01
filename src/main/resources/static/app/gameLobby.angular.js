@@ -33,11 +33,11 @@ function getQueryVariable(variable) {
         var websocket = gameLobbyWebsocket(userChanged, msgChanged);
 
         $scope.joinTeamRed = function(){
-
+            websocket.joinTeam("team1");
         }
 
         $scope.joinTeamBlue = function(){
-
+            websocket.joinTeam("team2");
         }
     }
 })();

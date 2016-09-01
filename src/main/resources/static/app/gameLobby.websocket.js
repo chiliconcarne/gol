@@ -27,8 +27,8 @@ function gameLobbyWebsocket(userChanged, msgChanged)
 
     }
 
-    function joinTeam(side){
-        /
+    websocket.joinTeam = function(side){
+        stompClient.send("/app/gameLobby/"+room+"/selectTeam",{},side);
     }
 
     return websocket;

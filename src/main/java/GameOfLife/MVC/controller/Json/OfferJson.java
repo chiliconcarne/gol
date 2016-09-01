@@ -13,11 +13,13 @@ public class OfferJson {
     private int draw;
     private int lost;
     private String owner;
+    private String image;
     private OfferState offerState;
     private int boardWidth;
     private int boardHeight;
     private int winCondition;
     private GameType gameType;
+    private String gameTypeIcon;
     private String room;
 
     public OfferJson(Player player, Offer offer) {
@@ -25,11 +27,23 @@ public class OfferJson {
         this.draw = player.getDraw();
         this.lost = player.getLost();
         this.owner = offer.getOfferGenerator();
+        if(player.getAvatar()==null||player.getAvatar().equals(""))
+            this.image = "warten.jpg";
+        else
+            this.image = player.getAvatar();
         this.offerState = offer.getOfferState();
         this.boardWidth = offer.getSettings().getBoardWidth();
         this.boardHeight = offer.getSettings().getBoardHeight();
         this.winCondition = offer.getSettings().getWinCondition();
         this.gameType = offer.getSettings().getGameType();
+        switch(this.gameType){
+            case duel:
+                this.gameTypeIcon = "knight";
+                break;
+            case teamDuel:
+                this.gameTypeIcon = "tower";
+                break;
+        }
         this.room = offer.getSettings().getRoom();
     }
 
@@ -111,5 +125,21 @@ public class OfferJson {
 
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getGameTypeIcon() {
+        return gameTypeIcon;
+    }
+
+    public void setGameTypeIcon(String gameTypeIcon) {
+        this.gameTypeIcon = gameTypeIcon;
     }
 }

@@ -5,16 +5,16 @@ import GameOfLife.MVC.controller.Enum.OfferState;
 import GameOfLife.MVC.controller.Json.OfferJson;
 import GameOfLife.MVC.controller.Listener.Event.WebsocketEvent;
 import GameOfLife.MVC.controller.Listener.LobbyWebsocketListener;
-import GameOfLife.MVC.model.Entity.GamePlayer;
+import GameOfLife.MVC.model.Entity.Game;
 import GameOfLife.MVC.model.Entity.Offer;
 import GameOfLife.MVC.model.Entity.Player;
 import GameOfLife.MVC.model.Entity.Settings;
+import GameOfLife.MVC.model.Repository.GameRepository;
 import GameOfLife.MVC.model.Repository.OfferRepository;
 import GameOfLife.MVC.model.Repository.PlayerRepository;
 import GameOfLife.MVC.model.Repository.SettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +28,8 @@ public class Lobby implements LobbyWebsocketListener {
     private PlayerRepository playerRepository;
     @Autowired
     private OfferRepository offerRepository;
+    @Autowired
+    private GameRepository gameRepository;
     @Autowired
     private SettingsRepository settingsRepository;
 
@@ -79,8 +81,11 @@ public class Lobby implements LobbyWebsocketListener {
             );
             offer = new Offer(0, player.getName(), OfferState.Available);
             settings.setOffer(offer);
+            Game game = new Game(settings);
+            settings.setGame(game);
             settingsRepository.save(settings);
             offerRepository.save(offer);
+            gameRepository.save(game);
             sendList();
         }
     }

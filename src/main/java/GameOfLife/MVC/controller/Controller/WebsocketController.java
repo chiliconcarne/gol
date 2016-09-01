@@ -89,7 +89,7 @@ public class WebsocketController {
         }
     }
 
-    @MessageMapping("/game/{room}/selectTeam")
+    @MessageMapping("/gameLobby/{room}/selectTeam")
     public void click(String team, @DestinationVariable String room, Principal principal){
         WebsocketEvent<String> event=new WebsocketEvent<String>(team,"selectTeam",userManager.getUserByName(principal.getName()),room);
         for (GameLobbyWebsocketListener lwl : gameLobbyWebsocketListeners)

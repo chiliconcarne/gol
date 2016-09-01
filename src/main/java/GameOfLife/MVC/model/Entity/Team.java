@@ -24,8 +24,8 @@ public class Team {
     private Color color;
     private String teamName;
 
-    public Team(int teamId, Game game, Color color, String teamName) {
-        this.teamId = teamId;
+    public Team(Game game, Color color, String teamName) {
+        this.teamId = 0;
         this.game = game;
         this.color = color;
         this.teamName = teamName;

@@ -62,6 +62,13 @@
                 <input type="number" min="20" max="100" name="win" id="win" class="form-control" th:value="${profile.winCondition}" />
                 <span class="input-group-addon">%</span>
             </div>
+            <div class="input-group">
+                <span class="input-group-addon">Gewinn Kondition:</span>
+                <select class="form-control" name="GameType">
+                    <option value="duell">Duell</option>
+                    <option value="teamduell">Teamduell</option>
+                </select>
+            </div>
         </div>
         <input type="hidden" name="color1" id="color1" th:value="${profile.color1}"/>
         <input type="hidden" name="color2" id="color2" th:value="${profile.color2}"/>

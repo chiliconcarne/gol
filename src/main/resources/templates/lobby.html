@@ -26,11 +26,14 @@
     <div class="offer">
         <div class="list-group" ng-repeat="row in offer" >
             <a class="list-group-item list-group-item-info" ng-show="row.offerState=='Available'" ng-click="accept( row.room )">
-                <div>Spiel von {{ row.owner }}</div>
-                <div><span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }}</div>
-                <div> WinCon. {{ row.winCondition }}%</div>
-                <div> W {{row.win}} | D {{row.draw}} | L {{row.lost}}</div>
-                <div> Spieltyp: {{row.gameType}}</div>
+                <div style="display:inline-block;vertical-align:top;"><img src="/img/{{ row.image }}" /></div>
+                <div style="display:inline-block;margin-left:20px;vertical-align:top;text-align: left;">
+                    <div>User: {{ row.owner }}</div>
+                    <div><span class="glyphicon glyphicon-thumbs-up"></span> {{row.win}} | <span class="glyphicon glyphicon-hand-right"></span> {{row.draw}} | <span class="glyphicon glyphicon-thumbs-down"></span> {{row.lost}}</div>
+                    <div><span class="glyphicon glyphicon-th"></span> {{ row.boardWidth }} x {{ row.boardHeight }}</div>
+                    <div><span class="glyphicon glyphicon-star"></span> WinCon. {{ row.winCondition }}%</div>
+                    <div><span class="glyphicon glyphicon-{{row.gameTypeIcon}}"></span> Spieltyp: {{row.gameType}}</div>
+                </div>
             </a>
             <div class="list-group-item list-group-item-inactive" ng-show="row.offerState=='Unavailable'">
                 <div style="display:inline-block;width:33%;text-align:right;margin-right:3%;margin-left:-20%;">Spiel von {{ row.owner }}</div>

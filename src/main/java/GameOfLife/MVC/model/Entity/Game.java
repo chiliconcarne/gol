@@ -15,8 +15,10 @@ public class Game {
     private int gameId;
     private int round;
     private GameState gameState;
+    private String room;
+    private String player;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "game")
+    @OneToOne(mappedBy = "game")
     private Settings settings;
 
     @OneToMany(mappedBy = "game")
@@ -25,11 +27,13 @@ public class Game {
     public Game() {
     }
 
-    public Game(int gameId, int round, GameState gameState, Settings settings) {
-        this.gameId = gameId;
-        this.round = round;
-        this.gameState = gameState;
+    public Game(Settings settings) {
+        this.gameId = 0;
+        this.round = 0;
+        this.gameState = GameState.Open;
         this.settings = settings;
+        this.room = settings.getRoom();
+        this.player = settings.getOffer().getOfferGenerator();
     }
 
     public int getGameId() {
@@ -62,5 +66,29 @@ public class Game {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public String getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(String player) {
+        this.player = player;
+    }
+
+    public List<Team> getTams() {
+        return tams;
+    }
+
+    public void setTams(List<Team> tams) {
+        this.tams = tams;
     }
 }
