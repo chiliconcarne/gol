@@ -35,6 +35,23 @@ public class GamePlayer {
 
     }
 
+    public GamePlayer(Player player, Team team) {
+        this.gamePlayerId = 0;
+        this.gameId = team.getGame().getGameId();
+        this.player = player;
+        this.livingCells = 0;
+        this.clicks = 0;
+        this.killCellByRule = 0;
+        this.killCellByPlayer = 0;
+        this.convertCells = 0;
+        this.explodeCells = 0;
+        this.createCellByRule = 0;
+        this.createCellByPlayer = 0;
+        this.playerState = PlayerState.Disconnected;
+        this.color = team.getColor();
+        this.team = team;
+    }
+
     public GamePlayer(int gameId, Player player, int livingCells, int clicks, int killCellByRule, int killCellByPlayer, int convertCells, int explodeCells, int createCellByRule, int createCellByPlayer, PlayerState playerState, Color color, Team team) {
         this.gamePlayerId = 0;
         this.gameId = gameId;

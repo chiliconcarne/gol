@@ -21,8 +21,9 @@ public class Game {
     @OneToOne(mappedBy = "game")
     private Settings settings;
 
-    @OneToMany(mappedBy = "game")
-    private List<Team> tams;
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+
+    private List<Team> teams;
 
     public Game() {
     }
@@ -84,11 +85,16 @@ public class Game {
         this.player = player;
     }
 
-    public List<Team> getTams() {
-        return tams;
+    public List<Team> getTeams() {
+        return teams;
     }
 
-    public void setTams(List<Team> tams) {
-        this.tams = tams;
+    public void setTeams(List<Team> tams) {
+        this.teams = teams;
+    }
+
+    public void addTeam(Team team)
+    {
+        this.teams.add(team);
     }
 }
