@@ -1,10 +1,13 @@
 package GameOfLife.MVC.controller.Controller;
 
+import GameOfLife.MVC.controller.Json.ProfilRequest;
 import GameOfLife.MVC.model.Entity.Player;
 import GameOfLife.MVC.model.Repository.PlayerRepository;
+import GameOfLife.example.entity.Profil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,48 +38,58 @@ public class FileUploadController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/profile")
     public String handleFileUpload(@RequestParam("avatar") MultipartFile file,
+                                   @ModelAttribute("SpringWeb") ProfilRequest pr,
                                    HttpServletRequest request,
                                    Model model
     ) {
         Player player=playerRepository.findOneByName(request.getUserPrincipal().getName());
-        model.addAttribute("profile",player);
-        String name = request.getUserPrincipal().getName().toLowerCase().replace(" ","_");
-        String type="png";
-        switch(file.getContentType()){
-            case "image/png":
-                name += ".png";
-                type="png";
-                break;
-            case "image/jpeg":
-                name += ".jpg";
-                type="jpg";
-                break;
-            case "image/gif":
-                name += ".gif";
-                type="gif";
-                break;
-            default:
-                name = "";
+        if(pr!=null){
+            player.setBoard_height(pr.getHeight());
+            player.setBoard_width(pr.getWidth());
+            player.setColor1(pr.getColor1());
+            player.setColor2(pr.getColor2());
+            player.setWinCondition(pr.getWin());
+            player.setGameType(pr.getGameT());
+            playerRepository.save(player);
         }
-        if (!file.isEmpty() && name != "") {
-            try {
-                if(player.getAvatar()!=null){
-                    Paths.get(ROOT,name).toFile().delete();
-                }
-                Files.copy(file.getInputStream(), Paths.get(ROOT,name));
-                player.setAvatar(name);
-                playerRepository.save(player);
-                ImageIcon image = new ImageIcon(Paths.get(ROOT,name).toString());
-                image.setImage(image.getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH));
-                ImageIO.write(((ToolkitImage)image.getImage()).getBufferedImage(),type,Paths.get(ROOT,name).toFile());
-                System.err.println("You successfully uploaded " + file.getOriginalFilename() + "!");
-            } catch (IOException|RuntimeException e) {
-                System.err.println("Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
+        if(file!=null) {
+            String name = request.getUserPrincipal().getName().toLowerCase().replace(" ", "_");
+            String type = "png";
+            switch (file.getContentType()) {
+                case "image/png":
+                    name += ".png";
+                    type = "png";
+                    break;
+                case "image/jpeg":
+                    name += ".jpg";
+                    type = "jpg";
+                    break;
+                case "image/gif":
+                    name += ".gif";
+                    type = "gif";
+                    break;
+                default:
+                    name = "";
             }
-        } else {
-            System.err.println("Failed to upload " + file.getOriginalFilename() + " because it was empty");
+            if (!file.isEmpty() && name != "") {
+                try {
+                    if (player.getAvatar() != null) {
+                        Paths.get(ROOT, name).toFile().delete();
+                    }
+                    Files.copy(file.getInputStream(), Paths.get(ROOT, name));
+                    player.setAvatar(name);
+                    playerRepository.save(player);
+                    ImageIcon image = new ImageIcon(Paths.get(ROOT, name).toString());
+                    image.setImage(image.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+                    ImageIO.write(((ToolkitImage) image.getImage()).getBufferedImage(), type, Paths.get(ROOT, name).toFile());
+                    System.err.println("You successfully uploaded " + file.getOriginalFilename() + "!");
+                } catch (IOException | RuntimeException e) {
+                    System.err.println("Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
+                }
+            } else {
+                System.err.println("Failed to upload " + file.getOriginalFilename() + " because it was empty");
+            }
         }
         return "redirect:/profile";
     }
-
 }
