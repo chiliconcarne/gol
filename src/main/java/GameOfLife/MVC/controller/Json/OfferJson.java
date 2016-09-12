@@ -45,6 +45,7 @@ public class OfferJson {
                 break;
         }
         this.room = offer.getSettings().getRoom();
+
     }
 
     public int getWin() {

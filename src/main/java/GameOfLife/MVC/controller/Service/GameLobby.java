@@ -1,6 +1,7 @@
 package GameOfLife.MVC.controller.Service;
 
 import GameOfLife.MVC.controller.Controller.WebsocketController;
+import GameOfLife.MVC.controller.Json.GameLobbyUpdates;
 import GameOfLife.MVC.controller.Listener.Event.WebsocketEvent;
 import GameOfLife.MVC.controller.Listener.GameLobbyWebsocketListener;
 import GameOfLife.MVC.model.Entity.Game;
@@ -25,6 +26,9 @@ public class GameLobby implements GameLobbyWebsocketListener {
     private GameRepository gameRepository;
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private GamePlayerRepository gamePlayerRepository;
+
 
     @Autowired
     public GameLobby(WebsocketController websocketController){
@@ -49,19 +53,31 @@ public class GameLobby implements GameLobbyWebsocketListener {
     @Override
     public void onSelectTeam(WebsocketEvent event) {
         Game game = gameRepository.findOneByRoom(event.getRoom());
-        Team teamA=teamRepository.findOneByTeamNameAndGameId((String) event.getDaten(),game.getGameId());
+        Team team=teamRepository.findOneByTeamNameAndGameId((String) event.getDaten(),game.getGameId());
 
-        if(teamA==null) {
-            teamA = new Team(game, game.getSettings().getTeam1Color(), (String) event.getDaten());
-            teamRepository.save(teamA);
-            game.addTeam(teamA);
+        if(team==null) {
+            team = new Team(game, game.getSettings().getTeam1Color(), (String) event.getDaten());
+            teamRepository.save(team);
+            game.addTeam(team);
             gameRepository.save(game);
         }
-        GamePlayer gamePlayer= new GamePlayer(playerRepository.findOneByName(event.getUser().getUsername()),teamA);
+        if((team.getGamePlayers().size())<2)
+        {
+            GamePlayer gamePlayer= new GamePlayer(playerRepository.findOneByName(event.getUser().getUsername()),team);
+            team.addGamePlayer(gamePlayer);
+            teamRepository.save(team);
+            gamePlayerRepository.save(gamePlayer);
+            messagingTemplate.convertAndSend("/topic/gameLobby/"+event.getRoom()+"/msg",event.getUser().getUsername()+" join team "+event.getDaten());
+
+            System.out.println(event.getUser().getUsername()+" join team "+event.getDaten());
+        } else {
+            messagingTemplate.convertAndSend("/topic/gameLobby/"+event.getRoom()+"/msg","The team is full");
+        }
+
+
+        messagingTemplate.convertAndSend("/topic/gameLobby/"+event.getRoom()+"/update",new GameLobbyUpdates(game.getTeams()));
 
 
 
-        messagingTemplate.convertAndSend("/topic/gameLobby/"+event.getRoom()+"/msg",event.getUser().getUsername()+" join team "+event.getDaten());
-        System.out.println(event.getUser().getUsername()+" join team "+event.getDaten());
     }
 }

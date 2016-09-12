@@ -13,11 +13,11 @@ function gameLobbyWebsocket(userChanged, msgChanged)
     {
         console.log('Connected');
 
-        stompClient.subscribe('/topic/gameLobby/'+room+'/user', userArrived);
+        stompClient.subscribe('/topic/gameLobby/'+room+'/update', update);
         stompClient.subscribe('/topic/gameLobby/'+room+'/msg', msgArrived);
         stompClient.send("/app/gameLobby/"+room+"/connect");
 
-        function userArrived(userJson){
+        function update(userJson){
             userChanged(JSON.parse(userJson.body));
         }
 

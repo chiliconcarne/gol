@@ -39,5 +39,6 @@ function getQueryVariable(variable) {
         $scope.joinTeamBlue = function(){
             websocket.joinTeam("team2");
         }
+
     }
 })();

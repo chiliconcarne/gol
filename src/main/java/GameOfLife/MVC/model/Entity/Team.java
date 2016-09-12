@@ -70,7 +70,14 @@ public class Team {
         return gamePlayers;
     }
 
-    public void setGamePlayers(List<GamePlayer> gamePlayers) {
+    public void setGamePlayers(List<GamePlayer> gamePlayers)
+    {
         this.gamePlayers = gamePlayers;
+    }
+
+    public void addGamePlayer(GamePlayer gamePlayer)
+    {
+        this.gamePlayers.add(gamePlayer);
+
     }
 }
