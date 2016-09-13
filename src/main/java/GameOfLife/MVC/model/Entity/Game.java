@@ -22,7 +22,6 @@ public class Game {
     private Settings settings;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-
     private List<Team> teams;
 
     public Game() {

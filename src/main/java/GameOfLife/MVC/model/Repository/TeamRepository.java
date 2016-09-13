@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * Created by kulandas on 23.08.2016.
  */
 public interface TeamRepository extends CrudRepository<Team,Integer> {
-    public Team findOneByTeamNameAndGameId(String teamName,int gameID);
+    public Team findOneByTeamNameAndGame(String teamName,int gameID);
 }

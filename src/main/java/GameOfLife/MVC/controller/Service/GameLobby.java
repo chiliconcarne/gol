@@ -53,7 +53,7 @@ public class GameLobby implements GameLobbyWebsocketListener {
     @Override
     public void onSelectTeam(WebsocketEvent event) {
         Game game = gameRepository.findOneByRoom(event.getRoom());
-        Team team=teamRepository.findOneByTeamNameAndGameId((String) event.getDaten(),game.getGameId());
+        Team team=teamRepository.findOneByTeamNameAndGame((String) event.getDaten(),game.getGameId());
 
         if(team==null) {
             team = new Team(game, game.getSettings().getTeam1Color(), (String) event.getDaten());
